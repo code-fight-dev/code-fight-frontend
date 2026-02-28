@@ -1,6 +1,7 @@
 import { Menu, X } from "lucide-react";
-import Link from "next/link";
 import { cn } from "@/shared/lib/cn";
+import { Button } from "@/shared/ui/Button";
+import { IconButton } from "@/shared/ui/IconButton";
 
 type Props = {
   isElevated: boolean;
@@ -11,29 +12,29 @@ type Props = {
 export function HeaderActions({ isElevated, isMenuOpen, onMenuToggle }: Props) {
   return (
     <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 lg:gap-4 xl:gap-6">
-      <Link
+      <Button
         href="/signin"
+        variant="ghost"
         className={cn(
-          "font-accent hidden rounded-lg px-3 py-2 font-semibold tracking-[-0.03em] text-white/78 transition-all duration-300 hover:bg-blue-500/10 hover:text-blue-50 hover:shadow-[0_10px_30px_rgba(37,99,235,0.1)] lg:inline-flex",
+          "hidden rounded-lg px-3 py-2 transition-all duration-300 lg:inline-flex",
           isElevated ? "text-[13px]" : "text-[14px]",
         )}
       >
         Sign In
-      </Link>
+      </Button>
 
-      <Link
+      <Button
         href="/signup"
         className={cn(
-          "font-accent hidden items-center justify-center rounded-xl border border-[#4f78ff]/70 bg-[#3466f6] px-4 font-semibold tracking-[-0.03em] text-white shadow-[0_14px_30px_rgba(37,99,235,0.28)] transition-all duration-300 hover:border-[#79a0ff] hover:bg-[#3d70ff] hover:shadow-[0_18px_38px_rgba(37,99,235,0.38)] sm:inline-flex lg:px-5",
+          "hidden rounded-xl border-[#4f78ff]/70 bg-[#3466f6] px-4 transition-all duration-300 sm:inline-flex lg:px-5",
           isElevated ? "h-9 text-[13px]" : "h-10 text-[14px]",
           isMenuOpen && "sm:pointer-events-none sm:scale-95 sm:opacity-0",
         )}
       >
         Join Now
-      </Link>
+      </Button>
 
-      <button
-        type="button"
+      <IconButton
         aria-expanded={isMenuOpen}
         aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
         onClick={onMenuToggle}
@@ -67,7 +68,7 @@ export function HeaderActions({ isElevated, isMenuOpen, onMenuToggle }: Props) {
             )}
           />
         </span>
-      </button>
+      </IconButton>
     </div>
   );
 }

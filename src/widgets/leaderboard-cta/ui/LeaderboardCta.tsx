@@ -1,7 +1,7 @@
-import Link from "next/link";
+import { Button } from "@/shared/ui/Button";
 import { Container } from "@/shared/ui/Container";
 import { Reveal } from "@/shared/ui/Reveal";
-import type { LeaderboardCtaSnapshot } from "../model/getLeaderboardCtaSnapshot";
+import type { LeaderboardCtaSnapshot } from "../model/types";
 
 type Props = {
   snapshot: LeaderboardCtaSnapshot;
@@ -34,12 +34,12 @@ export function LeaderboardCta({ snapshot }: Props) {
             </p>
 
             <div className="mt-8 sm:mt-10">
-              <Link
+              <Button
                 href={snapshot.actionHref}
-                className="font-accent inline-flex min-h-13.5 w-full items-center justify-center rounded-2xl border border-[#5a86ff]/60 bg-[#3466f6] px-7 py-4 text-[14px] font-semibold tracking-[-0.03em] text-white shadow-[0_18px_44px_rgba(37,99,235,0.28)] transition-all duration-200 hover:border-[#8fb2ff] hover:bg-[#3f71ff] hover:shadow-[0_24px_54px_rgba(37,99,235,0.38)] sm:min-h-14 sm:w-auto sm:px-8 sm:text-[15px] 2xl:min-h-15 2xl:px-9 2xl:text-[16px]"
+                className="min-h-13.5 w-full rounded-2xl border-[#5a86ff]/60 bg-[#3466f6] px-7 py-4 text-[14px] shadow-[0_18px_44px_rgba(37,99,235,0.28)] hover:border-[#8fb2ff] hover:bg-[#3f71ff] hover:shadow-[0_24px_54px_rgba(37,99,235,0.38)] sm:min-h-14 sm:w-auto sm:px-8 sm:text-[15px] 2xl:min-h-15 2xl:px-9 2xl:text-[16px]"
               >
                 {snapshot.actionLabel}
-              </Link>
+              </Button>
             </div>
           </div>
         </Reveal>

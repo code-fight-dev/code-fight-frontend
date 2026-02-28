@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/shared/lib/cn";
+import { Button } from "@/shared/ui/Button";
 import { HEADER_NAV } from "../model/nav";
 
 type Props = {
@@ -70,20 +71,21 @@ export function HeaderMobileOverlay({ isMenuOpen, onClose }: Props) {
             )}
             style={{ transitionDelay: isMenuOpen ? "220ms" : "0ms" }}
           >
-            <Link
+            <Button
               href="/signin"
               onClick={onClose}
-              className="font-accent inline-flex min-h-13 items-center justify-center rounded-2xl border border-white/8 bg-white/3 px-4 py-3 text-[14px] font-semibold tracking-[-0.03em] text-white/82 transition-all duration-300 hover:border-blue-400/20 hover:bg-blue-500/10 hover:text-blue-50"
+              variant="secondary"
+              className="min-h-13 rounded-2xl px-4 py-3 text-[14px] transition-all duration-300"
             >
               Sign In
-            </Link>
-            <Link
+            </Button>
+            <Button
               href="/signup"
               onClick={onClose}
-              className="font-accent inline-flex min-h-13 items-center justify-center rounded-2xl border border-[#4f78ff]/70 bg-[#3466f6] px-4 py-3 text-[14px] font-semibold tracking-[-0.03em] text-white shadow-[0_14px_30px_rgba(37,99,235,0.24)] transition-all duration-300 hover:border-[#79a0ff] hover:bg-[#3d70ff] hover:shadow-[0_18px_38px_rgba(37,99,235,0.34)]"
+              className="min-h-13 rounded-2xl border-[#4f78ff]/70 bg-[#3466f6] px-4 py-3 text-[14px] shadow-[0_14px_30px_rgba(37,99,235,0.24)] transition-all duration-300 hover:border-[#79a0ff] hover:bg-[#3d70ff] hover:shadow-[0_18px_38px_rgba(37,99,235,0.34)]"
             >
               Join Now
-            </Link>
+            </Button>
           </div>
         </div>
       </div>

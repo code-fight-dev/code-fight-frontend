@@ -1,6 +1,6 @@
-import Link from "next/link";
+import { Button } from "@/shared/ui/Button";
 import { Reveal } from "@/shared/ui/Reveal";
-import type { HeroSnapshot } from "../model/getHeroSnapshot";
+import type { HeroSnapshot } from "../model/types";
 
 type Props = {
   snapshot: HeroSnapshot;
@@ -34,20 +34,20 @@ export function HeroContent({ snapshot }: Props) {
       </p>
 
       <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:gap-4">
-        <Link
+        <Button
           href="/arena"
-          className="font-accent inline-flex min-h-14 w-full items-center justify-center rounded-2xl border border-[#5a86ff]/60 bg-[#3466f6] px-6 py-4 text-[14px] font-semibold tracking-[-0.03em] text-white shadow-[0_18px_44px_rgba(37,99,235,0.28)] transition-all duration-200 hover:border-[#8fb2ff] hover:bg-[#3f71ff] hover:shadow-[0_24px_54px_rgba(37,99,235,0.38)] sm:min-h-15 sm:w-auto sm:px-7 sm:text-[15px] 2xl:min-h-16 2xl:px-8 2xl:text-[16px]"
+          className="min-h-14 w-full rounded-2xl border-[#5a86ff]/60 bg-[#3466f6] px-6 py-4 text-[14px] shadow-[0_18px_44px_rgba(37,99,235,0.28)] hover:border-[#8fb2ff] hover:bg-[#3f71ff] hover:shadow-[0_24px_54px_rgba(37,99,235,0.38)] sm:min-h-15 sm:w-auto sm:px-7 sm:text-[15px] 2xl:min-h-16 2xl:px-8 2xl:text-[16px]"
         >
           Start Rating Game
-          <span className="ml-2 text-base">▷</span>
-        </Link>
+        </Button>
 
-        <Link
+        <Button
           href="/practice"
-          className="font-accent inline-flex min-h-14 w-full items-center justify-center rounded-2xl border border-white/8 bg-white/3 px-6 py-4 text-[14px] font-semibold tracking-[-0.03em] text-white/86 shadow-[0_10px_30px_rgba(4,10,24,0.35)] transition-all duration-200 hover:border-blue-400/20 hover:bg-blue-500/10 hover:text-blue-50 hover:shadow-[0_18px_40px_rgba(37,99,235,0.12)] sm:min-h-15 sm:w-auto sm:px-7 sm:text-[15px] 2xl:min-h-16 2xl:px-8 2xl:text-[16px]"
+          variant="secondary"
+          className="min-h-14 w-full rounded-2xl px-6 py-4 text-[14px] sm:min-h-15 sm:w-auto sm:px-7 sm:text-[15px] 2xl:min-h-16 2xl:px-8 2xl:text-[16px]"
         >
           Practice Arena
-        </Link>
+        </Button>
       </div>
 
       <div className="mt-10 flex flex-col gap-4 sm:mt-12 sm:flex-row sm:items-center">

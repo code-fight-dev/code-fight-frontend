@@ -1,4 +1,6 @@
-import { FOOTER_SOCIAL_LINKS, type FooterSocialLink } from "../model/socialLinks";
+import { IconButton } from "@/shared/ui/IconButton";
+import { FOOTER_SOCIAL_LINKS } from "../model/socialLinks";
+import type { FooterSocialLink } from "../model/types";
 
 function FooterSocialIcon({ icon }: Pick<FooterSocialLink, "icon">) {
   if (icon === "x") {
@@ -20,16 +22,16 @@ export function FooterSocialLinks() {
   return (
     <div className="flex items-center gap-4 sm:gap-5">
       {FOOTER_SOCIAL_LINKS.map((link) => (
-        <a
+        <IconButton
           key={link.label}
           href={link.href}
           target="_blank"
           rel="noreferrer"
           aria-label={link.label}
-          className="rounded-full border border-transparent p-2 text-white/52 transition-all duration-200 hover:border-blue-400/20 hover:bg-blue-500/10 hover:text-blue-50 hover:shadow-[0_10px_30px_rgba(37,99,235,0.12)]"
+          className="h-auto w-auto rounded-full p-2 text-white/52"
         >
           <FooterSocialIcon icon={link.icon} />
-        </a>
+        </IconButton>
       ))}
     </div>
   );
