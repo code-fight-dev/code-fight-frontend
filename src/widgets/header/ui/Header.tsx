@@ -33,7 +33,7 @@ export function Header() {
             )}
           >
             <div className="flex min-w-0 items-center">
-              <Logo />
+              <Logo onClick={closeMenu} />
             </div>
 
             <HeaderDesktopNav isElevated={isElevated} />
