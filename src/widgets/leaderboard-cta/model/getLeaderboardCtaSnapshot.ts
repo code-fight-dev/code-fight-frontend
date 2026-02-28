@@ -1,11 +1,5 @@
 import "server-only";
-
-export type LeaderboardCtaSnapshot = {
-  title: string;
-  description: string;
-  actionLabel: string;
-  actionHref: string;
-};
+import type { LeaderboardCtaSnapshot } from "./types";
 
 const LEADERBOARD_CTA_SNAPSHOT: LeaderboardCtaSnapshot = {
   title: "Ready to climb the world leaderboard?",

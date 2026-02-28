@@ -1,7 +1,7 @@
 import { Container } from "@/shared/ui/Container";
 import { cn } from "@/shared/lib/cn";
 import { Reveal } from "@/shared/ui/Reveal";
-import type { PlatformStat } from "../model/getPlatformStatsSnapshot";
+import type { PlatformStat } from "../model/types";
 
 type Props = {
   stats: PlatformStat[];
