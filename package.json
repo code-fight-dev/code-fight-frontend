@@ -9,11 +9,11 @@
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "lint-staged": "lint-staged",
-    "precommit:checks": "lint-staged && bun run typecheck && bun run lint",
+    "precommit:checks": "lint-staged && next typegen && tsc --noEmit && eslint .",
     "commitlint": "commitlint",
     "prepare": "husky"
   },
