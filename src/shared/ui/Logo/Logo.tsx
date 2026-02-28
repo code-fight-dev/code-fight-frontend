@@ -1,23 +1,26 @@
 import Link from "next/link";
+import type { MouseEventHandler } from "react";
 
 type Props = {
   href?: string;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
 };
 
-export function Logo({ href = "/" }: Props) {
+export function Logo({ href = "/", onClick }: Props) {
   return (
     <Link
       href={href}
+      onClick={onClick}
       className="font-accent inline-flex items-center gap-3.5 text-white transition-opacity hover:opacity-90"
     >
-      <span className="grid h-7 w-7 place-items-center rounded-lg border border-white/10 bg-[#2563eb] shadow-[0_8px_24px_rgba(37,99,235,0.32)]">
+      <span className="grid h-8.5 w-8.5 place-items-center rounded-xl border border-white/10 bg-[#2563eb] shadow-[0_10px_28px_rgba(37,99,235,0.34)]">
         <svg
           aria-hidden
           viewBox="0 0 20 20"
-          className="h-4 w-4 text-white"
+          className="h-7 w-7 text-white"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.7"
+          strokeWidth="1.6"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
