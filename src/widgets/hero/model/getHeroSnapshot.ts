@@ -1,16 +1,5 @@
 import "server-only";
-
-export type HeroDeveloper = {
-  id: string;
-  initials: string;
-  tintClassName: string;
-};
-
-export type HeroSnapshot = {
-  liveLabel: string;
-  queueCount: number;
-  featuredDevelopers: HeroDeveloper[];
-};
+import type { HeroSnapshot } from "./types";
 
 const HERO_SNAPSHOT: HeroSnapshot = {
   liveLabel: "Live Season",

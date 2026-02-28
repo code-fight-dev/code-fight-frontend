@@ -1,8 +1,4 @@
-export type FooterSocialLink = {
-  label: string;
-  href: string;
-  icon: "x" | "github";
-};
+import type { FooterSocialLink } from "./types";
 
 export const FOOTER_SOCIAL_LINKS: FooterSocialLink[] = [
   { label: "Twitter", href: "https://twitter.com", icon: "x" },

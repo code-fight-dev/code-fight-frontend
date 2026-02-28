@@ -1,6 +1,6 @@
 import { Container } from "@/shared/ui/Container";
 import { Reveal } from "@/shared/ui/Reveal";
-import type { ArenaEdgeCard, ArenaEdgeSnapshot } from "../model/getArenaEdgeSnapshot";
+import type { ArenaEdgeCard, ArenaEdgeSnapshot } from "../model/types";
 
 type Props = {
   snapshot: ArenaEdgeSnapshot;

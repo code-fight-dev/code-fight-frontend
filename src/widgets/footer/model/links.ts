@@ -1,6 +1,6 @@
-export type FooterLink = { label: string; href: string };
+import type { FooterColumn } from "./types";
 
-export const FOOTER_COLUMNS: Array<{ title: string; links: FooterLink[] }> = [
+export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     title: "Platform",
     links: [

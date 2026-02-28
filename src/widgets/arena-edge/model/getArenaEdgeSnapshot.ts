@@ -1,18 +1,5 @@
 import "server-only";
-
-export type ArenaEdgeCard = {
-  id: string;
-  title: string;
-  description: string;
-  icon: "realtime" | "elo" | "replay";
-};
-
-export type ArenaEdgeSnapshot = {
-  eyebrow: string;
-  title: string;
-  description: string;
-  cards: ArenaEdgeCard[];
-};
+import type { ArenaEdgeSnapshot } from "./types";
 
 const ARENA_EDGE_SNAPSHOT: ArenaEdgeSnapshot = {
   eyebrow: "The Arena Edge",

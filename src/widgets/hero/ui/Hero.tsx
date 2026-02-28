@@ -1,5 +1,5 @@
 import { Container } from "@/shared/ui/Container";
-import type { HeroSnapshot } from "../model/getHeroSnapshot";
+import type { HeroSnapshot } from "../model/types";
 import { HeroContent } from "./HeroContent";
 import { HeroPreview } from "./HeroPreview";
 

@@ -1,12 +1,5 @@
 import "server-only";
-
-export type PlatformStat = {
-  id: string;
-  label: string;
-  value: string;
-  badge: string;
-  badgeTone: "success" | "info";
-};
+import type { PlatformStat } from "./types";
 
 const PLATFORM_STATS: PlatformStat[] = [
   {
