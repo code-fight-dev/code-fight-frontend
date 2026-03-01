@@ -1,5 +1,6 @@
 "use client";
 
+import { useViewerSession } from "@/entities/viewer";
 import { cn } from "@/shared/lib/cn";
 import { Logo } from "@/shared/ui/Logo";
 import { useHeaderState } from "../model/useHeaderState";
@@ -11,6 +12,7 @@ import { HeaderMobileOverlay } from "./HeaderMobileOverlay";
 export function Header() {
   const { isReady, isElevated, isMenuOpen, surfaceStyles, closeMenu, toggleMenu } =
     useHeaderState();
+  const { viewer, isLoading, isSigningOut, signOut } = useViewerSession();
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-50">
@@ -40,13 +42,23 @@ export function Header() {
             <HeaderActions
               isElevated={isElevated}
               isMenuOpen={isMenuOpen}
+              viewer={viewer}
+              isLoading={isLoading}
+              isSigningOut={isSigningOut}
+              onSignOut={signOut}
               onMenuToggle={toggleMenu}
             />
           </div>
         </div>
       </div>
 
-      <HeaderMobileOverlay isMenuOpen={isMenuOpen} onClose={closeMenu} />
+      <HeaderMobileOverlay
+        isMenuOpen={isMenuOpen}
+        viewer={viewer}
+        isSigningOut={isSigningOut}
+        onClose={closeMenu}
+        onSignOut={signOut}
+      />
     </header>
   );
 }
