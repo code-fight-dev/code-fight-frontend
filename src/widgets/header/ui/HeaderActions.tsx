@@ -1,38 +1,44 @@
 import { Menu, X } from "lucide-react";
+import type { Viewer } from "@/entities/viewer";
 import { cn } from "@/shared/lib/cn";
-import { Button } from "@/shared/ui/Button";
 import { IconButton } from "@/shared/ui/IconButton";
+import { HeaderDesktopGuestActions } from "./HeaderDesktopGuestActions";
+import { HeaderDesktopViewerActions } from "./HeaderDesktopViewerActions";
 
 type Props = {
   isElevated: boolean;
   isMenuOpen: boolean;
+  viewer: Viewer | null;
+  isLoading: boolean;
+  isSigningOut: boolean;
+  onSignOut: () => void;
   onMenuToggle: () => void;
 };
 
-export function HeaderActions({ isElevated, isMenuOpen, onMenuToggle }: Props) {
+export function HeaderActions({
+  isElevated,
+  isMenuOpen,
+  viewer,
+  isLoading,
+  isSigningOut,
+  onSignOut,
+  onMenuToggle,
+}: Props) {
   return (
     <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 lg:gap-4 xl:gap-6">
-      <Button
-        href="/signin"
-        variant="ghost"
-        className={cn(
-          "hidden rounded-lg px-3 py-2 transition-all duration-300 lg:inline-flex",
-          isElevated ? "text-[13px]" : "text-[14px]",
-        )}
-      >
-        Sign In
-      </Button>
-
-      <Button
-        href="/signup"
-        className={cn(
-          "hidden rounded-xl border-[#4f78ff]/70 bg-[#3466f6] px-4 transition-all duration-300 sm:inline-flex lg:px-5",
-          isElevated ? "h-9 text-[13px]" : "h-10 text-[14px]",
-          isMenuOpen && "sm:pointer-events-none sm:scale-95 sm:opacity-0",
-        )}
-      >
-        Join Now
-      </Button>
+      {isLoading ? (
+        <div className="hidden h-10 w-44 rounded-full border border-white/8 bg-white/3 sm:inline-flex" />
+      ) : viewer ? (
+        <HeaderDesktopViewerActions
+          isElevated={isElevated}
+          isMenuOpen={isMenuOpen}
+          viewer={viewer}
+          isSigningOut={isSigningOut}
+          onSignOut={onSignOut}
+        />
+      ) : (
+        <HeaderDesktopGuestActions isElevated={isElevated} isMenuOpen={isMenuOpen} />
+      )}
 
       <IconButton
         aria-expanded={isMenuOpen}

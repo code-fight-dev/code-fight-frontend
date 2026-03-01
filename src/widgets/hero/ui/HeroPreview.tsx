@@ -1,4 +1,5 @@
 import { Reveal } from "@/shared/ui/Reveal";
+import { HeroTypingSnippet } from "./HeroTypingSnippet";
 
 export function HeroPreview() {
   return (
@@ -11,8 +12,21 @@ export function HeroPreview() {
         aria-hidden
         className="absolute inset-x-[8%] top-[18%] h-[56%] rounded-full bg-[#2563eb]/28 blur-3xl"
       />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-[12%] -bottom-3 h-12 rounded-full bg-[#2563eb]/12 blur-2xl"
+      />
 
-      <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-[linear-gradient(180deg,rgba(9,14,26,0.96)_0%,rgba(12,18,34,0.92)_100%)] shadow-[0_24px_80px_rgba(3,7,18,0.52)]">
+      <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-[linear-gradient(180deg,rgba(9,14,26,0.96)_0%,rgba(12,18,34,0.92)_100%)] shadow-[0_24px_80px_rgba(3,7,18,0.52),0_0_40px_rgba(37,99,235,0.08)]">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-[26px] ring-1 ring-blue-400/6 ring-inset"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-[20%] -top-10 h-16 rounded-full bg-[#60a5fa]/8 blur-2xl"
+        />
+
         <div className="flex items-center justify-between border-b border-white/6 bg-black/50 px-4 py-4 sm:px-6 sm:py-5">
           <div className="flex items-center gap-2">
             <span className="h-2.5 w-2.5 rounded-full bg-[#ef4444]/90" />
@@ -32,14 +46,8 @@ export function HeroPreview() {
               <span className="text-white/86">evaluate_move</span>
               <span className="text-[#60a5fa]">(player_state):</span>
               {"\n"}
-              <span className="text-white/30">
-                {"    # Calculate optimal pathing algorithm"}
-              </span>
-              {"\n"}
-              <span className="text-white/70">{"    grid = player_state."}</span>
-              <span className="text-[#60a5fa]">get_matrix</span>
-              <span className="text-white/70">()</span>
-              {"\n"}
+              <span className="block text-white/30"># Implement your solution here</span>
+              <HeroTypingSnippet />
               <span className="text-white/70">{"    visited = "}</span>
               <span className="text-[#93c5fd]">set</span>
               <span className="text-white/70">()</span>
@@ -54,7 +62,7 @@ export function HeroPreview() {
               {"\n"}
               <span className="text-white/70">{"    result = "}</span>
               <span className="text-[#60a5fa]">bfs_optimize</span>
-              <span className="text-white/70">(grid)</span>
+              <span className="text-white/70">(grid, best_move)</span>
               {"\n"}
               <span className="text-[#3b82f6]">{"    return"}</span>
               <span className="text-white/70">{" result"}</span>

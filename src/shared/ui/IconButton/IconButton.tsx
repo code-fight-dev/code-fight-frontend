@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { cn } from "@/shared/lib/cn";
-import type { ButtonHTMLAttributes, ComponentPropsWithoutRef } from "react";
+import type { ButtonHTMLAttributes, ComponentPropsWithoutRef, ReactNode } from "react";
 
 type SharedProps = {
   className?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
   "aria-label": string;
 };
 

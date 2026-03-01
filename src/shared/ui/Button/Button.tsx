@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { cn } from "@/shared/lib/cn";
-import type { ButtonHTMLAttributes, ComponentPropsWithoutRef } from "react";
+import type { ButtonHTMLAttributes, ComponentPropsWithoutRef, ReactNode } from "react";
 
 type SharedProps = {
   className?: string;
-  children: React.ReactNode;
+  children: ReactNode;
   variant?: "primary" | "secondary" | "ghost";
 };
 
@@ -24,7 +24,7 @@ export function Button(props: Props) {
   const { className, children, variant = "primary", ...restProps } = props;
 
   const base =
-    "font-accent relative inline-flex items-center justify-center gap-2.5 rounded-full border px-5 py-2.5 text-sm font-semibold tracking-[-0.03em] transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050816]";
+    "font-accent relative inline-flex items-center justify-center gap-2.5 rounded-full border px-5 py-2.5 text-sm font-semibold tracking-[-0.03em] transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050816] disabled:pointer-events-none disabled:opacity-60";
 
   const variants: Record<NonNullable<Props["variant"]>, string> = {
     ghost:
