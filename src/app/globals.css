@@ -41,6 +41,11 @@ a {
   font-family: var(--font-accent), "SFMono-Regular", "IBM Plex Mono", monospace;
 }
 
+.terminal-cursor-blink {
+  opacity: 0;
+  animation: terminal-cursor-blink 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
 .reveal {
   --reveal-name: reveal-up;
   opacity: 0;
@@ -104,7 +109,29 @@ a {
   }
 }
 
+@keyframes terminal-cursor-blink {
+  0%,
+  14% {
+    opacity: 0;
+  }
+
+  32%,
+  58% {
+    opacity: 1;
+  }
+
+  76%,
+  100% {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .terminal-cursor-blink {
+    animation: none;
+    opacity: 1;
+  }
+
   .reveal {
     opacity: 1;
     filter: none;
