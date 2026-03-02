@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { ArrowLeft, House } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/shared/ui/Button";
 
 export function NotFoundActions() {
