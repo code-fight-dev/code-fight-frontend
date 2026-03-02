@@ -5,15 +5,8 @@ export type Viewer = {
   createdAt: string;
 };
 
-export type AuthMode = "signin" | "signup";
-
-export type SignInPayload = {
-  email: string;
-  password: string;
-};
-
-export type SignUpPayload = {
+export type ViewerProfile = {
+  id: string;
   username: string;
-  email: string;
-  password: string;
+  createdAt: string;
 };
