@@ -1,9 +1,9 @@
 "use client";
 
 import { Github } from "lucide-react";
-import { getOAuthStartUrl } from "@/entities/viewer";
-import type { AuthMode } from "@/entities/viewer";
 import { Button } from "@/shared/ui/Button";
+import { getOAuthStartUrl } from "../api/auth";
+import type { AuthMode } from "../model/types";
 
 type Props = {
   provider: "github" | "google";
@@ -34,7 +34,7 @@ function GoogleIcon() {
   );
 }
 
-export function AuthSocialButton({ provider, mode, disabled = false }: Props) {
+export function OAuthButton({ provider, mode, disabled = false }: Props) {
   const label = provider === "github" ? "Continue with GitHub" : "Continue with Google";
   const href = getOAuthStartUrl(provider, mode);
 
@@ -46,7 +46,7 @@ export function AuthSocialButton({ provider, mode, disabled = false }: Props) {
       onClick={() => {
         window.location.assign(href);
       }}
-      className="min-h-14.5 w-full justify-center rounded-2xl border-white/12 bg-[linear-gradient(180deg,rgba(24,35,58,0.86)_0%,rgba(16,25,42,0.9)_100%)] text-[15px] text-white/92 hover:border-blue-400/18 hover:bg-[linear-gradient(180deg,rgba(28,42,69,0.92)_0%,rgba(18,29,50,0.96)_100%)]"
+      className="min-h-14.5 w-full justify-center rounded-2xl text-[15px]"
     >
       {provider === "github" ? (
         <Github className="h-4.5 w-4.5" strokeWidth={1.9} />

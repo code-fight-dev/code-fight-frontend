@@ -1,5 +1,5 @@
-import { NotFoundPage } from "@/widgets/not-found";
+import { NotFoundPageView } from "@/views/not-found";
 
 export default function NotFound() {
-  return <NotFoundPage />;
+  return <NotFoundPageView />;
 }

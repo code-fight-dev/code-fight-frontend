@@ -1,3 +1,16 @@
+export type AuthMode = "signin" | "signup";
+
+export type SignInPayload = {
+  email: string;
+  password: string;
+};
+
+export type SignUpPayload = {
+  username: string;
+  email: string;
+  password: string;
+};
+
 export type AuthFieldConfig = {
   id: string;
   label: string;
@@ -20,7 +33,7 @@ export type AuthTermsConfig = {
 };
 
 export type AuthPageConfig = {
-  mode: "signin" | "signup";
+  mode: AuthMode;
   layout: "card" | "stacked";
   title: string;
   description: string;

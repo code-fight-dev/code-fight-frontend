@@ -3,16 +3,16 @@
 import { useRouter } from "next/navigation";
 import { startTransition, useState } from "react";
 import type { FormEvent } from "react";
-import { submitAuth } from "@/entities/viewer";
 import { getAuthSubmitErrorMessage, getOAuthErrorMessage } from "./errors";
 import type { AuthPageConfig } from "./types";
+import { submitAuth } from "../api/auth";
 
 type Options = {
   config: AuthPageConfig;
   oauthErrorCode: string | null;
 };
 
-export function useAuthForm({ config, oauthErrorCode }: Options) {
+export function useCredentialsAuthForm({ config, oauthErrorCode }: Options) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(() =>
