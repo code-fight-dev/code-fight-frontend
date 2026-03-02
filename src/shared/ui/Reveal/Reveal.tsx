@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/shared/lib/cn";
+import { shouldReduceMotion } from "@/shared/lib/motion";
 import type { CSSProperties, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -35,9 +36,7 @@ export function Reveal({
       return;
     }
 
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-    if (mediaQuery.matches) {
+    if (shouldReduceMotion()) {
       return;
     }
 
