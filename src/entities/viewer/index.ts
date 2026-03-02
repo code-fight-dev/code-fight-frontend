@@ -1,8 +1,3 @@
-export {
-  getCurrentViewer,
-  getOAuthStartUrl,
-  signOutViewer,
-  submitAuth,
-} from "./api/auth";
-export { useViewerSession } from "./model/useViewerSession";
-export type { AuthMode, SignInPayload, SignUpPayload, Viewer } from "./model/types";
+export { getCurrentViewer, signOutViewer } from "./api/session";
+export type { Viewer } from "./model/types";
+export { ViewerSessionProvider, useViewerSession } from "./ui/ViewerSessionProvider";
