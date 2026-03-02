@@ -1,9 +1,9 @@
 import { Menu, X } from "lucide-react";
 import type { Viewer } from "@/entities/viewer";
+import { ViewerAccountDesktopMenu } from "@/features/viewer-account-menu";
 import { cn } from "@/shared/lib/cn";
 import { IconButton } from "@/shared/ui/IconButton";
 import { HeaderDesktopGuestActions } from "./HeaderDesktopGuestActions";
-import { HeaderDesktopViewerActions } from "./HeaderDesktopViewerActions";
 
 type Props = {
   isElevated: boolean;
@@ -27,11 +27,11 @@ export function HeaderActions({
   return (
     <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 lg:gap-4 xl:gap-6">
       {isLoading ? (
-        <div className="hidden h-10 w-44 rounded-full border border-white/8 bg-white/3 sm:inline-flex" />
+        <div className="hidden h-10 w-44 rounded-full border border-(--app-control-secondary-border) bg-(--app-control-secondary-bg) sm:inline-flex" />
       ) : viewer ? (
-        <HeaderDesktopViewerActions
+        <ViewerAccountDesktopMenu
           isElevated={isElevated}
-          isMenuOpen={isMenuOpen}
+          isNavigationOpen={isMenuOpen}
           viewer={viewer}
           isSigningOut={isSigningOut}
           onSignOut={onSignOut}
@@ -45,11 +45,10 @@ export function HeaderActions({
         aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
         onClick={onMenuToggle}
         className={cn(
-          "inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0.03)_100%)] text-white/84 shadow-[0_14px_34px_rgba(3,7,18,0.28)] transition-all duration-300 hover:border-blue-400/24 hover:bg-blue-500/10 hover:text-blue-50 lg:hidden",
-          isElevated &&
-            "border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.07)_0%,rgba(255,255,255,0.04)_100%)]",
+          "inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-(--app-control-secondary-border) bg-(--app-control-secondary-bg) text-(--app-control-secondary-text) shadow-[0_14px_34px_rgba(3,7,18,0.18)] transition-all duration-300 hover:border-blue-400/24 hover:bg-blue-500/10 hover:text-(--app-text-strong) lg:hidden",
+          isElevated && "border-(--app-control-secondary-hover-border)",
           isMenuOpen &&
-            "border-blue-400/26 bg-blue-500/12 text-blue-50 shadow-[0_16px_38px_rgba(37,99,235,0.18)]",
+            "border-blue-400/26 bg-blue-500/12 text-(--app-text-strong) shadow-[0_16px_38px_rgba(37,99,235,0.18)]",
         )}
       >
         <span className="relative flex h-5 w-5 items-center justify-center">
