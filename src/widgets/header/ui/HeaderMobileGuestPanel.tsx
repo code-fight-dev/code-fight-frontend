@@ -26,7 +26,7 @@ export function HeaderMobileGuestPanel({ isMenuOpen, onClose }: Props) {
       <Button
         href="/signup"
         onClick={onClose}
-        className="min-h-13 rounded-2xl border-[#4f78ff]/70 bg-[#3466f6] px-4 py-3 text-[14px] shadow-[0_14px_30px_rgba(37,99,235,0.24)] transition-all duration-300 hover:border-[#79a0ff] hover:bg-[#3d70ff] hover:shadow-[0_18px_38px_rgba(37,99,235,0.34)]"
+        className="min-h-13 rounded-2xl px-4 py-3 text-[14px] transition-all duration-300"
       >
         Join Now
       </Button>

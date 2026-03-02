@@ -9,7 +9,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden border-t border-[#18181B] bg-[#060b18]">
+    <footer className="relative overflow-hidden border-t border-(--app-header-border-soft) bg-(--app-surface-footer)">
       <div
         aria-hidden
         className="pointer-events-none absolute -top-12 -left-16 h-72 w-80 rounded-full bg-[#1d4ed8]/10 blur-3xl"
@@ -27,7 +27,7 @@ export function Footer() {
         <div className="grid gap-10 md:gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,2fr)] lg:gap-16">
           <Reveal className="space-y-5">
             <Logo />
-            <p className="max-w-lg text-[14px] leading-[1.7] tracking-[-0.02em] text-white/52 sm:text-[15px] 2xl:max-w-xl 2xl:text-[16px]">
+            <p className="max-w-lg text-[14px] leading-[1.7] tracking-[-0.02em] text-(--app-text-soft) sm:text-[15px] 2xl:max-w-xl 2xl:text-[16px]">
               The definitive platform for competitive programming and elite technical
               assessment.
             </p>
@@ -36,7 +36,7 @@ export function Footer() {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-12">
             {FOOTER_COLUMNS.map((column, index) => (
               <Reveal key={column.title} delay={index * 90}>
-                <h2 className="font-accent text-[14px] font-semibold tracking-[-0.03em] text-white/88">
+                <h2 className="font-accent text-[14px] font-semibold tracking-[-0.03em] text-(--app-text-strong)">
                   {column.title}
                 </h2>
                 <ul className="mt-5 space-y-3.5 sm:mt-6 sm:space-y-4">
@@ -44,7 +44,7 @@ export function Footer() {
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="text-[14px] tracking-[-0.02em] text-white/48 transition-colors hover:text-white/80 sm:text-[15px] 2xl:text-[16px]"
+                        className="text-[14px] tracking-[-0.02em] text-(--app-text-soft) transition-colors hover:text-(--app-text-strong) sm:text-[15px] 2xl:text-[16px]"
                       >
                         {link.label}
                       </Link>
@@ -56,7 +56,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-5 border-t border-[#18181B] pt-6 text-white/42 sm:mt-12 sm:flex-row sm:items-center sm:justify-between lg:mt-auto">
+        <div className="mt-10 flex flex-col gap-5 border-t border-(--app-header-border-soft) pt-6 text-(--app-text-faint) sm:mt-12 sm:flex-row sm:items-center sm:justify-between lg:mt-auto">
           <p className="text-[13px] tracking-[-0.02em] sm:text-[14px]">
             © {currentYear} Competitive Arena. All rights reserved.
           </p>

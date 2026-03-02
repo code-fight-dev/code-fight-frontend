@@ -14,7 +14,7 @@ export function HeaderDesktopNav({ isElevated }: Props) {
           key={item.href}
           href={item.href}
           className={cn(
-            "font-accent rounded-full border border-transparent px-3 py-1.5 font-medium tracking-[-0.025em] text-white/72 transition-all duration-300 hover:border-blue-400/20 hover:bg-blue-500/10 hover:text-blue-50 hover:shadow-[0_10px_30px_rgba(37,99,235,0.1)]",
+            "font-accent rounded-full border border-transparent px-3 py-1.5 font-medium tracking-[-0.025em] text-(--app-text-soft) transition-all duration-300 hover:border-blue-400/20 hover:bg-blue-500/10 hover:text-(--app-text-strong) hover:shadow-[0_10px_30px_rgba(37,99,235,0.1)]",
             isElevated ? "text-[13px] xl:text-[14px]" : "text-[14px] xl:text-[15px]",
           )}
         >

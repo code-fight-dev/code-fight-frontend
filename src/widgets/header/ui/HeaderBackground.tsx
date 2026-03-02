@@ -13,7 +13,10 @@ export function HeaderBackground({
   trailStyle,
 }: Props) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]"
+    >
       <div
         className={cn(
           "absolute -top-16 -left-20 h-40 w-72 rounded-full bg-[#2563eb]/12 blur-3xl transition-all duration-500",
@@ -29,18 +32,18 @@ export function HeaderBackground({
         style={rightGlowStyle}
       />
       <div
-        className="absolute inset-y-[-40%] left-[-12%] w-[24%] bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)] blur-3xl transition-opacity duration-500"
+        className="absolute inset-y-[-40%] left-[-12%] w-[24%] bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)] blur-3xl transition-opacity duration-500 [html[data-theme='light']_&]:bg-[linear-gradient(90deg,transparent,rgba(59,130,246,0.12),transparent)]"
         style={shimmerStyle}
       />
       <div
         className={cn(
-          "absolute inset-0 rounded-[inherit] border border-white/6 transition-opacity duration-500",
+          "absolute inset-0 rounded-[inherit] border border-(--app-surface-soft-border) transition-opacity duration-500",
           isElevated ? "opacity-100" : "opacity-0",
         )}
       />
       <div
         className={cn(
-          "absolute inset-x-0 bottom-0 h-px bg-white/10 transition-opacity duration-300",
+          "absolute inset-x-0 bottom-0 h-px bg-(--app-header-border-soft) transition-opacity duration-300",
           isElevated && "opacity-0",
         )}
       />

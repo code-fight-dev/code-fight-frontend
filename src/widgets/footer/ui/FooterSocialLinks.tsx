@@ -28,7 +28,7 @@ export function FooterSocialLinks() {
           target="_blank"
           rel="noreferrer"
           aria-label={link.label}
-          className="h-auto w-auto rounded-full p-2 text-white/52"
+          className="h-auto w-auto rounded-full p-2 text-(--app-text-soft)"
         >
           <FooterSocialIcon icon={link.icon} />
         </IconButton>
