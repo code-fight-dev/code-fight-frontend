@@ -1,3 +1,4 @@
+import { ChartColumnIncreasing, CodeXml, History } from "lucide-react";
 import { Container } from "@/shared/ui/Container";
 import { Reveal } from "@/shared/ui/Reveal";
 import type { ArenaEdgeCard, ArenaEdgeSnapshot } from "../model/types";
@@ -6,86 +7,41 @@ type Props = {
   snapshot: ArenaEdgeSnapshot;
 };
 
+const arenaEdgeIcons: Record<ArenaEdgeCard["icon"], typeof CodeXml> = {
+  realtime: CodeXml,
+  elo: ChartColumnIncreasing,
+  replay: History,
+};
+
 function ArenaEdgeIcon({ icon }: Pick<ArenaEdgeCard, "icon">) {
-  if (icon === "realtime") {
-    return (
-      <svg
-        aria-hidden
-        viewBox="0 0 20 20"
-        className="h-5 w-5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="3.25" y="4.25" width="13.5" height="11.5" rx="2.1" />
-        <path d="M6.2 9.2 8.5 11.5 6.2 13.8" />
-        <path d="M10.2 13.8h3.3" />
-      </svg>
-    );
-  }
+  const Icon = arenaEdgeIcons[icon];
 
-  if (icon === "elo") {
-    return (
-      <svg
-        aria-hidden
-        viewBox="0 0 20 20"
-        className="h-5 w-5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M3.5 15.5h13" />
-        <path d="M5.5 15.5V9.25" />
-        <path d="M10 15.5V5.5" />
-        <path d="M14.5 15.5V7.5" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 20 20"
-      className="h-5 w-5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M10 4.25a5.75 5.75 0 1 1-4.06 1.69" />
-      <path d="M5.25 4.5v4h4" />
-    </svg>
-  );
+  return <Icon aria-hidden className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={1.9} />;
 }
 
 export function ArenaEdge({ snapshot }: Props) {
   return (
-    <section className="relative overflow-hidden bg-[linear-gradient(180deg,#0a0f1c_0%,#09101d_48%,#08111f_100%)] py-20 sm:py-24 lg:py-28 xl:py-32">
+    <section className="relative overflow-hidden bg-(--app-surface-contrast) py-20 sm:py-24 lg:py-28 xl:py-32">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_14%,rgba(37,99,235,0.1),transparent_22%),radial-gradient(circle_at_86%_78%,rgba(37,99,235,0.08),transparent_24%)]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-y-0 right-[8%] w-px bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.04),transparent)]"
+        className="pointer-events-none absolute inset-y-0 right-[8%] w-px bg-[linear-gradient(180deg,transparent,var(--app-grid-line),transparent)]"
       />
 
       <Container className="relative">
         <Reveal className="mx-auto max-w-3xl text-center xl:max-w-4xl" delay={40}>
-          <div className="font-accent text-[12px] font-semibold tracking-[0.22em] text-blue-400/90 uppercase">
+          <div className="font-accent text-[13px] font-semibold tracking-[0.26em] text-blue-400/92 uppercase sm:text-[14px]">
             {snapshot.eyebrow}
           </div>
 
-          <h2 className="mt-5 text-[2rem] font-semibold tracking-[-0.07em] text-white sm:text-[2.7rem] md:text-[3.1rem] xl:text-[3.7rem] 2xl:text-[4.2rem]">
+          <h2 className="mt-5 text-[2rem] font-semibold tracking-[-0.07em] text-(--app-text-strong) sm:text-[2.7rem] md:text-[3.1rem] xl:text-[3.7rem] 2xl:text-[4.2rem]">
             {snapshot.title}
           </h2>
 
-          <p className="mx-auto mt-4 max-w-2xl text-[0.98rem] leading-[1.72] tracking-[-0.03em] text-white/48 sm:mt-5 sm:text-[1.08rem] xl:max-w-184 xl:text-[1.2rem]">
+          <p className="mx-auto mt-4 max-w-2xl text-[0.98rem] leading-[1.72] tracking-[-0.03em] text-(--app-text-soft) sm:mt-5 sm:text-[1.08rem] xl:max-w-184 xl:text-[1.2rem]">
             {snapshot.description}
           </p>
         </Reveal>
@@ -98,7 +54,7 @@ export function ArenaEdge({ snapshot }: Props) {
                 card.id === "real-time-coding" ? 0 : card.id === "elo-system" ? 90 : 180
               }
               variant="scale"
-              className={`group relative overflow-hidden rounded-[22px] border border-white/8 bg-[linear-gradient(180deg,rgba(13,18,32,0.88)_0%,rgba(10,15,27,0.82)_100%)] px-5 py-5 shadow-[0_20px_60px_rgba(3,7,18,0.28)] transition-colors duration-200 hover:border-blue-400/16 sm:px-6 sm:py-6 ${index === snapshot.cards.length - 1 ? "md:col-span-2 xl:col-span-1" : ""}`}
+              className={`app-shell-card group relative overflow-hidden rounded-[22px] px-5 py-5 transition-colors duration-200 hover:border-blue-400/16 sm:px-6 sm:py-6 ${index === snapshot.cards.length - 1 ? "md:col-span-2 xl:col-span-1" : ""}`}
             >
               <div
                 aria-hidden
@@ -110,11 +66,11 @@ export function ArenaEdge({ snapshot }: Props) {
                   <ArenaEdgeIcon icon={card.icon} />
                 </div>
 
-                <h3 className="mt-6 text-[1.45rem] font-semibold tracking-[-0.06em] text-white/92 sm:mt-7 sm:text-[1.7rem] xl:text-[1.95rem] 2xl:text-[2.15rem]">
+                <h3 className="mt-6 text-[1.45rem] font-semibold tracking-[-0.06em] text-(--app-text-strong) sm:mt-7 sm:text-[1.7rem] xl:text-[1.95rem] 2xl:text-[2.15rem]">
                   {card.title}
                 </h3>
 
-                <p className="mt-3 max-w-[34ch] text-[0.98rem] leading-[1.75] tracking-[-0.025em] text-white/42 sm:mt-4 sm:text-[1rem] sm:leading-[1.85]">
+                <p className="mt-3 max-w-[34ch] text-[0.98rem] leading-[1.75] tracking-[-0.025em] text-(--app-text-soft) sm:mt-4 sm:text-[1rem] sm:leading-[1.85]">
                   {card.description}
                 </p>
               </div>

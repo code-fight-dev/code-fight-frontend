@@ -23,7 +23,7 @@ export function HeaderDesktopGuestActions({ isElevated, isMenuOpen }: Props) {
       <Button
         href="/signup"
         className={cn(
-          "hidden rounded-xl border-[#4f78ff]/70 bg-[#3466f6] px-4 transition-all duration-300 sm:inline-flex lg:px-5",
+          "hidden rounded-xl px-4 transition-all duration-300 sm:inline-flex lg:px-5",
           isElevated ? "h-9 text-[13px]" : "h-10 text-[14px]",
           isMenuOpen && "sm:pointer-events-none sm:scale-95 sm:opacity-0",
         )}

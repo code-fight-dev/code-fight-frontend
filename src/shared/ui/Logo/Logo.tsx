@@ -12,10 +12,10 @@ export function Logo({ href = "/", onClick }: Props) {
     <Link
       href={href}
       onClick={onClick}
-      className="font-accent inline-flex items-center gap-3.5 text-white transition-opacity hover:opacity-90"
+      className="font-accent inline-flex items-center gap-3.5 text-(--app-text-strong) transition-opacity hover:opacity-90"
     >
       <BrandMark />
-      <span className="text-[1.35rem] font-semibold tracking-[-0.05em] text-white">
+      <span className="text-[1.35rem] font-semibold tracking-[-0.05em] text-(--app-text-strong)">
         Arena<span className="text-[#60a5fa]">.</span>
       </span>
     </Link>
