@@ -4,6 +4,8 @@ import { IBM_Plex_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ViewerSessionProvider } from "@/entities/viewer";
 import { getCurrentViewerServer } from "@/entities/viewer/server";
+import { getPreferencesInitScript, PreferencesProvider } from "@/features/preferences";
+import { getPreferencesServer } from "@/features/preferences/server";
 import { Footer } from "@/widgets/footer";
 import { Header } from "@/widgets/header";
 
@@ -26,18 +28,34 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const initialViewer = await getCurrentViewerServer();
+  const [initialViewer, initialPreferences] = await Promise.all([
+    getCurrentViewerServer(),
+    getPreferencesServer(),
+  ]);
 
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      data-theme={initialPreferences.theme}
+      data-motion={initialPreferences.motion}
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          id="codefight-preferences-init"
+          dangerouslySetInnerHTML={{ __html: getPreferencesInitScript() }}
+        />
+      </head>
       <body
-        className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} min-h-dvh overflow-x-hidden bg-[#050816] text-white`}
+        className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} min-h-dvh overflow-x-hidden`}
       >
-        <ViewerSessionProvider initialViewer={initialViewer}>
-          <Header />
-          <main className="min-h-[calc(100dvh-81px)] pt-20.25">{children}</main>
-          <Footer />
-        </ViewerSessionProvider>
+        <PreferencesProvider initialPreferences={initialPreferences}>
+          <ViewerSessionProvider initialViewer={initialViewer}>
+            <Header />
+            <main className="min-h-[calc(100dvh-81px)] pt-20.25">{children}</main>
+            <Footer />
+          </ViewerSessionProvider>
+        </PreferencesProvider>
       </body>
     </html>
   );

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
+import { shouldReduceMotion } from "@/shared/lib/motion";
 
 type Token = {
   className: string;
@@ -11,43 +12,43 @@ type Token = {
 const TYPING_LINES: Token[][] = [
   [
     {
-      className: "text-white/70",
+      className: "text-[var(--app-code-text)]",
       text: "    grid = player_state.",
     },
     {
-      className: "text-[#60a5fa]",
+      className: "text-[var(--app-code-call)]",
       text: "get_matrix",
     },
     {
-      className: "text-white/70",
+      className: "text-[var(--app-code-text)]",
       text: "()",
     },
   ],
   [
     {
-      className: "text-white/70",
+      className: "text-[var(--app-code-text)]",
       text: "    frontier = ",
     },
     {
-      className: "text-[#93c5fd]",
+      className: "text-[var(--app-code-builtin)]",
       text: "deque",
     },
     {
-      className: "text-white/70",
+      className: "text-[var(--app-code-text)]",
       text: "([player_state.origin])",
     },
   ],
   [
     {
-      className: "text-white/70",
+      className: "text-[var(--app-code-text)]",
       text: "    best_move = ",
     },
     {
-      className: "text-[#60a5fa]",
+      className: "text-[var(--app-code-call)]",
       text: "search",
     },
     {
-      className: "text-white/70",
+      className: "text-[var(--app-code-text)]",
       text: "(frontier, grid)",
     },
   ],
@@ -65,7 +66,7 @@ export function HeroTypingSnippet() {
   const [visibleCharacters, setVisibleCharacters] = useState(0);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (shouldReduceMotion()) {
       const frameId = window.requestAnimationFrame(() => {
         setVisibleCharacters(TOTAL_CHARACTERS);
       });
@@ -137,8 +138,10 @@ export function HeroTypingSnippet() {
         return (
           <span key={lineIndex} className="block min-h-[1.65em]">
             {renderedTokens}
-            {activeLineIndex === lineIndex && visibleCharacters > 0 ? (
-              <span className="terminal-cursor-blink text-white">_</span>
+            {activeLineIndex === lineIndex &&
+            visibleCharacters > 0 &&
+            visibleCharacters < TOTAL_CHARACTERS ? (
+              <span className="terminal-cursor-blink text-(--app-text-strong)">_</span>
             ) : null}
           </span>
         );
