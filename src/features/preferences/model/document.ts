@@ -8,6 +8,11 @@ import {
 } from "./preferences";
 import type { PreferencesState } from "./types";
 
+function getPreferencesCookieAttributes() {
+  const secureAttribute = window.location.protocol === "https:" ? "; secure" : "";
+  return `path=/; max-age=${PREFERENCES_COOKIE_MAX_AGE}; samesite=lax${secureAttribute}`;
+}
+
 export function applyPreferencesToDocument(preferences: PreferencesState) {
   if (typeof document === "undefined") {
     return;
@@ -52,11 +57,13 @@ export function persistPreferences(preferences: PreferencesState) {
     return;
   }
 
+  const cookieAttributes = getPreferencesCookieAttributes();
+
   window.localStorage.setItem(PREFERENCES_STORAGE_KEY, JSON.stringify(preferences));
   document.cookie =
     `${THEME_PREFERENCE_COOKIE_KEY}=${encodeURIComponent(preferences.theme)}; ` +
-    `path=/; max-age=${PREFERENCES_COOKIE_MAX_AGE}; samesite=lax`;
+    cookieAttributes;
   document.cookie =
     `${MOTION_PREFERENCE_COOKIE_KEY}=${encodeURIComponent(preferences.motion)}; ` +
-    `path=/; max-age=${PREFERENCES_COOKIE_MAX_AGE}; samesite=lax`;
+    cookieAttributes;
 }
