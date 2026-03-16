@@ -1,9 +1,10 @@
 import { API_BASE_URL } from "@/shared/config/api";
+import { isViewer } from "@/entities/viewer";
 import type { Viewer } from "@/entities/viewer";
 import type { AuthMode, SignInPayload, SignUpPayload } from "../model/types";
 
 type AuthResponse = {
-  user: Viewer;
+  user?: unknown;
 };
 
 type AuthErrorResponse = {
@@ -11,7 +12,9 @@ type AuthErrorResponse = {
 };
 
 export function getOAuthStartUrl(provider: "github" | "google", mode: AuthMode) {
-  return `${API_BASE_URL}/auth/oauth/${provider}/start?mode=${mode}`;
+  const url = new URL(`/auth/oauth/${provider}/start`, API_BASE_URL);
+  url.searchParams.set("mode", mode);
+  return url.toString();
 }
 
 export async function submitAuth(mode: "signin", payload: SignInPayload): Promise<Viewer>;
@@ -40,5 +43,9 @@ export async function submitAuth(mode: AuthMode, payload: SignInPayload | SignUp
     );
   }
 
-  return (body as AuthResponse).user;
+  if (!body || !("user" in body) || !isViewer(body.user)) {
+    throw new Error("Invalid authentication response");
+  }
+
+  return body.user;
 }

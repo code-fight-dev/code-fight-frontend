@@ -52,6 +52,12 @@ export function AuthField({ field, disabled = false }: Props) {
           type={inputType}
           placeholder={field.placeholder}
           autoComplete={field.autoComplete}
+          inputMode={field.inputMode}
+          autoCapitalize={field.autoCapitalize}
+          spellCheck={field.spellCheck}
+          required={field.required}
+          maxLength={field.maxLength}
+          autoCorrect="off"
           disabled={disabled}
           className="app-input-surface h-14.5 w-full rounded-2xl pr-12 pl-12 text-[16px] tracking-[-0.03em] transition-[border-color,box-shadow,background-color] duration-200 outline-none focus:border-(--app-input-focus-border) focus:bg-(--app-surface-input-focus) focus:shadow-[0_0_0_1px_rgba(59,130,246,0.18),0_12px_30px_rgba(3,7,18,0.12)]"
         />
