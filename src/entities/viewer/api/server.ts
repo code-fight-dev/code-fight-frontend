@@ -1,14 +1,15 @@
 import "server-only";
 
+import { cache } from "react";
 import { headers } from "next/headers";
 import { API_BASE_URL } from "@/shared/config/api";
-import type { Viewer } from "../model/types";
+import { isViewer } from "../model/types";
 
 type AuthResponse = {
-  user: Viewer;
+  user?: unknown;
 };
 
-export async function getCurrentViewerServer() {
+export const getCurrentViewerServer = cache(async function getCurrentViewerServer() {
   const requestHeaders = await headers();
   const cookieHeader = requestHeaders.get("cookie");
 
@@ -33,9 +34,14 @@ export async function getCurrentViewerServer() {
       throw new Error("Failed to fetch current user");
     }
 
-    const body = (await response.json()) as AuthResponse;
+    const body = (await response.json().catch(() => null)) as AuthResponse | null;
+
+    if (!body || !isViewer(body.user)) {
+      throw new Error("Invalid current user response");
+    }
+
     return body.user;
   } catch {
     return null;
   }
-}
+});

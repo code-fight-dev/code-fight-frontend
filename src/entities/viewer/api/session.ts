@@ -1,8 +1,8 @@
 import { API_BASE_URL } from "@/shared/config/api";
-import type { Viewer } from "../model/types";
+import { isViewer } from "../model/types";
 
 type CurrentViewerResponse = {
-  user: Viewer;
+  user?: unknown;
 };
 
 export async function getCurrentViewer(signal?: AbortSignal) {
@@ -20,7 +20,12 @@ export async function getCurrentViewer(signal?: AbortSignal) {
     throw new Error("Failed to fetch current user");
   }
 
-  const body = (await response.json()) as CurrentViewerResponse;
+  const body = (await response.json().catch(() => null)) as CurrentViewerResponse | null;
+
+  if (!body || !isViewer(body.user)) {
+    throw new Error("Invalid current user response");
+  }
+
   return body.user;
 }
 
