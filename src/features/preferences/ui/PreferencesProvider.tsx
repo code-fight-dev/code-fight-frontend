@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   applyPreferencesToDocument,
   persistPreferences,
@@ -30,18 +30,21 @@ export function PreferencesProvider({ children, initialPreferences }: Props) {
     return readPreferencesFromDocument();
   });
 
-  function updatePreferences(nextPreferences: PreferencesState) {
-    setPreferences(nextPreferences);
-    applyPreferencesToDocument(nextPreferences);
-    persistPreferences(nextPreferences);
-  }
+  useEffect(() => {
+    applyPreferencesToDocument(preferences);
+    persistPreferences(preferences);
+  }, [preferences]);
 
   return (
     <PreferencesContext.Provider
       value={{
         preferences,
-        setTheme: (theme) => updatePreferences({ ...preferences, theme }),
-        setMotion: (motion) => updatePreferences({ ...preferences, motion }),
+        setTheme: (theme) => {
+          setPreferences((currentPreferences) => ({ ...currentPreferences, theme }));
+        },
+        setMotion: (motion) => {
+          setPreferences((currentPreferences) => ({ ...currentPreferences, motion }));
+        },
       }}
     >
       {children}
