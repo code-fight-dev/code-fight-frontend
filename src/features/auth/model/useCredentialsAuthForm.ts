@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { startTransition, useState } from "react";
-import type { FormEvent } from "react";
+import type { SubmitEvent } from "react";
 import { getAuthSubmitErrorMessage, getOAuthErrorMessage } from "./errors";
 import type { AuthPageConfig } from "./types";
 import { submitAuth } from "../api/auth";
@@ -12,6 +12,8 @@ type Options = {
   oauthErrorCode: string | null;
 };
 
+const SIMPLE_EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export function useCredentialsAuthForm({ config, oauthErrorCode }: Options) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,7 +21,7 @@ export function useCredentialsAuthForm({ config, oauthErrorCode }: Options) {
     getOAuthErrorMessage(oauthErrorCode),
   );
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setErrorMessage(null);
 
@@ -30,18 +32,50 @@ export function useCredentialsAuthForm({ config, oauthErrorCode }: Options) {
     }
 
     try {
-      setIsSubmitting(true);
+      const email = String(formData.get("email") ?? "").trim();
+      const password = String(formData.get("password") ?? "");
+
+      if (!email) {
+        setErrorMessage("Email is required.");
+        return;
+      }
+
+      if (!SIMPLE_EMAIL_PATTERN.test(email)) {
+        setErrorMessage("Enter a valid email address.");
+        return;
+      }
+
+      if (!password) {
+        setErrorMessage("Password is required.");
+        return;
+      }
 
       if (config.mode === "signup") {
+        const username = String(formData.get("username") ?? "").trim();
+
+        if (!username) {
+          setErrorMessage("Username is required.");
+          return;
+        }
+
+        if (/\s/.test(username)) {
+          setErrorMessage("Username must not contain spaces.");
+          return;
+        }
+
+        setIsSubmitting(true);
+
         await submitAuth("signup", {
-          username: String(formData.get("username") ?? ""),
-          email: String(formData.get("email") ?? ""),
-          password: String(formData.get("password") ?? ""),
+          username,
+          email,
+          password,
         });
       } else {
+        setIsSubmitting(true);
+
         await submitAuth("signin", {
-          email: String(formData.get("email") ?? ""),
-          password: String(formData.get("password") ?? ""),
+          email,
+          password,
         });
       }
 

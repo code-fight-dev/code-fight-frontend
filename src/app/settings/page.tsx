@@ -1,5 +1,6 @@
-import { SettingsPageView } from "@/views/settings";
+import { redirect } from "next/navigation";
+import { SETTINGS_APPEARANCE_HREF } from "@/shared/config/routes";
 
 export default function SettingsPage() {
-  return <SettingsPageView />;
+  redirect(SETTINGS_APPEARANCE_HREF);
 }

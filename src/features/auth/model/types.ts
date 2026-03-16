@@ -18,6 +18,11 @@ export type AuthFieldConfig = {
   type: "text" | "email" | "password";
   icon: "username" | "email" | "password";
   autoComplete?: string;
+  inputMode?: "text" | "email";
+  autoCapitalize?: "none" | "sentences" | "words" | "characters";
+  spellCheck?: boolean;
+  required?: boolean;
+  maxLength?: number;
   auxiliaryLink?: {
     label: string;
     href: string;

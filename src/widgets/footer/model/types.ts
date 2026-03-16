@@ -8,8 +8,10 @@ export type FooterColumn = {
   links: FooterLink[];
 };
 
-export type FooterSocialLink = {
+export type FooterSocialIcon = "x" | "github";
+
+export type FooterSocialLink = Readonly<{
   label: string;
-  href: string;
-  icon: "x" | "github";
-};
+  href: `https://${string}`;
+  icon: FooterSocialIcon;
+}>;

@@ -1,8 +1,8 @@
 import { API_BASE_URL } from "@/shared/config/api";
-import type { ViewerProfile } from "../model/types";
+import { isViewerProfile } from "../model/types";
 
 type ProfileResponse = {
-  profile: ViewerProfile;
+  profile?: unknown;
 };
 
 export async function getViewerProfile(username: string) {
@@ -19,6 +19,11 @@ export async function getViewerProfile(username: string) {
     throw new Error("Failed to fetch profile");
   }
 
-  const body = (await response.json()) as ProfileResponse;
+  const body = (await response.json().catch(() => null)) as ProfileResponse | null;
+
+  if (!body || !isViewerProfile(body.profile)) {
+    throw new Error("Invalid profile response");
+  }
+
   return body.profile;
 }
