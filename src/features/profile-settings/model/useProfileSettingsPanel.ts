@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import {
   readAvatarFile,
   updateViewerProfile,
@@ -17,7 +17,11 @@ import {
   getLocationCountryOptions,
   getLocationStateOptions,
 } from "../api/locationCatalog";
-import { PROFILE_SETTINGS_TOAST_DURATION_MS } from "./constants";
+import {
+  PROFILE_SETTINGS_SAVE_INDICATOR_DELAY_MS,
+  PROFILE_SETTINGS_SAVE_INDICATOR_MIN_VISIBLE_MS,
+  PROFILE_SETTINGS_TOAST_DURATION_MS,
+} from "./constants";
 import {
   createProfileSettingsDraft,
   createProfileSettingsLocationDraft,
@@ -75,6 +79,16 @@ function getLocationSummary(
 
 function getBioSummary(bio: string) {
   return bio.trim() || "Add a short public summary for your profile hero.";
+}
+
+function waitForDuration(durationMs: number) {
+  if (durationMs <= 0) {
+    return Promise.resolve();
+  }
+
+  return new Promise<void>((resolve) => {
+    window.setTimeout(resolve, durationMs);
+  });
 }
 
 function buildTargetPayload(
@@ -158,7 +172,8 @@ export function useProfileSettingsPanel(profile: ViewerProfile) {
   const [stateProvinceOptions, setStateProvinceOptions] = useState<string[]>([]);
   const [cityOptions, setCityOptions] = useState<string[]>([]);
   const [locationLookupError, setLocationLookupError] = useState<string | null>(null);
-  const [isSaving, startSaving] = useTransition();
+  const [isSaving, setIsSaving] = useState(false);
+  const [savingTarget, setSavingTarget] = useState<SaveTarget | null>(null);
 
   const photoHasChanges = draft.pendingAvatarDataUrl !== "" || draft.removeCustomAvatar;
   const displayNameHasChanges = profileState.displayName !== draft.displayName;
@@ -420,32 +435,49 @@ export function useProfileSettingsPanel(profile: ViewerProfile) {
     return feedbackTarget === target ? saveError : null;
   }
 
-  function handleSave(target: SaveTarget) {
+  async function handleSave(target: SaveTarget) {
     if (isSaving || !changeFlags[target]) {
       return;
     }
 
-    startSaving(async () => {
-      try {
-        setSaveError(null);
-        setFeedbackTarget(target);
-        setToastMessage(null);
+    setIsSaving(true);
+    setSaveError(null);
+    setFeedbackTarget(target);
+    setToastMessage(null);
 
-        const updatedProfile = await updateViewerProfile(
-          profileState.username,
-          buildTargetPayload(target, profileState, draft),
-        );
+    let savingIndicatorShownAt = 0;
+    const savingIndicatorTimeoutId = window.setTimeout(() => {
+      savingIndicatorShownAt = Date.now();
+      setSavingTarget(target);
+    }, PROFILE_SETTINGS_SAVE_INDICATOR_DELAY_MS);
 
-        setProfileState(updatedProfile);
-        setDraft((currentDraft) =>
-          syncDraftAfterSave(target, currentDraft, updatedProfile),
+    try {
+      const updatedProfile = await updateViewerProfile(
+        profileState.username,
+        buildTargetPayload(target, profileState, draft),
+      );
+
+      setProfileState(updatedProfile);
+      setDraft((currentDraft) =>
+        syncDraftAfterSave(target, currentDraft, updatedProfile),
+      );
+      setAvatarError(null);
+      setToastMessage(PROFILE_SETTINGS_SUCCESS_MESSAGES[target]);
+    } catch (error) {
+      setSaveError(getProfileSettingsErrorMessage(error, "Failed to update profile"));
+    } finally {
+      window.clearTimeout(savingIndicatorTimeoutId);
+
+      if (savingIndicatorShownAt > 0) {
+        await waitForDuration(
+          PROFILE_SETTINGS_SAVE_INDICATOR_MIN_VISIBLE_MS -
+            (Date.now() - savingIndicatorShownAt),
         );
-        setAvatarError(null);
-        setToastMessage(PROFILE_SETTINGS_SUCCESS_MESSAGES[target]);
-      } catch (error) {
-        setSaveError(getProfileSettingsErrorMessage(error, "Failed to update profile"));
       }
-    });
+
+      setSavingTarget(null);
+      setIsSaving(false);
+    }
   }
 
   return {
@@ -461,22 +493,28 @@ export function useProfileSettingsPanel(profile: ViewerProfile) {
       avatarUrl: draft.avatarUrl,
       avatarSource: draft.avatarSource,
       isSaving,
+      isSavePending: savingTarget === "photo",
       hasChanges: photoHasChanges,
       errorMessage: avatarError,
       saveErrorMessage: getSaveErrorMessage("photo"),
       onFileChange: handleAvatarFileChange,
       onRemoveCustomAvatar: handleRemoveCustomAvatar,
       onReset: resetPhoto,
-      onSave: () => handleSave("photo"),
+      onSave: () => {
+        void handleSave("photo");
+      },
     },
     displayNameSectionProps: {
       displayName: draft.displayName,
       isSaving,
+      isSavePending: savingTarget === "display-name",
       hasChanges: displayNameHasChanges,
       errorMessage: getSaveErrorMessage("display-name"),
       onDisplayNameChange: (value: string) => updateDraftField("displayName", value),
       onReset: resetDisplayName,
-      onSave: () => handleSave("display-name"),
+      onSave: () => {
+        void handleSave("display-name");
+      },
     },
     locationSectionProps: {
       country: draft.country,
@@ -486,22 +524,28 @@ export function useProfileSettingsPanel(profile: ViewerProfile) {
       stateProvinceOptions,
       cityOptions,
       isSaving,
+      isSavePending: savingTarget === "location",
       hasChanges: locationHasChanges,
       errorMessage: locationLookupError ?? getSaveErrorMessage("location"),
       onCountryChange: handleCountryChange,
       onStateProvinceChange: handleStateProvinceChange,
       onCityChange: (value: string) => updateDraftField("city", value),
       onReset: resetLocation,
-      onSave: () => handleSave("location"),
+      onSave: () => {
+        void handleSave("location");
+      },
     },
     bioSectionProps: {
       bio: draft.bio,
       isSaving,
+      isSavePending: savingTarget === "bio",
       hasChanges: bioHasChanges,
       errorMessage: getSaveErrorMessage("bio"),
       onBioChange: (value: string) => updateDraftField("bio", value),
       onReset: resetBio,
-      onSave: () => handleSave("bio"),
+      onSave: () => {
+        void handleSave("bio");
+      },
     },
   };
 }
