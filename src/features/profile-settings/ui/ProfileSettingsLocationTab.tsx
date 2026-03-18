@@ -1,5 +1,6 @@
 import { MapPin } from "lucide-react";
 import { Button } from "@/shared/ui/Button";
+import { ProfileSettingsSaveButton } from "./ProfileSettingsSaveButton";
 
 type Props = {
   country: string;
@@ -9,6 +10,7 @@ type Props = {
   stateProvinceOptions: string[];
   cityOptions: string[];
   isSaving: boolean;
+  isSavePending: boolean;
   hasChanges: boolean;
   errorMessage: string | null;
   onCountryChange: (value: string) => void;
@@ -26,6 +28,7 @@ export function ProfileSettingsLocationTab({
   stateProvinceOptions,
   cityOptions,
   isSaving,
+  isSavePending,
   hasChanges,
   errorMessage,
   onCountryChange,
@@ -114,13 +117,11 @@ export function ProfileSettingsLocationTab({
         >
           Cancel
         </Button>
-        <Button
+        <ProfileSettingsSaveButton
           onClick={onSave}
           disabled={isSaving || !hasChanges}
-          className="min-h-10 rounded-xl px-4 text-[13px]"
-        >
-          {isSaving ? "Saving..." : "Save"}
-        </Button>
+          isPending={isSavePending}
+        />
       </div>
     </section>
   );

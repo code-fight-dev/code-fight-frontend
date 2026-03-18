@@ -1,9 +1,11 @@
 import { UserRound } from "lucide-react";
 import { Button } from "@/shared/ui/Button";
+import { ProfileSettingsSaveButton } from "./ProfileSettingsSaveButton";
 
 type Props = {
   displayName: string;
   isSaving: boolean;
+  isSavePending: boolean;
   hasChanges: boolean;
   errorMessage: string | null;
   onDisplayNameChange: (value: string) => void;
@@ -16,6 +18,7 @@ const DISPLAY_NAME_LIMIT = 60;
 export function ProfileSettingsDisplayNameTab({
   displayName,
   isSaving,
+  isSavePending,
   hasChanges,
   errorMessage,
   onDisplayNameChange,
@@ -71,13 +74,11 @@ export function ProfileSettingsDisplayNameTab({
         >
           Cancel
         </Button>
-        <Button
+        <ProfileSettingsSaveButton
           onClick={onSave}
           disabled={isSaving || !hasChanges}
-          className="min-h-10 rounded-xl px-4 text-[13px]"
-        >
-          {isSaving ? "Saving..." : "Save"}
-        </Button>
+          isPending={isSavePending}
+        />
       </div>
     </section>
   );
