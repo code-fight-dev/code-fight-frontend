@@ -1,18 +1,20 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { createContext, startTransition, useContext, useState } from "react";
+import { createContext, startTransition, useContext, useEffect, useState } from "react";
+import { HOME_HREF } from "@/shared/config/routes";
 import { signOutViewer } from "../api/session";
 import type { Viewer } from "../model/types";
 
-type ViewerSessionValue = {
+type ViewerSessionContextValue = {
   viewer: Viewer | null;
   isLoading: boolean;
   isSigningOut: boolean;
+  setViewer: (viewer: Viewer | null) => void;
   signOut: () => Promise<void>;
 };
 
-const ViewerSessionContext = createContext<ViewerSessionValue | null>(null);
+const ViewerSessionContext = createContext<ViewerSessionContextValue | null>(null);
 
 type Props = {
   children: React.ReactNode;
@@ -23,6 +25,10 @@ export function ViewerSessionProvider({ children, initialViewer }: Props) {
   const router = useRouter();
   const [viewer, setViewer] = useState<Viewer | null>(initialViewer);
   const [isSigningOut, setIsSigningOut] = useState(false);
+
+  useEffect(() => {
+    setViewer(initialViewer);
+  }, [initialViewer]);
 
   async function handleSignOut() {
     if (isSigningOut) {
@@ -35,7 +41,7 @@ export function ViewerSessionProvider({ children, initialViewer }: Props) {
       setViewer(null);
 
       startTransition(() => {
-        router.push("/");
+        router.push(HOME_HREF);
         router.refresh();
       });
     } finally {
@@ -49,6 +55,7 @@ export function ViewerSessionProvider({ children, initialViewer }: Props) {
         viewer,
         isLoading: false,
         isSigningOut,
+        setViewer,
         signOut: handleSignOut,
       }}
     >

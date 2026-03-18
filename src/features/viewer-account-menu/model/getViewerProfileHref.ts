@@ -1,7 +1,7 @@
-import { SETTINGS_APPEARANCE_HREF } from "@/shared/config/routes";
+import { buildViewerProfileHref, SETTINGS_PROFILE_HREF } from "@/shared/config/routes";
 
 export function getViewerProfileHref(username: string) {
-  return `/u/${encodeURIComponent(username)}`;
+  return buildViewerProfileHref(username);
 }
 
-export const VIEWER_SETTINGS_HREF = SETTINGS_APPEARANCE_HREF;
+export const VIEWER_SETTINGS_HREF = SETTINGS_PROFILE_HREF;

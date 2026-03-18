@@ -2,12 +2,16 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import tailwindCanonicalClasses from "eslint-plugin-tailwind-canonical-classes";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   {
     files: ["src/**/*.{ts,tsx}"],
+    plugins: {
+      "tailwind-canonical-classes": tailwindCanonicalClasses,
+    },
     rules: {
       "no-console": ["warn", { allow: ["warn", "error"] }],
       "no-restricted-imports": [
@@ -30,6 +34,14 @@ const eslintConfig = defineConfig([
         { prefer: "type-imports", fixStyle: "separate-type-imports" },
       ],
       "@typescript-eslint/no-import-type-side-effects": "error",
+      "tailwind-canonical-classes/tailwind-canonical-classes": [
+        "warn",
+        {
+          cssPath: "./src/app/globals.css",
+          rootFontSize: 16,
+          calleeFunctions: ["cn", "clsx", "classNames", "twMerge", "cva"],
+        },
+      ],
     },
   },
   // Override default ignores of eslint-config-next.
