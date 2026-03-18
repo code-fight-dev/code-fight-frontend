@@ -1,6 +1,7 @@
-import { Gauge, Palette } from "lucide-react";
+import { Gauge, Palette, UserRound } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import {
+  SETTINGS_PROFILE_HREF,
   SETTINGS_APPEARANCE_HREF,
   SETTINGS_PERFORMANCE_HREF,
   type SettingsRoute,
@@ -17,6 +18,15 @@ type SettingsSection = Readonly<{
 }>;
 
 const SETTINGS_SECTION_BY_ID = {
+  profile: {
+    id: "profile",
+    href: SETTINGS_PROFILE_HREF,
+    label: "Profile",
+    meta: "Public",
+    description:
+      "Manage the public profile fields shown on your player page, including avatar, display name, location, and bio.",
+    icon: UserRound,
+  },
   appearance: {
     id: "appearance",
     href: SETTINGS_APPEARANCE_HREF,
@@ -36,11 +46,12 @@ const SETTINGS_SECTION_BY_ID = {
 } as const satisfies Record<SettingsSectionId, SettingsSection>;
 
 export const SETTINGS_SECTIONS = [
+  SETTINGS_SECTION_BY_ID.profile,
   SETTINGS_SECTION_BY_ID.appearance,
   SETTINGS_SECTION_BY_ID.performance,
 ] as const;
 
-export const DEFAULT_SETTINGS_SECTION = SETTINGS_SECTION_BY_ID.appearance;
+export const DEFAULT_SETTINGS_SECTION = SETTINGS_SECTION_BY_ID.profile;
 
 export function isSettingsSectionId(value: string): value is SettingsSectionId {
   return Object.hasOwn(SETTINGS_SECTION_BY_ID, value);

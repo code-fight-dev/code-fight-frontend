@@ -1,0 +1,2 @@
+export const PROFILE_BIO_LIMIT = 255;
+export const PROFILE_SETTINGS_TOAST_DURATION_MS = 2800;
