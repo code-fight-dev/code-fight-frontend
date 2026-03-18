@@ -10,6 +10,7 @@ import {
   shouldShowGeneratedAvatar,
 } from "@/entities/viewer";
 import { Button } from "@/shared/ui/Button";
+import { ProfileSettingsSaveButton } from "./ProfileSettingsSaveButton";
 
 type Props = {
   username: string;
@@ -17,6 +18,7 @@ type Props = {
   avatarUrl: string;
   avatarSource: AvatarSource;
   isSaving: boolean;
+  isSavePending: boolean;
   hasChanges: boolean;
   errorMessage: string | null;
   saveErrorMessage: string | null;
@@ -32,6 +34,7 @@ export function ProfileSettingsAvatarCard({
   avatarUrl,
   avatarSource,
   isSaving,
+  isSavePending,
   hasChanges,
   errorMessage,
   saveErrorMessage,
@@ -145,13 +148,11 @@ export function ProfileSettingsAvatarCard({
           >
             Cancel
           </Button>
-          <Button
+          <ProfileSettingsSaveButton
             onClick={onSave}
             disabled={isSaving || !hasChanges}
-            className="min-h-10 rounded-xl px-4 text-[13px]"
-          >
-            {isSaving ? "Saving..." : "Save"}
-          </Button>
+            isPending={isSavePending}
+          />
         </div>
       </div>
     </section>

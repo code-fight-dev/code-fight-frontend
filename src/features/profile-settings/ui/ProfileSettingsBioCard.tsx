@@ -1,10 +1,12 @@
 import { PenSquare } from "lucide-react";
 import { Button } from "@/shared/ui/Button";
 import { PROFILE_BIO_LIMIT } from "../model/constants";
+import { ProfileSettingsSaveButton } from "./ProfileSettingsSaveButton";
 
 type Props = {
   bio: string;
   isSaving: boolean;
+  isSavePending: boolean;
   hasChanges: boolean;
   errorMessage: string | null;
   onBioChange: (value: string) => void;
@@ -15,6 +17,7 @@ type Props = {
 export function ProfileSettingsBioCard({
   bio,
   isSaving,
+  isSavePending,
   hasChanges,
   errorMessage,
   onBioChange,
@@ -71,13 +74,11 @@ export function ProfileSettingsBioCard({
         >
           Cancel
         </Button>
-        <Button
+        <ProfileSettingsSaveButton
           onClick={onSave}
           disabled={isSaving || !hasChanges}
-          className="min-h-10 rounded-xl px-4 text-[13px]"
-        >
-          {isSaving ? "Saving..." : "Save"}
-        </Button>
+          isPending={isSavePending}
+        />
       </div>
     </section>
   );
