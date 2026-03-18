@@ -60,6 +60,8 @@
     rgba(7, 10, 19, 0.98) 100%
   );
   --app-surface-contrast-border: rgba(255, 255, 255, 0.06);
+  --app-profile-card-solid-bg: linear-gradient(180deg, #0b1220 0%, #09111d 100%);
+  --app-profile-card-soft-bg: linear-gradient(180deg, #131c31 0%, #0d1526 100%);
   --app-stats-band-bg: linear-gradient(180deg, #11192c 0%, #0d1425 54%, #0b1222 100%);
   --app-surface-overlay: rgba(5, 9, 22, 0.92);
   --app-surface-overlay-card: rgba(255, 255, 255, 0.03);
@@ -139,6 +141,43 @@
   --app-settings-row-active: rgba(37, 99, 235, 0.1);
   --app-settings-badge-bg: rgba(255, 255, 255, 0.04);
   --app-settings-badge-border: rgba(255, 255, 255, 0.08);
+  --app-settings-kicker-color: rgba(96, 165, 250, 0.78);
+  --app-settings-upload-text: #dbeafe;
+  --app-settings-upload-bg: linear-gradient(
+    180deg,
+    rgba(59, 130, 246, 0.12) 0%,
+    rgba(37, 99, 235, 0.1) 100%
+  );
+  --app-settings-upload-border: rgba(96, 165, 250, 0.28);
+  --app-settings-upload-hover-text: #eff6ff;
+  --app-settings-upload-hover-bg: linear-gradient(
+    180deg,
+    rgba(59, 130, 246, 0.18) 0%,
+    rgba(37, 99, 235, 0.14) 100%
+  );
+  --app-settings-upload-hover-border: rgba(147, 197, 253, 0.42);
+  --app-settings-upload-shadow: 0 14px 34px rgba(37, 99, 235, 0.18);
+  --app-settings-tab-icon-bg: rgba(255, 255, 255, 0.05);
+  --app-settings-tab-icon-border: rgba(255, 255, 255, 0.1);
+  --app-settings-tab-icon-color: rgba(226, 232, 240, 0.5);
+  --app-settings-tab-icon-active-bg: rgba(59, 130, 246, 0.12);
+  --app-settings-tab-icon-active-border: rgba(96, 165, 250, 0.2);
+  --app-settings-tab-icon-active-color: #bfdbfe;
+  --app-profile-meta-bg: rgba(255, 255, 255, 0.04);
+  --app-profile-meta-border: rgba(255, 255, 255, 0.1);
+  --app-profile-meta-text: rgba(226, 232, 240, 0.58);
+  --app-profile-meta-icon: #93c5fd;
+  --app-avatar-frame-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  --app-avatar-frame-border: rgba(255, 255, 255, 0.12);
+  --app-avatar-frame-shadow: 0 22px 50px rgba(2, 6, 23, 0.28);
+  --app-avatar-glow:
+    radial-gradient(circle at 24% 18%, rgba(96, 165, 250, 0.24), transparent 52%),
+    radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.14), transparent 26%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(8, 15, 30, 0.96));
 }
 
 :root[data-theme="light"] {
@@ -220,9 +259,9 @@
     rgba(240, 247, 255, 1) 100%
   );
   --app-input-border: rgba(148, 163, 184, 0.2);
-  --app-input-focus-border: rgba(37, 99, 235, 0.24);
+  --app-input-focus-border: rgba(37, 99, 235, 0.34);
   --app-input-icon: rgba(51, 65, 85, 0.48);
-  --app-input-placeholder: rgba(51, 65, 85, 0.34);
+  --app-input-placeholder: rgba(51, 65, 85, 0.42);
   --app-input-text: rgba(15, 23, 42, 0.92);
   --app-header-elevated-bg: rgba(255, 255, 255, 0.74);
   --app-header-flat-bg: rgba(243, 248, 255, 0.88);
@@ -233,12 +272,20 @@
   --app-control-ghost-hover-text: #0f172a;
   --app-control-ghost-hover-bg: rgba(59, 130, 246, 0.08);
   --app-control-ghost-hover-border: rgba(59, 130, 246, 0.18);
-  --app-control-secondary-text: rgba(15, 23, 42, 0.88);
-  --app-control-secondary-bg: rgba(255, 255, 255, 0.72);
-  --app-control-secondary-border: rgba(148, 163, 184, 0.22);
+  --app-control-secondary-text: rgba(15, 23, 42, 0.84);
+  --app-control-secondary-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(242, 247, 255, 0.96) 100%
+  );
+  --app-control-secondary-border: rgba(148, 163, 184, 0.26);
   --app-control-secondary-hover-text: #0f172a;
-  --app-control-secondary-hover-bg: rgba(255, 255, 255, 0.92);
-  --app-control-secondary-hover-border: rgba(100, 116, 139, 0.26);
+  --app-control-secondary-hover-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(237, 244, 255, 1) 100%
+  );
+  --app-control-secondary-hover-border: rgba(96, 165, 250, 0.28);
   --app-popover-bg: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.98) 0%,
@@ -249,33 +296,131 @@
   --app-popover-section-bg: rgba(241, 245, 249, 0.72);
   --app-popover-section-border: rgba(148, 163, 184, 0.16);
   --app-popover-shadow: 0 26px 60px rgba(15, 23, 42, 0.14);
-  --app-card-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
-  --app-settings-shell-bg: linear-gradient(
+  --app-card-shadow:
+    0 28px 68px rgba(148, 163, 184, 0.16), 0 10px 28px rgba(96, 165, 250, 0.08);
+  --app-surface-strong: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.94) 0%,
-    rgba(244, 248, 255, 0.96) 100%
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(244, 248, 255, 0.94) 100%
   );
-  --app-settings-shell-border: rgba(148, 163, 184, 0.22);
+  --app-surface-soft: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.84) 0%,
+    rgba(239, 246, 255, 0.94) 100%
+  );
+  --app-surface-contrast: linear-gradient(
+    180deg,
+    rgba(245, 249, 255, 0.95) 0%,
+    rgba(236, 244, 255, 0.98) 100%
+  );
+  --app-profile-card-solid-bg: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(248, 251, 255, 0.98) 48%,
+    rgba(235, 244, 255, 0.96) 100%
+  );
+  --app-profile-card-soft-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(242, 247, 255, 0.98) 100%
+  );
+  --app-settings-shell-bg: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(248, 251, 255, 0.98) 44%,
+    rgba(237, 245, 255, 0.97) 100%
+  );
+  --app-settings-shell-border: rgba(148, 163, 184, 0.24);
   --app-settings-rail-bg: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.7) 0%,
-    rgba(248, 250, 252, 0.62) 100%
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(242, 247, 255, 0.88) 100%
   );
   --app-settings-section-bg: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.76) 0%,
-    rgba(248, 250, 252, 0.66) 100%
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(243, 248, 255, 0.94) 100%
   );
-  --app-settings-section-border: rgba(148, 163, 184, 0.2);
-  --app-settings-divider: rgba(148, 163, 184, 0.18);
-  --app-settings-nav-bg: rgba(255, 255, 255, 0.72);
-  --app-settings-nav-border: rgba(148, 163, 184, 0.18);
-  --app-settings-nav-active-bg: rgba(59, 130, 246, 0.1);
-  --app-settings-nav-active-border: rgba(37, 99, 235, 0.18);
-  --app-settings-row-hover: rgba(255, 255, 255, 0.56);
-  --app-settings-row-active: rgba(59, 130, 246, 0.08);
-  --app-settings-badge-bg: rgba(255, 255, 255, 0.72);
-  --app-settings-badge-border: rgba(148, 163, 184, 0.18);
+  --app-settings-section-border: rgba(148, 163, 184, 0.24);
+  --app-settings-divider: rgba(148, 163, 184, 0.22);
+  --app-settings-nav-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(243, 248, 255, 0.96) 100%
+  );
+  --app-settings-nav-border: rgba(96, 165, 250, 0.22);
+  --app-settings-nav-active-bg: linear-gradient(
+    180deg,
+    rgba(191, 219, 254, 0.34) 0%,
+    rgba(219, 234, 254, 0.42) 100%
+  );
+  --app-settings-nav-active-border: rgba(59, 130, 246, 0.34);
+  --app-settings-row-hover: linear-gradient(
+    180deg,
+    rgba(241, 246, 255, 0.92) 0%,
+    rgba(233, 242, 255, 0.96) 100%
+  );
+  --app-settings-row-active: linear-gradient(
+    180deg,
+    rgba(191, 219, 254, 0.34) 0%,
+    rgba(219, 234, 254, 0.46) 100%
+  );
+  --app-settings-badge-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(240, 247, 255, 0.98) 100%
+  );
+  --app-settings-badge-border: rgba(96, 165, 250, 0.22);
+  --app-settings-kicker-color: rgba(37, 99, 235, 0.82);
+  --app-settings-upload-text: #1d4ed8;
+  --app-settings-upload-bg: linear-gradient(
+    180deg,
+    rgba(96, 165, 250, 0.18) 0%,
+    rgba(59, 130, 246, 0.12) 100%
+  );
+  --app-settings-upload-border: rgba(59, 130, 246, 0.32);
+  --app-settings-upload-hover-text: #1e40af;
+  --app-settings-upload-hover-bg: linear-gradient(
+    180deg,
+    rgba(147, 197, 253, 0.26) 0%,
+    rgba(96, 165, 250, 0.16) 100%
+  );
+  --app-settings-upload-hover-border: rgba(37, 99, 235, 0.42);
+  --app-settings-upload-shadow: 0 16px 34px rgba(59, 130, 246, 0.16);
+  --app-settings-tab-icon-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(240, 247, 255, 0.98) 100%
+  );
+  --app-settings-tab-icon-border: rgba(148, 163, 184, 0.22);
+  --app-settings-tab-icon-color: rgba(71, 85, 105, 0.78);
+  --app-settings-tab-icon-active-bg: linear-gradient(
+    180deg,
+    rgba(147, 197, 253, 0.24) 0%,
+    rgba(96, 165, 250, 0.16) 100%
+  );
+  --app-settings-tab-icon-active-border: rgba(59, 130, 246, 0.32);
+  --app-settings-tab-icon-active-color: #2563eb;
+  --app-profile-meta-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(243, 248, 255, 0.92) 100%
+  );
+  --app-profile-meta-border: rgba(148, 163, 184, 0.18);
+  --app-profile-meta-text: rgba(51, 65, 85, 0.8);
+  --app-profile-meta-icon: #3b82f6;
+  --app-avatar-frame-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(240, 247, 255, 0.98) 100%
+  );
+  --app-avatar-frame-border: rgba(148, 163, 184, 0.18);
+  --app-avatar-frame-shadow:
+    0 24px 54px rgba(71, 85, 105, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  --app-avatar-glow:
+    radial-gradient(circle at 24% 18%, rgba(59, 130, 246, 0.22), transparent 52%),
+    radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.92), transparent 30%),
+    linear-gradient(180deg, rgba(191, 219, 254, 0.34), rgba(96, 165, 250, 0.16));
 }
 
 html,
@@ -326,11 +471,21 @@ a {
   backdrop-filter: blur(20px);
 }
 
+.profile-card-solid {
+  background: var(--app-profile-card-solid-bg);
+  backdrop-filter: none;
+}
+
 .app-shell-card-soft {
   border: 1px solid var(--app-surface-soft-border);
   background: var(--app-surface-soft);
   box-shadow: var(--app-card-shadow);
   backdrop-filter: blur(18px);
+}
+
+.profile-card-soft {
+  background: var(--app-profile-card-soft-bg);
+  backdrop-filter: none;
 }
 
 .app-shell-card-contrast {
@@ -470,6 +625,63 @@ a {
 .app-settings-option-active {
   background: var(--app-settings-row-active);
   box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.12);
+}
+
+.app-settings-kicker {
+  color: var(--app-settings-kicker-color);
+}
+
+.app-settings-accent {
+  color: var(--app-settings-tab-icon-active-color);
+}
+
+.app-settings-upload-trigger {
+  border: 1px solid var(--app-settings-upload-border);
+  background: var(--app-settings-upload-bg);
+  color: var(--app-settings-upload-text);
+  box-shadow: var(--app-settings-upload-shadow);
+}
+
+.app-settings-upload-trigger:hover {
+  border-color: var(--app-settings-upload-hover-border);
+  background: var(--app-settings-upload-hover-bg);
+  color: var(--app-settings-upload-hover-text);
+}
+
+.app-settings-tab-icon {
+  border: 1px solid var(--app-settings-tab-icon-border);
+  background: var(--app-settings-tab-icon-bg);
+  color: var(--app-settings-tab-icon-color);
+}
+
+.app-settings-tab-icon-active {
+  border-color: var(--app-settings-tab-icon-active-border);
+  background: var(--app-settings-tab-icon-active-bg);
+  color: var(--app-settings-tab-icon-active-color);
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.08),
+    0 12px 28px rgba(59, 130, 246, 0.1);
+}
+
+.app-profile-meta-chip {
+  border: 1px solid var(--app-profile-meta-border);
+  background: var(--app-profile-meta-bg);
+  color: var(--app-profile-meta-text);
+  backdrop-filter: blur(14px);
+}
+
+.app-profile-meta-chip-icon {
+  color: var(--app-profile-meta-icon);
+}
+
+.app-avatar-display-glow {
+  background: var(--app-avatar-glow);
+}
+
+.app-avatar-display-frame {
+  border: 1px solid var(--app-avatar-frame-border);
+  background: var(--app-avatar-frame-bg);
+  box-shadow: var(--app-avatar-frame-shadow);
 }
 
 .app-option {
