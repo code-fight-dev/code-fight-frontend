@@ -1,6 +1,6 @@
 import type { ViewerProfileTopLanguage } from "@/entities/viewer";
-import { formatPercent } from "../model/format";
-import { ProfileSection } from "./ProfileSection";
+import { formatPercent } from "@/views/viewer-profile/model/format";
+import { ProfileSection } from "@/views/viewer-profile/ui/ProfileSection";
 
 type Props = {
   languages: ViewerProfileTopLanguage[];

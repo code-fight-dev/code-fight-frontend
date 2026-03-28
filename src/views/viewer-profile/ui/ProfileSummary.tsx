@@ -38,15 +38,15 @@ export function ProfileSummary({
     <section className="app-shell-card profile-card-solid relative overflow-hidden rounded-[34px] p-5 sm:p-6 lg:p-7">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(59,130,246,0.16),transparent_26%),radial-gradient(circle_at_88%_16%,rgba(6,182,212,0.08),transparent_18%),linear-gradient(180deg,transparent,rgba(8,12,24,0.22)_100%)]"
+        className="app-profile-ambient pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(59,130,246,0.16),transparent_26%),radial-gradient(circle_at_88%_16%,rgba(6,182,212,0.08),transparent_18%),linear-gradient(180deg,transparent,rgba(8,12,24,0.22)_100%)]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.56)_0.7px,transparent_0.8px)] mask-[linear-gradient(180deg,transparent,black_12%,black_88%,transparent)] bg-size-[28px_28px] opacity-[0.06]"
+        className="app-profile-grid pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.56)_0.7px,transparent_0.8px)] mask-[linear-gradient(180deg,transparent,black_12%,black_88%,transparent)] bg-size-[28px_28px] opacity-[0.06]"
       />
 
       <div className="relative grid items-start gap-7 xl:grid-cols-[180px_minmax(0,1fr)]">
-        <div className="flex w-fit flex-col items-center">
+        <div className="flex w-fit flex-col items-center justify-self-center">
           <div className="relative">
             <div className="app-avatar-display-glow absolute inset-0 rounded-[34px] blur-xl" />
 
@@ -69,10 +69,10 @@ export function ProfileSummary({
           </div>
 
           {isOwner ? (
-            <div className="mt-4 flex justify-center">
+            <div className="mt-4 flex w-full justify-center">
               <Button
                 href={SETTINGS_PROFILE_HREF}
-                className="min-h-10 rounded-full px-4.5 text-[12px] shadow-[0_0_0_1px_rgba(59,130,246,0.28),0_10px_24px_rgba(37,99,235,0.16)]"
+                className="min-h-10 w-full rounded-full px-4.5 text-[12px] shadow-[0_0_0_1px_rgba(59,130,246,0.28),0_10px_24px_rgba(37,99,235,0.16)] sm:w-auto"
               >
                 <Settings2 className="h-4 w-4" strokeWidth={1.9} />
                 Edit Profile
@@ -81,8 +81,8 @@ export function ProfileSummary({
           ) : null}
         </div>
 
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-3">
+        <div className="min-w-0 text-center xl:text-left">
+          <div className="flex flex-wrap items-center justify-center gap-3 xl:justify-start">
             <h1 className="text-[2.1rem] font-semibold tracking-[-0.075em] text-(--app-text-strong) sm:text-[2.85rem]">
               {displayName}
             </h1>
@@ -107,7 +107,7 @@ export function ProfileSummary({
             {profile.bio || "This player has not added a public bio yet."}
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap justify-center gap-3 xl:justify-start">
             {locationLabel ? (
               <MetaChip icon={<MapPin className="h-4 w-4" strokeWidth={1.95} />}>
                 {locationLabel}
@@ -130,9 +130,9 @@ type MetaChipProps = {
 
 function MetaChip({ icon, children }: MetaChipProps) {
   return (
-    <div className="app-profile-meta-chip inline-flex items-center gap-2 rounded-2xl px-3.5 py-2.5 text-[13px] font-medium tracking-[-0.02em]">
+    <div className="app-profile-meta-chip inline-flex max-w-full items-center justify-center gap-2 rounded-2xl px-3.5 py-2.5 text-[13px] font-medium tracking-[-0.02em] sm:justify-start">
       <span className="app-profile-meta-chip-icon">{icon}</span>
-      <span>{children}</span>
+      <span className="min-w-0 wrap-anywhere wrap-break-word">{children}</span>
     </div>
   );
 }
