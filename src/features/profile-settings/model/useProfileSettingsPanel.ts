@@ -1,203 +1,82 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  readAvatarFile,
-  updateViewerProfile,
-  validateAvatarFile,
-} from "@/entities/viewer";
-import type {
-  AvatarSource,
-  UpdateViewerProfileInput,
-  ViewerProfile,
-} from "@/entities/viewer";
-import { getCountryCodeByName } from "@/shared/lib/country";
-import {
-  getLocationCityOptions,
-  getLocationCountryOptions,
-  getLocationStateOptions,
-} from "../api/locationCatalog";
+import { updateViewerProfile } from "@/entities/viewer";
+import type { ViewerProfile } from "@/entities/viewer";
 import {
   PROFILE_SETTINGS_SAVE_INDICATOR_DELAY_MS,
   PROFILE_SETTINGS_SAVE_INDICATOR_MIN_VISIBLE_MS,
   PROFILE_SETTINGS_TOAST_DURATION_MS,
-} from "./constants";
+} from "@/features/profile-settings/model/constants";
+import {
+  buildProfileSettingsChangeFlags,
+  buildProfileSettingsTabSummaries,
+  buildTargetPayload,
+  getProfileSettingsErrorMessage,
+  PROFILE_SETTINGS_SUCCESS_MESSAGES,
+  type ProfileSettingsSaveTarget,
+  syncDraftAfterSave,
+  waitForDuration,
+} from "@/features/profile-settings/model/panelHelpers";
 import {
   createProfileSettingsDraft,
-  createProfileSettingsLocationDraft,
-  getProfileSettingsFallbackAvatar,
-  getResolvedProfileCountryCode,
   type ProfileSettingsDraft,
-} from "./profileSettingsForm";
-import type { ProfileSettingsTabId } from "./tabs";
-
-type SaveTarget = ProfileSettingsTabId;
-type ChangeFlags = Record<SaveTarget, boolean>;
-
-const PROFILE_SETTINGS_SUCCESS_MESSAGES: Record<SaveTarget, string> = {
-  photo: "Successfully updated your profile photo.",
-  "display-name": "Successfully updated your display name.",
-  location: "Successfully updated your location.",
-  bio: "Successfully updated your public bio.",
-};
-
-function buildPersistedProfileInput(profile: ViewerProfile): UpdateViewerProfileInput {
-  return {
-    displayName: profile.displayName,
-    bio: profile.bio,
-    country: profile.country,
-    countryCode: getResolvedProfileCountryCode(profile),
-    stateProvince: profile.stateProvince,
-    city: profile.city,
-  };
-}
-
-function getProfileSettingsErrorMessage(error: unknown, fallback: string) {
-  return error instanceof Error ? error.message : fallback;
-}
-
-function getPhotoSummary(avatarSource: AvatarSource) {
-  if (avatarSource === "custom") {
-    return "Custom image uploaded";
-  }
-
-  if (avatarSource === "provider") {
-    return "Provider avatar active";
-  }
-
-  return "Generated initial avatar";
-}
-
-function getLocationSummary(
-  draft: Pick<ProfileSettingsDraft, "city" | "stateProvince" | "country">,
-) {
-  return (
-    [draft.city, draft.stateProvince, draft.country].filter(Boolean).join(", ") ||
-    "Optional"
-  );
-}
-
-function getBioSummary(bio: string) {
-  return bio.trim() || "Add a short public summary for your profile hero.";
-}
-
-function waitForDuration(durationMs: number) {
-  if (durationMs <= 0) {
-    return Promise.resolve();
-  }
-
-  return new Promise<void>((resolve) => {
-    window.setTimeout(resolve, durationMs);
-  });
-}
-
-function buildTargetPayload(
-  target: SaveTarget,
-  profileState: ViewerProfile,
-  draft: ProfileSettingsDraft,
-): UpdateViewerProfileInput {
-  const persistedProfileInput = buildPersistedProfileInput(profileState);
-
-  switch (target) {
-    case "photo":
-      return {
-        ...persistedProfileInput,
-        avatarDataUrl: draft.pendingAvatarDataUrl || undefined,
-        removeCustomAvatar: draft.removeCustomAvatar,
-      };
-    case "display-name":
-      return {
-        ...persistedProfileInput,
-        displayName: draft.displayName,
-      };
-    case "location":
-      return {
-        ...persistedProfileInput,
-        country: draft.country,
-        countryCode: draft.countryCode,
-        stateProvince: draft.stateProvince,
-        city: draft.city,
-      };
-    case "bio":
-      return {
-        ...persistedProfileInput,
-        bio: draft.bio,
-      };
-  }
-}
-
-function syncDraftAfterSave(
-  target: SaveTarget,
-  currentDraft: ProfileSettingsDraft,
-  updatedProfile: ViewerProfile,
-): ProfileSettingsDraft {
-  switch (target) {
-    case "photo":
-      return {
-        ...currentDraft,
-        avatarUrl: updatedProfile.avatarUrl,
-        avatarSource: updatedProfile.avatarSource,
-        pendingAvatarDataUrl: "",
-        removeCustomAvatar: false,
-      };
-    case "display-name":
-      return {
-        ...currentDraft,
-        displayName: updatedProfile.displayName,
-      };
-    case "location":
-      return {
-        ...currentDraft,
-        ...createProfileSettingsLocationDraft(updatedProfile),
-      };
-    case "bio":
-      return {
-        ...currentDraft,
-        bio: updatedProfile.bio,
-      };
-  }
-}
+} from "@/features/profile-settings/model/profileSettingsForm";
+import type { ProfileSettingsTabId } from "@/features/profile-settings/model/tabs";
+import { useProfileSettingsAvatarState } from "@/features/profile-settings/model/useProfileSettingsAvatarState";
+import { useProfileSettingsLocationState } from "@/features/profile-settings/model/useProfileSettingsLocationState";
 
 export function useProfileSettingsPanel(profile: ViewerProfile) {
   const [profileState, setProfileState] = useState(profile);
   const [draft, setDraft] = useState<ProfileSettingsDraft>(() =>
     createProfileSettingsDraft(profile),
   );
-  const [avatarError, setAvatarError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [feedbackTarget, setFeedbackTarget] = useState<SaveTarget | null>(null);
+  const [feedbackTarget, setFeedbackTarget] = useState<ProfileSettingsSaveTarget | null>(
+    null,
+  );
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<ProfileSettingsTabId>("display-name");
-  const [countryOptions, setCountryOptions] = useState<string[]>([]);
-  const [stateProvinceOptions, setStateProvinceOptions] = useState<string[]>([]);
-  const [cityOptions, setCityOptions] = useState<string[]>([]);
-  const [locationLookupError, setLocationLookupError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [savingTarget, setSavingTarget] = useState<SaveTarget | null>(null);
+  const [savingTarget, setSavingTarget] = useState<ProfileSettingsSaveTarget | null>(
+    null,
+  );
 
-  const photoHasChanges = draft.pendingAvatarDataUrl !== "" || draft.removeCustomAvatar;
-  const displayNameHasChanges = profileState.displayName !== draft.displayName;
-  const profileCountryCode = getResolvedProfileCountryCode(profileState);
-  const locationHasChanges =
-    profileState.country !== draft.country ||
-    profileCountryCode !== draft.countryCode ||
-    profileState.stateProvince !== draft.stateProvince ||
-    profileState.city !== draft.city;
-  const bioHasChanges = profileState.bio !== draft.bio;
+  const changeFlags = buildProfileSettingsChangeFlags(profileState, draft);
+  const tabsSummaries = buildProfileSettingsTabSummaries(profileState, draft);
 
-  const changeFlags: ChangeFlags = {
-    photo: photoHasChanges,
-    "display-name": displayNameHasChanges,
-    location: locationHasChanges,
-    bio: bioHasChanges,
-  };
+  function clearSaveFeedback() {
+    setSaveError(null);
+    setFeedbackTarget(null);
+  }
 
-  const tabsSummaries: Record<ProfileSettingsTabId, string> = {
-    photo: getPhotoSummary(draft.avatarSource),
-    "display-name": draft.displayName || profileState.username,
-    location: getLocationSummary(draft),
-    bio: getBioSummary(draft.bio),
-  };
+  const {
+    avatarError,
+    clearAvatarError,
+    handleAvatarFileChange,
+    handleRemoveCustomAvatar,
+    resetPhoto,
+  } = useProfileSettingsAvatarState({
+    clearSaveFeedback,
+    profileState,
+    setDraft,
+  });
+
+  const {
+    cityOptions,
+    countryOptions,
+    handleCountryChange,
+    handleStateProvinceChange,
+    locationLookupError,
+    resetLocation,
+    stateProvinceOptions,
+  } = useProfileSettingsLocationState({
+    activeTab,
+    clearSaveFeedback,
+    draft,
+    profileState,
+    setDraft,
+  });
 
   useEffect(() => {
     if (!toastMessage) {
@@ -213,118 +92,6 @@ export function useProfileSettingsPanel(profile: ViewerProfile) {
     };
   }, [toastMessage]);
 
-  useEffect(() => {
-    if (activeTab !== "location" || countryOptions.length > 0) {
-      return;
-    }
-
-    let isCancelled = false;
-
-    getLocationCountryOptions()
-      .then((options) => {
-        if (!isCancelled) {
-          setCountryOptions(options);
-          setLocationLookupError(null);
-        }
-      })
-      .catch((error) => {
-        if (!isCancelled) {
-          setLocationLookupError(
-            getProfileSettingsErrorMessage(error, "Failed to load countries"),
-          );
-        }
-      });
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [activeTab, countryOptions.length]);
-
-  useEffect(() => {
-    if (activeTab !== "location" || !draft.country) {
-      return;
-    }
-
-    let isCancelled = false;
-
-    getLocationStateOptions(draft.country)
-      .then(async (options) => {
-        if (isCancelled) {
-          return;
-        }
-
-        setStateProvinceOptions(options);
-        setLocationLookupError(null);
-
-        if (draft.stateProvince && !options.includes(draft.stateProvince)) {
-          setDraft((currentDraft) => ({
-            ...currentDraft,
-            stateProvince: "",
-            city: "",
-          }));
-          setCityOptions([]);
-          return;
-        }
-
-        if (options.length > 0 && !draft.stateProvince) {
-          setCityOptions([]);
-          return;
-        }
-
-        try {
-          const nextCityOptions = await getLocationCityOptions(
-            draft.country,
-            draft.stateProvince,
-          );
-
-          if (isCancelled) {
-            return;
-          }
-
-          setCityOptions(nextCityOptions);
-          setLocationLookupError(null);
-
-          setDraft((currentDraft) =>
-            currentDraft.city && !nextCityOptions.includes(currentDraft.city)
-              ? {
-                  ...currentDraft,
-                  city: "",
-                }
-              : currentDraft,
-          );
-        } catch (error) {
-          if (!isCancelled) {
-            setLocationLookupError(
-              getProfileSettingsErrorMessage(error, "Failed to load cities"),
-            );
-            setCityOptions([]);
-          }
-        }
-      })
-      .catch((error) => {
-        if (!isCancelled) {
-          setLocationLookupError(
-            getProfileSettingsErrorMessage(error, "Failed to load states or provinces"),
-          );
-          setStateProvinceOptions([]);
-        }
-      });
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [activeTab, draft.country, draft.stateProvince]);
-
-  function clearSaveFeedback() {
-    setSaveError(null);
-    setFeedbackTarget(null);
-  }
-
-  function clearLocationFeedback() {
-    clearSaveFeedback();
-    setLocationLookupError(null);
-  }
-
   function updateDraftField<K extends keyof ProfileSettingsDraft>(
     key: K,
     value: ProfileSettingsDraft[K],
@@ -336,106 +103,19 @@ export function useProfileSettingsPanel(profile: ViewerProfile) {
     clearSaveFeedback();
   }
 
-  function resetPhoto() {
-    const fallback = getProfileSettingsFallbackAvatar(profileState);
-
-    setAvatarError(null);
-    clearSaveFeedback();
-    setDraft((currentDraft) => ({
-      ...currentDraft,
-      avatarUrl: profileState.avatarUrl || fallback.avatarUrl,
-      avatarSource: profileState.avatarSource || fallback.avatarSource,
-      pendingAvatarDataUrl: "",
-      removeCustomAvatar: false,
-    }));
-  }
-
   function resetDisplayName() {
     updateDraftField("displayName", profileState.displayName);
-  }
-
-  function resetLocation() {
-    setDraft((currentDraft) => ({
-      ...currentDraft,
-      ...createProfileSettingsLocationDraft(profileState),
-    }));
-    clearLocationFeedback();
   }
 
   function resetBio() {
     updateDraftField("bio", profileState.bio);
   }
 
-  async function handleAvatarFileChange(file: File | null) {
-    clearSaveFeedback();
-
-    if (!file) {
-      return;
-    }
-
-    const validationError = validateAvatarFile(file);
-    if (validationError) {
-      setAvatarError(validationError);
-      return;
-    }
-
-    try {
-      const avatarDataUrl = await readAvatarFile(file);
-      setAvatarError(null);
-      setDraft((currentDraft) => ({
-        ...currentDraft,
-        avatarUrl: avatarDataUrl,
-        avatarSource: "custom",
-        pendingAvatarDataUrl: avatarDataUrl,
-        removeCustomAvatar: false,
-      }));
-    } catch (error) {
-      setAvatarError(getProfileSettingsErrorMessage(error, "Failed to read avatar file"));
-    }
-  }
-
-  function handleRemoveCustomAvatar() {
-    const fallback = getProfileSettingsFallbackAvatar(profileState);
-
-    setAvatarError(null);
-    clearSaveFeedback();
-    setDraft((currentDraft) => ({
-      ...currentDraft,
-      avatarUrl: fallback.avatarUrl,
-      avatarSource: fallback.avatarSource,
-      pendingAvatarDataUrl: "",
-      removeCustomAvatar: profileState.avatarSource === "custom",
-    }));
-  }
-
-  function handleCountryChange(value: string) {
-    setDraft((currentDraft) => ({
-      ...currentDraft,
-      country: value,
-      countryCode: getCountryCodeByName(value),
-      stateProvince: "",
-      city: "",
-    }));
-    clearLocationFeedback();
-    setStateProvinceOptions([]);
-    setCityOptions([]);
-  }
-
-  function handleStateProvinceChange(value: string) {
-    setDraft((currentDraft) => ({
-      ...currentDraft,
-      stateProvince: value,
-      city: "",
-    }));
-    clearLocationFeedback();
-    setCityOptions([]);
-  }
-
-  function getSaveErrorMessage(target: SaveTarget) {
+  function getSaveErrorMessage(target: ProfileSettingsSaveTarget) {
     return feedbackTarget === target ? saveError : null;
   }
 
-  async function handleSave(target: SaveTarget) {
+  async function handleSave(target: ProfileSettingsSaveTarget) {
     if (isSaving || !changeFlags[target]) {
       return;
     }
@@ -461,7 +141,7 @@ export function useProfileSettingsPanel(profile: ViewerProfile) {
       setDraft((currentDraft) =>
         syncDraftAfterSave(target, currentDraft, updatedProfile),
       );
-      setAvatarError(null);
+      clearAvatarError();
       setToastMessage(PROFILE_SETTINGS_SUCCESS_MESSAGES[target]);
     } catch (error) {
       setSaveError(getProfileSettingsErrorMessage(error, "Failed to update profile"));
@@ -480,6 +160,12 @@ export function useProfileSettingsPanel(profile: ViewerProfile) {
     }
   }
 
+  function createSaveHandler(target: ProfileSettingsSaveTarget) {
+    return () => {
+      void handleSave(target);
+    };
+  }
+
   return {
     toastMessage,
     tabsProps: {
@@ -494,27 +180,23 @@ export function useProfileSettingsPanel(profile: ViewerProfile) {
       avatarSource: draft.avatarSource,
       isSaving,
       isSavePending: savingTarget === "photo",
-      hasChanges: photoHasChanges,
+      hasChanges: changeFlags.photo,
       errorMessage: avatarError,
       saveErrorMessage: getSaveErrorMessage("photo"),
       onFileChange: handleAvatarFileChange,
       onRemoveCustomAvatar: handleRemoveCustomAvatar,
       onReset: resetPhoto,
-      onSave: () => {
-        void handleSave("photo");
-      },
+      onSave: createSaveHandler("photo"),
     },
     displayNameSectionProps: {
       displayName: draft.displayName,
       isSaving,
       isSavePending: savingTarget === "display-name",
-      hasChanges: displayNameHasChanges,
+      hasChanges: changeFlags["display-name"],
       errorMessage: getSaveErrorMessage("display-name"),
       onDisplayNameChange: (value: string) => updateDraftField("displayName", value),
       onReset: resetDisplayName,
-      onSave: () => {
-        void handleSave("display-name");
-      },
+      onSave: createSaveHandler("display-name"),
     },
     locationSectionProps: {
       country: draft.country,
@@ -525,27 +207,23 @@ export function useProfileSettingsPanel(profile: ViewerProfile) {
       cityOptions,
       isSaving,
       isSavePending: savingTarget === "location",
-      hasChanges: locationHasChanges,
+      hasChanges: changeFlags.location,
       errorMessage: locationLookupError ?? getSaveErrorMessage("location"),
       onCountryChange: handleCountryChange,
       onStateProvinceChange: handleStateProvinceChange,
       onCityChange: (value: string) => updateDraftField("city", value),
       onReset: resetLocation,
-      onSave: () => {
-        void handleSave("location");
-      },
+      onSave: createSaveHandler("location"),
     },
     bioSectionProps: {
       bio: draft.bio,
       isSaving,
       isSavePending: savingTarget === "bio",
-      hasChanges: bioHasChanges,
+      hasChanges: changeFlags.bio,
       errorMessage: getSaveErrorMessage("bio"),
       onBioChange: (value: string) => updateDraftField("bio", value),
       onReset: resetBio,
-      onSave: () => {
-        void handleSave("bio");
-      },
+      onSave: createSaveHandler("bio"),
     },
   };
 }
