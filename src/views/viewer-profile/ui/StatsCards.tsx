@@ -1,6 +1,10 @@
 import { Flame, Hourglass, TrendingUp, Trophy } from "lucide-react";
 import type { ViewerProfileStats } from "@/entities/viewer";
-import { formatDurationFromSeconds, formatInteger, formatPercent } from "../model/format";
+import {
+  formatDurationFromSeconds,
+  formatInteger,
+  formatPercent,
+} from "@/views/viewer-profile/model/format";
 
 type Props = {
   stats: ViewerProfileStats;
@@ -45,7 +49,7 @@ export function StatsCards({ stats }: Props) {
   );
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {cards.map((card) => {
         const Icon = card.icon;
 

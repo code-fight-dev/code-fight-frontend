@@ -1,85 +1,12 @@
-import type { ReactNode } from "react";
-import type { LucideIcon } from "lucide-react";
 import { MoonStar, SunMedium, Zap, ZapOff } from "lucide-react";
-import type { MotionPreference, ThemePreference } from "./types";
-
-export type PreferenceOption<T extends string> = Readonly<{
-  value: T;
-  label: string;
-  eyebrow: string;
-  description: string;
-  details: readonly string[];
-  preview: ReactNode;
-  icon: LucideIcon;
-}>;
-
-export type PreferenceSectionDefinition<T extends string> = Readonly<{
-  name: `${string}-preference`;
-  eyebrow: string;
-  title: string;
-  description: string;
-  options: readonly PreferenceOption<T>[];
-}>;
-
-function DarkThemePreview() {
-  return (
-    <div className="app-settings-preview-shell border-white/10 bg-[#091120] text-white">
-      <div className="border-b border-white/8 px-2.5 py-2">
-        <div className="h-1.5 w-10 rounded-full bg-blue-400/75" />
-      </div>
-      <div className="space-y-2 px-2.5 py-2.5">
-        <div className="h-2 rounded-full bg-white/18" />
-        <div className="h-2 w-4/5 rounded-full bg-white/10" />
-        <div className="flex gap-1.5">
-          <span className="h-4 flex-1 rounded-md bg-blue-400/22" />
-          <span className="h-4 flex-1 rounded-md bg-white/8" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function LightThemePreview() {
-  return (
-    <div className="app-settings-preview-shell border-slate-200/90 bg-[#f9fbff] text-slate-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
-      <div className="border-b border-slate-200/80 px-2.5 py-2">
-        <div className="h-1.5 w-10 rounded-full bg-blue-500/72" />
-      </div>
-      <div className="space-y-2 px-2.5 py-2.5">
-        <div className="h-2 rounded-full bg-slate-300/90" />
-        <div className="h-2 w-4/5 rounded-full bg-slate-200/95" />
-        <div className="flex gap-1.5">
-          <span className="h-4 flex-1 rounded-md bg-blue-100" />
-          <span className="h-4 flex-1 rounded-md bg-slate-100" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function StandardMotionPreview() {
-  return (
-    <div className="app-settings-preview-shell border-white/10 bg-[#0b1324] text-white">
-      <div className="relative h-full overflow-hidden rounded-[18px]">
-        <span className="absolute top-3 left-3 h-2 w-8 rounded-full bg-blue-400/80" />
-        <span className="absolute top-6 left-8 h-2 w-12 rounded-full bg-sky-300/60 blur-[1px]" />
-        <span className="absolute top-10 left-14 h-2 w-9 rounded-full bg-white/22 blur-[1px]" />
-      </div>
-    </div>
-  );
-}
-
-function ReducedMotionPreview() {
-  return (
-    <div className="app-settings-preview-shell border-white/10 bg-[#0b1324] text-white">
-      <div className="flex h-full flex-col justify-center gap-2 px-3">
-        <span className="h-2 w-8 rounded-full bg-blue-400/72" />
-        <span className="h-2 w-12 rounded-full bg-white/26" />
-        <span className="h-2 w-10 rounded-full bg-white/16" />
-      </div>
-    </div>
-  );
-}
+import type {
+  PreferenceOption,
+  PreferenceSectionDefinition,
+} from "@/features/preferences/model/definitions";
+import type {
+  MotionPreference,
+  ThemePreference,
+} from "@/features/preferences/model/types";
 
 export const THEME_OPTIONS = [
   {
@@ -88,7 +15,7 @@ export const THEME_OPTIONS = [
     eyebrow: "Low-light",
     description: "Deeper contrast for focus-heavy sessions.",
     details: ["Higher contrast", "Blue accents"],
-    preview: <DarkThemePreview />,
+    previewVariant: "dark-theme",
     icon: MoonStar,
   },
   {
@@ -97,7 +24,7 @@ export const THEME_OPTIONS = [
     eyebrow: "Daylight",
     description: "Brighter canvas with softer contrast edges.",
     details: ["Airier surface", "Sharper text"],
-    preview: <LightThemePreview />,
+    previewVariant: "light-theme",
     icon: SunMedium,
   },
 ] as const satisfies readonly PreferenceOption<ThemePreference>[];
@@ -109,7 +36,7 @@ export const MOTION_OPTIONS = [
     eyebrow: "Animated",
     description: "Keeps transitions and visual polish fully enabled.",
     details: ["Reveal effects", "Glass blur"],
-    preview: <StandardMotionPreview />,
+    previewVariant: "standard-motion",
     icon: Zap,
   },
   {
@@ -118,7 +45,7 @@ export const MOTION_OPTIONS = [
     eyebrow: "Lighter",
     description: "Cuts motion and expensive visual effects for steadier rendering.",
     details: ["Animations off", "Blur off"],
-    preview: <ReducedMotionPreview />,
+    previewVariant: "reduced-motion",
     icon: ZapOff,
   },
 ] as const satisfies readonly PreferenceOption<MotionPreference>[];

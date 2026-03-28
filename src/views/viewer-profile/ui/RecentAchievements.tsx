@@ -1,4 +1,4 @@
-import { ProfileSection } from "./ProfileSection";
+import { ProfileSection } from "@/views/viewer-profile/ui/ProfileSection";
 
 export function RecentAchievements() {
   return (

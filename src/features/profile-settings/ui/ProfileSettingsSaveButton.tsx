@@ -13,7 +13,7 @@ export function ProfileSettingsSaveButton({ disabled, isPending, onClick }: Prop
       onClick={onClick}
       disabled={disabled}
       aria-busy={isPending}
-      className="min-h-10 min-w-30 rounded-xl px-4 text-[13px]"
+      className="min-h-10 w-full min-w-30 rounded-xl px-4 text-[13px] sm:w-auto"
     >
       <span className="inline-flex items-center justify-center gap-2">
         {isPending ? (

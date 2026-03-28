@@ -9,8 +9,10 @@ import {
   getProfileInitial,
   shouldShowGeneratedAvatar,
 } from "@/entities/viewer";
+import { ProfileSettingsErrorNotice } from "@/features/profile-settings/ui/ProfileSettingsErrorNotice";
 import { Button } from "@/shared/ui/Button";
-import { ProfileSettingsSaveButton } from "./ProfileSettingsSaveButton";
+import { ProfileSettingsFormActions } from "@/features/profile-settings/ui/ProfileSettingsFormActions";
+import { ProfileSettingsSectionCard } from "@/features/profile-settings/ui/ProfileSettingsSectionCard";
 
 type Props = {
   username: string;
@@ -47,18 +49,13 @@ export function ProfileSettingsAvatarCard({
   const showGeneratedAvatar = shouldShowGeneratedAvatar(avatarUrl, avatarSource);
 
   return (
-    <section className="app-settings-section overflow-hidden rounded-[30px] p-5 sm:p-6">
-      <div className="app-settings-kicker font-accent text-[12px] tracking-[0.2em] uppercase">
-        Photo
-      </div>
-      <h3 className="mt-3 text-[1.45rem] font-semibold tracking-[-0.05em] text-(--app-text-strong)">
-        Update profile photo
-      </h3>
-      <p className="mt-2 text-[15px] leading-[1.7] tracking-[-0.03em] text-(--app-text-muted)">
-        Upload a custom image or fall back to the provider avatar or generated initial.
-      </p>
-
-      <div className="mt-6 flex flex-col gap-5">
+    <ProfileSettingsSectionCard
+      eyebrow="Photo"
+      title="Update profile photo"
+      description="Upload a custom image or fall back to the provider avatar or generated initial."
+      contentClassName="mt-6 flex flex-col gap-5"
+    >
+      <>
         <div className="relative mx-auto w-fit">
           <div className="app-avatar-display-glow absolute inset-0 rounded-[36px] blur-xl" />
           <div className="app-avatar-display-frame relative flex h-34 w-34 items-center justify-center overflow-hidden rounded-[34px]">
@@ -127,34 +124,23 @@ export function ProfileSettingsAvatarCard({
           Supported formats: JPG, JPEG, PNG, GIF
         </div>
 
-        {errorMessage ? (
-          <div className="rounded-2xl border border-red-400/18 bg-red-500/8 px-3.5 py-3 text-[13px] tracking-[-0.02em] text-red-400">
-            {errorMessage}
-          </div>
-        ) : null}
+        <ProfileSettingsErrorNotice
+          message={errorMessage}
+          className="px-3.5 py-3 text-[13px]"
+        />
+        <ProfileSettingsErrorNotice
+          message={saveErrorMessage}
+          className="px-3.5 py-3 text-[13px]"
+        />
 
-        {saveErrorMessage ? (
-          <div className="rounded-2xl border border-red-400/18 bg-red-500/8 px-3.5 py-3 text-[13px] tracking-[-0.02em] text-red-400">
-            {saveErrorMessage}
-          </div>
-        ) : null}
-
-        <div className="flex justify-end gap-3 border-t border-(--app-settings-divider) pt-5">
-          <Button
-            variant="secondary"
-            onClick={onReset}
-            disabled={isSaving || !hasChanges}
-            className="min-h-10 rounded-xl px-4 text-[13px]"
-          >
-            Cancel
-          </Button>
-          <ProfileSettingsSaveButton
-            onClick={onSave}
-            disabled={isSaving || !hasChanges}
-            isPending={isSavePending}
-          />
-        </div>
-      </div>
-    </section>
+        <ProfileSettingsFormActions
+          onReset={onReset}
+          onSave={onSave}
+          isSaving={isSaving}
+          isSavePending={isSavePending}
+          hasChanges={hasChanges}
+        />
+      </>
+    </ProfileSettingsSectionCard>
   );
 }

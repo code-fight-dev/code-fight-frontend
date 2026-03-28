@@ -1,13 +1,13 @@
 "use client";
 
 import type { ViewerProfile } from "@/entities/viewer";
-import { useProfileSettingsPanel } from "../model/useProfileSettingsPanel";
-import { ProfileSettingsAvatarCard } from "./ProfileSettingsAvatarCard";
-import { ProfileSettingsBioCard } from "./ProfileSettingsBioCard";
-import { ProfileSettingsDisplayNameTab } from "./ProfileSettingsDisplayNameTab";
-import { ProfileSettingsLocationTab } from "./ProfileSettingsLocationTab";
-import { ProfileSettingsTabs } from "./ProfileSettingsTabs";
-import { ProfileSettingsToast } from "./ProfileSettingsToast";
+import { useProfileSettingsPanel } from "@/features/profile-settings/model/useProfileSettingsPanel";
+import { ProfileSettingsAvatarCard } from "@/features/profile-settings/ui/ProfileSettingsAvatarCard";
+import { ProfileSettingsBioCard } from "@/features/profile-settings/ui/ProfileSettingsBioCard";
+import { ProfileSettingsDisplayNameTab } from "@/features/profile-settings/ui/ProfileSettingsDisplayNameTab";
+import { ProfileSettingsLocationTab } from "@/features/profile-settings/ui/ProfileSettingsLocationTab";
+import { ProfileSettingsTabs } from "@/features/profile-settings/ui/ProfileSettingsTabs";
+import { ProfileSettingsToast } from "@/features/profile-settings/ui/ProfileSettingsToast";
 
 type Props = {
   profile: ViewerProfile;

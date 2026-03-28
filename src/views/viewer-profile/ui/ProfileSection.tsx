@@ -37,7 +37,7 @@ export function ProfileSection({
           ) : null}
         </div>
 
-        {actions ? <div className="shrink-0">{actions}</div> : null}
+        {actions ? <div className="w-full sm:w-auto sm:shrink-0">{actions}</div> : null}
       </div>
 
       <div className={cn("mt-6", contentClassName)}>{children}</div>

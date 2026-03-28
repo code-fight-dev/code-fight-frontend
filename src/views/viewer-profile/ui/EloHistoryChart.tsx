@@ -7,10 +7,10 @@ import {
   ELO_HISTORY_RANGES,
   getChartTicks,
   getEloHistoryPointsForRange,
-} from "../model/chart";
-import type { EloHistoryRange } from "../model/chart";
-import { formatChartDate, formatSignedNumber } from "../model/format";
-import { ProfileSection } from "./ProfileSection";
+} from "@/views/viewer-profile/model/chart";
+import type { EloHistoryRange } from "@/views/viewer-profile/model/chart";
+import { formatChartDate, formatSignedNumber } from "@/views/viewer-profile/model/format";
+import { ProfileSection } from "@/views/viewer-profile/ui/ProfileSection";
 
 type Props = {
   points: ViewerProfileEloHistoryPoint[];
@@ -62,7 +62,7 @@ export function EloHistoryChart({ points, accentColor }: Props) {
         </div>
       ) : (
         <div>
-          <div className="relative h-78 overflow-hidden rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] px-4 py-4 sm:px-5">
+          <div className="relative h-64 overflow-hidden rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] px-4 py-4 sm:h-78 sm:px-5">
             <svg
               viewBox="0 0 100 100"
               className="h-full w-full overflow-visible"
@@ -130,7 +130,7 @@ export function EloHistoryChart({ points, accentColor }: Props) {
 
             {hoveredPoint ? (
               <div
-                className="pointer-events-none absolute z-10 min-w-42 -translate-x-1/2 rounded-[20px] border border-white/10 bg-[rgba(7,12,24,0.94)] px-4 py-3 shadow-[0_18px_42px_rgba(2,6,23,0.26)] backdrop-blur-xl"
+                className="pointer-events-none absolute z-10 min-w-34 -translate-x-1/2 rounded-[20px] border border-white/10 bg-[rgba(7,12,24,0.94)] px-3.5 py-3 shadow-[0_18px_42px_rgba(2,6,23,0.26)] backdrop-blur-xl sm:min-w-42 sm:px-4"
                 style={{
                   left: `${clampTooltipPosition(hoveredPoint.x)}%`,
                   top: `${Math.max(hoveredPoint.y - 16, 8)}%`,
@@ -156,7 +156,7 @@ export function EloHistoryChart({ points, accentColor }: Props) {
             ) : null}
           </div>
 
-          <div className="mt-4 flex items-center justify-between gap-3 text-[12px] tracking-[0.16em] text-(--app-text-faint) uppercase">
+          <div className="mt-4 flex items-center justify-between gap-2 text-[11px] tracking-[0.16em] text-(--app-text-faint) uppercase sm:gap-3 sm:text-[12px]">
             {ticks.map((tick) => {
               const point = chartPoints.find((item) => item.date === tick.date);
 

@@ -1,4 +1,8 @@
-import type { MotionPreference, PreferencesState, ThemePreference } from "./types";
+import type {
+  MotionPreference,
+  PreferencesState,
+  ThemePreference,
+} from "@/features/preferences/model/types";
 
 export const PREFERENCES_STORAGE_KEY = "codefight.preferences";
 export const THEME_PREFERENCE_COOKIE_KEY = "codefight.theme";

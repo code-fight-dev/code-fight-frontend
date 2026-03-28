@@ -1,6 +1,6 @@
 import { Camera, ChevronRight, MapPin, PenSquare, UserRound } from "lucide-react";
+import type { ProfileSettingsTabId } from "@/features/profile-settings/model/tabs";
 import { cn } from "@/shared/lib/cn";
-import type { ProfileSettingsTabId } from "../model/tabs";
 
 const TABS = [
   { id: "display-name", label: "Display Name", icon: UserRound },

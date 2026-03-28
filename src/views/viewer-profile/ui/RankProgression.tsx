@@ -5,8 +5,8 @@ import { getNextRank, getRankByRating, getRankGradient } from "@/entities/rank";
 import { RANKING_HREF } from "@/shared/config/routes";
 import { resolveCountryCode } from "@/shared/lib/country";
 import { CountryFlag } from "@/shared/ui/CountryFlag";
-import { formatInteger } from "../model/format";
-import { ProfileSection } from "./ProfileSection";
+import { formatInteger } from "@/views/viewer-profile/model/format";
+import { ProfileSection } from "@/views/viewer-profile/ui/ProfileSection";
 
 const MIN_PROGRESS_WIDTH_PERCENT = 8;
 
@@ -93,7 +93,7 @@ export function RankProgression({
       description="Track your current division and open the full ladder for every tier, color, and explanation."
     >
       <div className="space-y-5">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
             <div className="font-accent text-[11px] tracking-[0.2em] text-(--app-text-faint) uppercase">
               Current Division
@@ -124,7 +124,7 @@ export function RankProgression({
 
           <Link
             href={RANKING_HREF}
-            className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-2 text-[13px] tracking-[-0.02em] text-(--app-text-soft) transition-all duration-300 hover:border-blue-400/20 hover:bg-blue-500/10 hover:text-(--app-text-strong) focus-visible:ring-2 focus-visible:ring-blue-400/40 focus-visible:ring-offset-2 focus-visible:ring-offset-(--app-focus-ring-offset) focus-visible:outline-none"
+            className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-2 text-[13px] tracking-[-0.02em] text-(--app-text-soft) transition-all duration-300 hover:border-blue-400/20 hover:bg-blue-500/10 hover:text-(--app-text-strong) focus-visible:ring-2 focus-visible:ring-blue-400/40 focus-visible:ring-offset-2 focus-visible:ring-offset-(--app-focus-ring-offset) focus-visible:outline-none sm:w-auto"
           >
             <Sparkles className="h-4 w-4 text-blue-300" strokeWidth={1.9} />
             Open ranking guide
