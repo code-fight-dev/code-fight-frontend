@@ -1,6 +1,8 @@
 import { UserRound } from "lucide-react";
-import { Button } from "@/shared/ui/Button";
-import { ProfileSettingsSaveButton } from "./ProfileSettingsSaveButton";
+import { PROFILE_DISPLAY_NAME_LIMIT } from "@/features/profile-settings/model/constants";
+import { ProfileSettingsErrorNotice } from "@/features/profile-settings/ui/ProfileSettingsErrorNotice";
+import { ProfileSettingsFormActions } from "@/features/profile-settings/ui/ProfileSettingsFormActions";
+import { ProfileSettingsSectionCard } from "@/features/profile-settings/ui/ProfileSettingsSectionCard";
 
 type Props = {
   displayName: string;
@@ -13,8 +15,6 @@ type Props = {
   onSave: () => void;
 };
 
-const DISPLAY_NAME_LIMIT = 60;
-
 export function ProfileSettingsDisplayNameTab({
   displayName,
   isSaving,
@@ -26,32 +26,25 @@ export function ProfileSettingsDisplayNameTab({
   onSave,
 }: Props) {
   return (
-    <section className="app-settings-section overflow-hidden rounded-[30px] p-5 sm:p-6">
-      <div className="app-settings-kicker flex items-center gap-2 text-[12px] tracking-[0.18em] uppercase">
-        <UserRound className="h-4.5 w-4.5" strokeWidth={1.95} />
-        Display Name
-      </div>
-
-      <h3 className="mt-3 text-[1.45rem] font-semibold tracking-[-0.05em] text-(--app-text-strong)">
-        Update display name
-      </h3>
-      <p className="mt-2 text-[15px] leading-[1.7] tracking-[-0.03em] text-(--app-text-muted)">
-        Changing your display name won&apos;t change your username.
-      </p>
-
-      <div className="mt-5">
+    <ProfileSettingsSectionCard
+      eyebrow="Display Name"
+      eyebrowIcon={<UserRound className="h-4.5 w-4.5" strokeWidth={1.95} />}
+      title="Update display name"
+      description="Changing your display name won't change your username."
+    >
+      <div>
         <div className="mb-3 flex items-center justify-between gap-4">
           <span className="text-[12px] tracking-[-0.02em] text-(--app-text-faint)">
             Public name
           </span>
           <span className="text-[12px] tracking-[-0.02em] text-(--app-text-faint)">
-            {displayName.length}/{DISPLAY_NAME_LIMIT}
+            {displayName.length}/{PROFILE_DISPLAY_NAME_LIMIT}
           </span>
         </div>
 
         <input
           value={displayName}
-          maxLength={DISPLAY_NAME_LIMIT}
+          maxLength={PROFILE_DISPLAY_NAME_LIMIT}
           disabled={isSaving}
           onChange={(event) => onDisplayNameChange(event.target.value)}
           placeholder="How your name appears on the profile page"
@@ -59,27 +52,19 @@ export function ProfileSettingsDisplayNameTab({
         />
       </div>
 
-      {errorMessage ? (
-        <div className="mt-5 rounded-2xl border border-red-400/18 bg-red-500/8 px-4 py-3 text-[14px] tracking-[-0.02em] text-red-400">
-          {errorMessage}
-        </div>
-      ) : null}
+      <ProfileSettingsErrorNotice
+        message={errorMessage}
+        className="mt-5 px-4 py-3 text-[14px]"
+      />
 
-      <div className="mt-6 flex justify-end gap-3 border-t border-(--app-settings-divider) pt-5">
-        <Button
-          variant="secondary"
-          onClick={onReset}
-          disabled={isSaving || !hasChanges}
-          className="min-h-10 rounded-xl px-4 text-[13px]"
-        >
-          Cancel
-        </Button>
-        <ProfileSettingsSaveButton
-          onClick={onSave}
-          disabled={isSaving || !hasChanges}
-          isPending={isSavePending}
-        />
-      </div>
-    </section>
+      <ProfileSettingsFormActions
+        className="mt-6"
+        onReset={onReset}
+        onSave={onSave}
+        isSaving={isSaving}
+        isSavePending={isSavePending}
+        hasChanges={hasChanges}
+      />
+    </ProfileSettingsSectionCard>
   );
 }

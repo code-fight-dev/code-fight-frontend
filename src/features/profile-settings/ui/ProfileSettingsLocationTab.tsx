@@ -1,6 +1,7 @@
 import { MapPin } from "lucide-react";
-import { Button } from "@/shared/ui/Button";
-import { ProfileSettingsSaveButton } from "./ProfileSettingsSaveButton";
+import { ProfileSettingsErrorNotice } from "@/features/profile-settings/ui/ProfileSettingsErrorNotice";
+import { ProfileSettingsFormActions } from "@/features/profile-settings/ui/ProfileSettingsFormActions";
+import { ProfileSettingsSectionCard } from "@/features/profile-settings/ui/ProfileSettingsSectionCard";
 
 type Props = {
   country: string;
@@ -44,21 +45,14 @@ export function ProfileSettingsLocationTab({
     cityOptions.length > 0;
 
   return (
-    <section className="app-settings-section overflow-hidden rounded-[30px] p-5 sm:p-6">
-      <div className="app-settings-kicker flex items-center gap-2 text-[12px] tracking-[0.18em] uppercase">
-        <MapPin className="h-4.5 w-4.5" strokeWidth={1.95} />
-        Location
-      </div>
-
-      <h3 className="mt-3 text-[1.45rem] font-semibold tracking-[-0.05em] text-(--app-text-strong)">
-        Update your location
-      </h3>
-      <p className="mt-2 text-[15px] leading-[1.7] tracking-[-0.03em] text-(--app-text-muted)">
-        Update your location if you want. Countries, states or provinces, and cities are
-        filtered progressively from the selected geography.
-      </p>
-
-      <div className="mt-6 grid gap-3 lg:grid-cols-3">
+    <ProfileSettingsSectionCard
+      eyebrow="Location"
+      eyebrowIcon={<MapPin className="h-4.5 w-4.5" strokeWidth={1.95} />}
+      title="Update your location"
+      description="Update your location if you want. Countries, states or provinces, and cities are filtered progressively from the selected geography."
+      contentClassName="mt-6"
+    >
+      <div className="grid gap-3 lg:grid-cols-3">
         <SelectField
           value={country}
           disabled={isSaving}
@@ -102,28 +96,20 @@ export function ProfileSettingsLocationTab({
         Some countries expose city selection only after a state or province is chosen.
       </p>
 
-      {errorMessage ? (
-        <div className="mt-5 rounded-2xl border border-red-400/18 bg-red-500/8 px-4 py-3 text-[14px] tracking-[-0.02em] text-red-400">
-          {errorMessage}
-        </div>
-      ) : null}
+      <ProfileSettingsErrorNotice
+        message={errorMessage}
+        className="mt-5 px-4 py-3 text-[14px]"
+      />
 
-      <div className="mt-6 flex justify-end gap-3 border-t border-(--app-settings-divider) pt-5">
-        <Button
-          variant="secondary"
-          onClick={onReset}
-          disabled={isSaving || !hasChanges}
-          className="min-h-10 rounded-xl px-4 text-[13px]"
-        >
-          Cancel
-        </Button>
-        <ProfileSettingsSaveButton
-          onClick={onSave}
-          disabled={isSaving || !hasChanges}
-          isPending={isSavePending}
-        />
-      </div>
-    </section>
+      <ProfileSettingsFormActions
+        className="mt-6"
+        onReset={onReset}
+        onSave={onSave}
+        isSaving={isSaving}
+        isSavePending={isSavePending}
+        hasChanges={hasChanges}
+      />
+    </ProfileSettingsSectionCard>
   );
 }
 
