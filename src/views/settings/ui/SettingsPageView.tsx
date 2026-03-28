@@ -7,7 +7,10 @@ import { useSelectedLayoutSegment } from "next/navigation";
 import { cn } from "@/shared/lib/cn";
 import { Container } from "@/shared/ui/Container";
 import { Reveal } from "@/shared/ui/Reveal";
-import { getSettingsSectionBySegment, SETTINGS_SECTIONS } from "../model/sections";
+import {
+  getSettingsSectionBySegment,
+  SETTINGS_SECTIONS,
+} from "@/views/settings/model/sections";
 
 type Props = {
   children: ReactNode;
@@ -18,14 +21,14 @@ export function SettingsPageView({ children }: Props) {
   const activeSection = getSettingsSectionBySegment(selectedSegment);
 
   return (
-    <section className="relative overflow-hidden py-10 sm:py-12 lg:py-16">
+    <section className="app-settings-page relative overflow-hidden py-10 sm:py-12 lg:py-16">
       <div
         aria-hidden
         className="app-settings-ambient pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_12%,rgba(37,99,235,0.12),transparent_22%),radial-gradient(circle_at_82%_18%,rgba(59,130,246,0.08),transparent_18%),linear-gradient(180deg,transparent,rgba(8,12,24,0.14)_100%)]"
       />
       <div
         aria-hidden
-        className="app-settings-grid pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.58)_0.7px,transparent_0.8px)] mask-[limask-[linear-gradient(180deg,transparent,black_18%,black_82%,transparent)]_36px] opacity-[0.12]"
+        className="app-settings-grid pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.58)_0.7px,transparent_0.8px)] mask-[linear-gradient(180deg,transparent,black_18%,black_82%,transparent)] bg-size-[36px_36px] opacity-[0.12]"
       />
 
       <Container className="relative">
