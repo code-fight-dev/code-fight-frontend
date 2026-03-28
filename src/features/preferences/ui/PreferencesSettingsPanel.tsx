@@ -5,9 +5,9 @@ import {
   getMotionPreferenceLabel,
   getThemePreferenceLabel,
   PERFORMANCE_PREFERENCE_SECTION,
-} from "../model/settingsSections";
-import { usePreferences } from "./PreferencesProvider";
-import { PreferenceSection } from "./PreferenceSection";
+} from "@/features/preferences/model/settingsSections";
+import { usePreferences } from "@/features/preferences/ui/PreferencesProvider";
+import { PreferenceSection } from "@/features/preferences/ui/PreferenceSection";
 
 export function AppearanceSettingsPanel() {
   const { preferences, setTheme } = usePreferences();

@@ -5,8 +5,12 @@ import {
   applyPreferencesToDocument,
   persistPreferences,
   readPreferencesFromDocument,
-} from "../model/document";
-import type { MotionPreference, PreferencesState, ThemePreference } from "../model/types";
+} from "@/features/preferences/model/document";
+import type {
+  MotionPreference,
+  PreferencesState,
+  ThemePreference,
+} from "@/features/preferences/model/types";
 
 type PreferencesContextValue = {
   preferences: PreferencesState;

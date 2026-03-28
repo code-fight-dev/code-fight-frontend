@@ -5,8 +5,8 @@ import {
   PREFERENCES_COOKIE_MAX_AGE,
   PREFERENCES_STORAGE_KEY,
   THEME_PREFERENCE_COOKIE_KEY,
-} from "./preferences";
-import type { PreferencesState } from "./types";
+} from "@/features/preferences/model/preferences";
+import type { PreferencesState } from "@/features/preferences/model/types";
 
 function getPreferencesCookieAttributes() {
   const secureAttribute = window.location.protocol === "https:" ? "; secure" : "";
