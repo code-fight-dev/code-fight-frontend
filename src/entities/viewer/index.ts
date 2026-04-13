@@ -4,6 +4,7 @@ export {
   getAvatarAlt,
   getProfileInitial,
   readAvatarFile,
+  shouldBypassAvatarOptimization,
   shouldShowGeneratedAvatar,
   validateAvatarFile,
 } from "./model/avatar";

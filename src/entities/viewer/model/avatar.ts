@@ -14,6 +14,10 @@ export function getAvatarAlt(username: string) {
   return `${username} avatar`;
 }
 
+export function shouldBypassAvatarOptimization(avatarUrl: string) {
+  return avatarUrl.startsWith("data:");
+}
+
 export function shouldShowGeneratedAvatar(avatarUrl: string, avatarSource: AvatarSource) {
   return avatarUrl === "" || avatarSource === "none";
 }

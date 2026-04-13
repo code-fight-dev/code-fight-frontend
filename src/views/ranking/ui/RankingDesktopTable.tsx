@@ -13,17 +13,24 @@ function RankingDesktopRow({ rank, index }: { rank: RankConfig; index: number })
       className={index > 0 ? "border-t border-(--app-surface-strong-border)" : ""}
       style={getDesktopRowStyle(index)}
     >
-      <td className={TABLE_CELL_CLASS}>
-        <RankingTierBadge rank={rank} />
+      <td className={`${TABLE_CELL_CLASS} align-middle`}>
+        <div className="flex items-center">
+          <RankingTierBadge rank={rank} />
+        </div>
       </td>
-      <td className={TABLE_CELL_CLASS}>
-        <RankingBandPill rank={rank} />
+
+      <td className={`${TABLE_CELL_CLASS} align-middle`}>
+        <div className="flex items-center">
+          <RankingBandPill rank={rank} />
+        </div>
       </td>
+
       <td
         className={`${TABLE_CELL_CLASS} text-[14px] leading-[1.72] tracking-[-0.02em] text-(--app-text-soft)`}
       >
         {rank.summary}
       </td>
+
       <td className="px-5 py-5 align-top text-[14px] leading-[1.72] tracking-[-0.02em] text-(--app-text-muted)">
         {rank.focus}
       </td>

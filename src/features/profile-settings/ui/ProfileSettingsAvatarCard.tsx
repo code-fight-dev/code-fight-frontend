@@ -7,6 +7,7 @@ import type { AvatarSource } from "@/entities/viewer";
 import {
   getAvatarAlt,
   getProfileInitial,
+  shouldBypassAvatarOptimization,
   shouldShowGeneratedAvatar,
 } from "@/entities/viewer";
 import { ProfileSettingsErrorNotice } from "@/features/profile-settings/ui/ProfileSettingsErrorNotice";
@@ -68,7 +69,8 @@ export function ProfileSettingsAvatarCard({
                 src={avatarUrl}
                 alt={getAvatarAlt(username)}
                 fill
-                unoptimized
+                preload
+                unoptimized={shouldBypassAvatarOptimization(avatarUrl)}
                 sizes="136px"
                 className="object-cover"
               />
