@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import {
   getAvatarAlt,
   getProfileInitial,
+  shouldBypassAvatarOptimization,
   shouldShowGeneratedAvatar,
 } from "@/entities/viewer";
 import type { ViewerProfile } from "@/entities/viewer";
@@ -60,7 +61,8 @@ export function ProfileSummary({
                   src={profile.avatarUrl}
                   alt={getAvatarAlt(profile.username)}
                   fill
-                  unoptimized
+                  preload
+                  unoptimized={shouldBypassAvatarOptimization(profile.avatarUrl)}
                   sizes="160px"
                   className="object-cover"
                 />

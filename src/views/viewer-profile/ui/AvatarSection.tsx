@@ -6,6 +6,7 @@ import { useId } from "react";
 import {
   getAvatarAlt,
   getProfileInitial,
+  shouldBypassAvatarOptimization,
   shouldShowGeneratedAvatar,
 } from "@/entities/viewer";
 import type { AvatarSource } from "@/entities/viewer";
@@ -50,10 +51,10 @@ export function AvatarSection({
               src={avatarUrl}
               alt={getAvatarAlt(username)}
               fill
-              unoptimized
+              preload
+              unoptimized={shouldBypassAvatarOptimization(avatarUrl)}
               sizes="136px"
               className="object-cover"
-              loading="lazy"
             />
           )}
         </div>
