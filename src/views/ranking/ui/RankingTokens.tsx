@@ -38,7 +38,7 @@ export function RankingBandPill({ rank, mobile = false }: RankingBandPillProps) 
       className={
         mobile
           ? "inline-flex rounded-full border px-3 py-1.5 text-[12px] font-medium tracking-[0.12em] whitespace-nowrap text-(--app-text-faint) uppercase"
-          : "inline-flex rounded-full border px-3.5 py-2 text-[13px] font-medium tracking-[-0.02em] whitespace-nowrap"
+          : "inline-flex h-12 items-center rounded-full border px-3.5 text-[13px] font-medium tracking-[-0.02em] whitespace-nowrap"
       }
       style={styles.bandPill}
     >
