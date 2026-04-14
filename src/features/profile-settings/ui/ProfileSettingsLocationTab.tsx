@@ -2,6 +2,7 @@ import { MapPin } from "lucide-react";
 import { ProfileSettingsErrorNotice } from "@/features/profile-settings/ui/ProfileSettingsErrorNotice";
 import { ProfileSettingsFormActions } from "@/features/profile-settings/ui/ProfileSettingsFormActions";
 import { ProfileSettingsSectionCard } from "@/features/profile-settings/ui/ProfileSettingsSectionCard";
+import { Select, type SelectOption } from "@/shared/ui/Select";
 
 type Props = {
   country: string;
@@ -128,26 +129,20 @@ function SelectField({
   options,
   onChange,
 }: SelectFieldProps) {
+  const selectOptions: SelectOption[] = options.map((option) => ({
+    value: option,
+    label: option,
+  }));
+
   return (
-    <select
+    <Select
+      aria-label={placeholder}
       value={value}
       disabled={disabled}
-      onChange={(event) => onChange(event.target.value)}
-      className="app-input-surface h-14.5 w-full rounded-2xl px-4 text-[15px] tracking-[-0.03em] transition-[border-color,box-shadow,background-color] duration-200 outline-none focus:border-(--app-input-focus-border) focus:bg-(--app-surface-input-focus) focus:shadow-[0_0_0_1px_rgba(59,130,246,0.18),0_12px_30px_rgba(3,7,18,0.12)] disabled:cursor-not-allowed disabled:opacity-55"
-    >
-      <option value="" style={{ color: "black", backgroundColor: "white" }}>
-        {placeholder}
-      </option>
-
-      {options.map((option) => (
-        <option
-          key={option}
-          value={option}
-          style={{ color: "black", backgroundColor: "white" }}
-        >
-          {option}
-        </option>
-      ))}
-    </select>
+      placeholder={placeholder}
+      options={selectOptions}
+      onValueChange={onChange}
+      controlSize="lg"
+    />
   );
 }
