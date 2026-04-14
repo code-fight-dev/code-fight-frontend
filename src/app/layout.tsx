@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { IBM_Plex_Mono, Space_Grotesk } from "next/font/google";
+import {
+  Fira_Code,
+  IBM_Plex_Mono,
+  JetBrains_Mono,
+  Space_Grotesk,
+} from "next/font/google";
 import "./globals.css";
 import { ViewerSessionProvider } from "@/entities/viewer";
 import { getCurrentViewerServer } from "@/entities/viewer/server";
@@ -20,6 +25,18 @@ const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-accent",
   display: "swap",
   weight: ["400", "500", "600"],
+});
+
+const firaCode = Fira_Code({
+  subsets: ["latin"],
+  variable: "--font-editor-fira",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-editor-jetbrains",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -47,7 +64,13 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         />
       </head>
       <body
-        className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} min-h-dvh overflow-x-hidden`}
+        className={[
+          spaceGrotesk.variable,
+          ibmPlexMono.variable,
+          firaCode.variable,
+          jetbrainsMono.variable,
+          "min-h-dvh overflow-x-hidden",
+        ].join(" ")}
       >
         <PreferencesProvider initialPreferences={initialPreferences}>
           <ViewerSessionProvider initialViewer={initialViewer}>

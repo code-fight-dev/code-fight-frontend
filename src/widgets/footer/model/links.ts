@@ -5,6 +5,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
     title: "Platform",
     links: [
       { label: "Global Arena", href: "/arena" },
+      { label: "Challenges", href: "/challenges" },
       { label: "Tournaments", href: "/tournaments" },
       { label: "Leaderboards", href: "/leaderboard" },
     ],
