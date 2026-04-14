@@ -1,0 +1,91 @@
+@media (prefers-reduced-motion: reduce) {
+  .app-panel,
+  .app-panel-subtle,
+  .app-shell-card,
+  .app-shell-card-soft,
+  .app-overlay-card,
+  .app-popover,
+  .app-settings-shell,
+  .app-settings-rail,
+  .app-settings-section {
+    backdrop-filter: none;
+  }
+
+  .app-settings-page-ambient,
+  .app-settings-page-grid,
+  .app-settings-shell-ambient,
+  .app-settings-shell-grid {
+    display: none;
+  }
+
+  .app-settings-nav-item,
+  .app-settings-option,
+  .app-option-icon {
+    transition: none !important;
+  }
+
+  .terminal-cursor-blink {
+    animation: none;
+    opacity: 1;
+  }
+
+  .reveal {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    animation: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  /* Improve legibility on glass-heavy settings and profile layouts. */
+  :root:not([data-theme="light"]) :is(.app-settings-page, .app-profile-page) {
+    --app-text-muted: rgba(226, 232, 240, 0.74);
+    --app-text-soft: rgba(226, 232, 240, 0.66);
+    --app-text-faint: rgba(226, 232, 240, 0.52);
+  }
+
+  :root[data-theme="light"] :is(.app-settings-page, .app-profile-page) {
+    --app-text-muted: rgba(15, 23, 42, 0.68);
+    --app-text-soft: rgba(15, 23, 42, 0.58);
+    --app-text-faint: rgba(15, 23, 42, 0.42);
+  }
+
+  :is(
+    .app-settings-page .app-settings-shell,
+    .app-settings-page .app-settings-rail,
+    .app-settings-page .app-settings-section,
+    .app-profile-page .app-shell-card,
+    .app-profile-page .app-shell-card-soft
+  ) {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  :is(
+    .app-settings-page .app-settings-page-ambient,
+    .app-settings-page .app-settings-page-grid,
+    .app-settings-page .app-settings-shell-ambient,
+    .app-settings-page .app-settings-shell-grid,
+    .app-profile-page .app-profile-ambient,
+    .app-profile-page .app-profile-grid
+  ) {
+    opacity: 0.04;
+  }
+
+  :is(.app-settings-page .reveal, .app-profile-page .reveal) {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    will-change: auto;
+    animation: none !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .app-settings-page .app-option-icon {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 0.9rem;
+  }
+}

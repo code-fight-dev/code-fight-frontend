@@ -1,0 +1,52 @@
+.app-profile-meta-chip {
+  border: 1px solid var(--app-profile-meta-border);
+  background: var(--app-profile-meta-bg);
+  color: var(--app-profile-meta-text);
+  backdrop-filter: blur(14px);
+}
+
+.app-profile-meta-chip-icon {
+  color: var(--app-profile-meta-icon);
+}
+
+.app-avatar-display-glow {
+  background: var(--app-avatar-glow);
+}
+
+.app-avatar-display-frame {
+  border: 1px solid var(--app-avatar-frame-border);
+  background: var(--app-avatar-frame-bg);
+  box-shadow: var(--app-avatar-frame-shadow);
+}
+
+:root[data-theme="light"] .app-profile-ambient {
+  background:
+    radial-gradient(circle at 12% 10%, rgba(59, 130, 246, 0.13), transparent 25%),
+    radial-gradient(circle at 86% 14%, rgba(14, 165, 233, 0.1), transparent 20%),
+    linear-gradient(180deg, transparent, rgba(100, 116, 139, 0.12) 100%) !important;
+}
+
+:root[data-theme="light"] .app-profile-grid {
+  opacity: 0.16 !important;
+  background-image: radial-gradient(
+    circle at center,
+    rgba(71, 85, 105, 0.28) 0.7px,
+    transparent 0.8px
+  ) !important;
+}
+
+:root[data-theme="light"]
+  .app-profile-page
+  :is(.border-white\/8, .border-white\/10, .border-white\/12) {
+  border-color: var(--app-surface-soft-border);
+}
+
+:root[data-theme="light"]
+  .app-profile-page
+  :is(.bg-white\/3, .bg-white\/4, .bg-white\/5, .bg-white\/6, .bg-white\/8) {
+  background: var(--app-panel-subtle-bg);
+}
+
+:root[data-theme="light"] .app-profile-page :is(.text-blue-300, .text-blue-300\/78) {
+  color: #2563eb;
+}

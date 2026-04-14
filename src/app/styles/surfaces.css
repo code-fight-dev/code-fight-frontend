@@ -1,0 +1,64 @@
+.app-panel {
+  border: 1px solid var(--app-panel-border);
+  background: var(--app-panel-bg);
+  box-shadow: var(--app-panel-shadow);
+  backdrop-filter: blur(20px);
+}
+
+.app-shell-card {
+  border: 1px solid var(--app-surface-strong-border);
+  background: var(--app-surface-strong);
+  box-shadow: var(--app-card-shadow);
+  backdrop-filter: blur(20px);
+}
+
+.profile-card-solid {
+  background: var(--app-profile-card-solid-bg);
+  backdrop-filter: none;
+}
+
+.app-shell-card-soft {
+  border: 1px solid var(--app-surface-soft-border);
+  background: var(--app-surface-soft);
+  box-shadow: var(--app-card-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.profile-card-soft {
+  background: var(--app-profile-card-soft-bg);
+  backdrop-filter: none;
+}
+
+.app-shell-card-contrast {
+  border: 1px solid var(--app-surface-contrast-border);
+  background: var(--app-surface-contrast);
+}
+
+.app-overlay-card {
+  border: 1px solid var(--app-surface-overlay-card-border);
+  background: var(--app-surface-overlay-card);
+  box-shadow: var(--app-card-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.app-popover {
+  border: 1px solid var(--app-popover-border);
+  background: var(--app-popover-bg);
+  box-shadow: var(--app-popover-shadow);
+  backdrop-filter: blur(28px);
+}
+
+.app-popover-section {
+  border: 1px solid var(--app-popover-section-border);
+  background: var(--app-popover-section-bg);
+}
+
+.app-input-surface {
+  border: 1px solid var(--app-input-border);
+  background: var(--app-surface-input);
+  color: var(--app-input-text);
+}
+
+.app-input-surface::placeholder {
+  color: var(--app-input-placeholder);
+}

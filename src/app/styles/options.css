@@ -1,0 +1,23 @@
+.app-option {
+  border-color: var(--app-option-border);
+  background: var(--app-option-bg);
+}
+
+.app-option-active {
+  border-color: var(--app-option-active-border);
+  background: var(--app-option-active-bg);
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.16);
+}
+
+.app-option-icon {
+  display: inline-flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 1rem;
+  border: 1px solid var(--app-option-icon-border);
+  background: var(--app-option-icon-bg);
+  color: #3b82f6;
+}

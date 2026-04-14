@@ -1,0 +1,194 @@
+.challenge-page {
+  color: var(--app-text-strong);
+  background: var(--app-body-background);
+}
+
+.challenge-grid-layer {
+  background-image:
+    linear-gradient(var(--app-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--app-grid-line) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+.challenge-panel {
+  border: 1px solid var(--app-surface-strong-border);
+  background: var(--app-surface-strong);
+  box-shadow: var(--app-panel-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.challenge-panel-soft {
+  border: 1px solid var(--app-surface-soft-border);
+  background: var(--app-panel-subtle-bg);
+  backdrop-filter: blur(16px);
+}
+
+.challenge-panel-muted {
+  border: 1px solid var(--app-surface-soft-border);
+  background: var(--app-option-bg);
+}
+
+.challenge-panel-header {
+  border-color: var(--app-surface-soft-border);
+  background: var(--app-surface-contrast);
+}
+
+.challenge-table-row {
+  border-color: var(--app-surface-soft-border);
+}
+
+.challenge-table-row:hover {
+  background: var(--app-control-secondary-hover-bg);
+}
+
+.challenge-control {
+  border: 1px solid var(--app-input-border);
+  background: var(--app-surface-input);
+  color: var(--app-input-text);
+}
+
+.challenge-control::placeholder {
+  color: var(--app-input-placeholder);
+}
+
+.challenge-control:focus {
+  border-color: var(--app-input-focus-border);
+  background: var(--app-surface-input-focus);
+}
+
+.challenge-code-block {
+  border: 1px solid var(--app-surface-code-border);
+  background: var(--app-surface-code);
+  color: var(--app-code-text);
+}
+
+.challenge-code-block-output {
+  color: var(--app-code-builtin);
+}
+
+.challenge-focus-ring {
+  outline: none;
+}
+
+.challenge-focus-ring:focus-visible {
+  box-shadow:
+    0 0 0 2px rgba(103, 232, 249, 0.72),
+    0 0 0 4px var(--app-focus-ring-offset);
+}
+
+:root[data-theme="light"] .challenge-grid-layer {
+  opacity: 0.42;
+}
+
+:root[data-theme="light"] .challenge-panel {
+  box-shadow:
+    0 22px 54px rgba(15, 23, 42, 0.12),
+    0 8px 20px rgba(59, 130, 246, 0.05);
+}
+
+:root[data-theme="light"] .challenge-panel-muted {
+  background: var(--app-panel-subtle-bg);
+}
+
+:root[data-theme="light"] .challenge-table-row:hover {
+  background: var(--app-settings-row-hover);
+}
+
+:root[data-theme="light"] .challenge-table-row:hover h3,
+:root[data-theme="light"] .challenge-panel-soft:hover h3 {
+  color: #1d4ed8;
+}
+
+:root[data-theme="light"] .challenge-table-row:hover svg,
+:root[data-theme="light"] .challenge-panel-soft:hover svg {
+  color: #2563eb;
+}
+
+:root[data-theme="light"] .challenge-kicker,
+:root[data-theme="light"] .challenge-accent-icon {
+  color: #1d4ed8;
+}
+
+:root[data-theme="light"] .challenge-action-run {
+  border-color: rgba(8, 145, 178, 0.38);
+  background: linear-gradient(
+    180deg,
+    rgba(207, 250, 254, 0.92) 0%,
+    rgba(165, 243, 252, 0.52) 100%
+  );
+  color: #0e7490;
+}
+
+:root[data-theme="light"] .challenge-action-run:hover {
+  border-color: rgba(14, 116, 144, 0.5);
+  background: linear-gradient(
+    180deg,
+    rgba(165, 243, 252, 0.96) 0%,
+    rgba(103, 232, 249, 0.46) 100%
+  );
+  color: #155e75;
+}
+
+:root[data-theme="light"] .challenge-action-submit {
+  border-color: rgba(5, 150, 105, 0.38);
+  background: linear-gradient(
+    180deg,
+    rgba(209, 250, 229, 0.92) 0%,
+    rgba(167, 243, 208, 0.54) 100%
+  );
+  color: #047857;
+}
+
+:root[data-theme="light"] .challenge-action-submit:hover {
+  border-color: rgba(4, 120, 87, 0.5);
+  background: linear-gradient(
+    180deg,
+    rgba(167, 243, 208, 0.98) 0%,
+    rgba(110, 231, 183, 0.48) 100%
+  );
+  color: #065f46;
+}
+
+.challenge-difficulty-easy {
+  color: #34d399;
+}
+
+.challenge-difficulty-medium {
+  color: #f59e0b;
+}
+
+.challenge-difficulty-hard {
+  color: #fb7185;
+}
+
+.challenge-status-check {
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  box-shadow: 0 10px 24px rgba(16, 185, 129, 0.1);
+}
+
+:root[data-theme="light"] .challenge-difficulty-easy {
+  color: #047857;
+}
+
+:root[data-theme="light"] .challenge-status-check {
+  border-color: rgba(5, 150, 105, 0.34);
+  background: linear-gradient(
+    180deg,
+    rgba(209, 250, 229, 0.92) 0%,
+    rgba(167, 243, 208, 0.54) 100%
+  );
+  color: #047857;
+  box-shadow:
+    0 0 0 1px rgba(5, 150, 105, 0.08),
+    0 10px 22px rgba(5, 150, 105, 0.12);
+}
+
+:root[data-theme="light"] .challenge-difficulty-medium {
+  color: #b45309;
+}
+
+:root[data-theme="light"] .challenge-difficulty-hard {
+  color: #be123c;
+}
