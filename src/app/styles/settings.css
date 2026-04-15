@@ -1,0 +1,246 @@
+.app-settings-page-ambient {
+  background:
+    radial-gradient(circle at 14% 12%, rgba(37, 99, 235, 0.12), transparent 22%),
+    radial-gradient(circle at 82% 18%, rgba(59, 130, 246, 0.08), transparent 18%),
+    linear-gradient(180deg, transparent, rgba(8, 12, 24, 0.14) 100%);
+}
+
+.app-settings-page-grid {
+  opacity: 0.12;
+  background-image: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.58) 0.7px,
+    transparent 0.8px
+  );
+  background-size: 36px 36px;
+  mask-image: linear-gradient(180deg, transparent, black 18%, black 82%, transparent);
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent,
+    black 18%,
+    black 82%,
+    transparent
+  );
+}
+
+.app-settings-shell-ambient {
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.12), transparent 24%),
+    radial-gradient(circle at 82% 12%, rgba(56, 189, 248, 0.07), transparent 18%),
+    radial-gradient(circle at 74% 88%, rgba(37, 99, 235, 0.06), transparent 18%);
+}
+
+.app-settings-shell-grid {
+  opacity: 0.1;
+  background-image: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.64) 0.7px,
+    transparent 0.8px
+  );
+  background-size: 28px 28px;
+  mask-image: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.14),
+    rgba(0, 0, 0, 1) 18%,
+    rgba(0, 0, 0, 1) 82%,
+    rgba(0, 0, 0, 0.18)
+  );
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.14),
+    rgba(0, 0, 0, 1) 18%,
+    rgba(0, 0, 0, 1) 82%,
+    rgba(0, 0, 0, 0.18)
+  );
+}
+
+.app-settings-brand-icon {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: radial-gradient(
+    circle at 30% 28%,
+    rgba(96, 165, 250, 0.22),
+    rgba(59, 130, 246, 0.12) 42%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  box-shadow:
+    0 14px 32px rgba(2, 6, 23, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.app-settings-shell {
+  border: 1px solid var(--app-settings-shell-border);
+  background: var(--app-settings-shell-bg);
+  box-shadow: var(--app-panel-shadow);
+  backdrop-filter: blur(24px);
+}
+
+.app-settings-rail {
+  background: var(--app-settings-rail-bg);
+  backdrop-filter: blur(18px);
+}
+
+.app-settings-section {
+  border: 1px solid var(--app-settings-section-border);
+  background: var(--app-settings-section-bg);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(18px);
+}
+
+.app-editor-quiet-field {
+  box-shadow: none;
+  backdrop-filter: blur(10px);
+}
+
+:root:not([data-theme="light"]) .app-editor-quiet-field {
+  border-color: rgba(255, 255, 255, 0.055);
+  background: rgba(255, 255, 255, 0.018);
+}
+
+:root:not([data-theme="light"]) .app-editor-quiet-field:hover {
+  background: rgba(255, 255, 255, 0.028);
+}
+
+:root[data-theme="light"] .app-editor-quiet-field {
+  border-color: rgba(148, 163, 184, 0.16);
+  background: rgba(255, 255, 255, 0.58);
+}
+
+:root[data-theme="light"] .app-editor-quiet-field:hover {
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.app-settings-preview-shell {
+  display: inline-flex;
+  height: 5.4rem;
+  width: 7rem;
+  overflow: hidden;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 1.2rem;
+}
+
+.app-settings-nav-item {
+  border: 1px solid transparent;
+  color: var(--app-text-muted);
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.app-settings-nav-item:hover {
+  border-color: var(--app-settings-nav-border);
+  background: var(--app-settings-nav-bg);
+  color: var(--app-text-strong);
+}
+
+.app-settings-nav-item-active {
+  border-color: var(--app-settings-nav-active-border);
+  background: var(--app-settings-nav-active-bg);
+  color: var(--app-text-strong);
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.08);
+}
+
+.app-settings-option {
+  background: transparent;
+}
+
+.app-settings-option:hover {
+  background: var(--app-settings-row-hover);
+}
+
+.app-settings-option-active {
+  background: var(--app-settings-row-active);
+  box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.12);
+}
+
+.app-settings-kicker {
+  color: var(--app-settings-kicker-color);
+}
+
+.app-settings-accent {
+  color: var(--app-settings-tab-icon-active-color);
+}
+
+.app-settings-upload-trigger {
+  border: 1px solid var(--app-settings-upload-border);
+  background: var(--app-settings-upload-bg);
+  color: var(--app-settings-upload-text);
+  box-shadow: var(--app-settings-upload-shadow);
+}
+
+.app-settings-upload-trigger:hover {
+  border-color: var(--app-settings-upload-hover-border);
+  background: var(--app-settings-upload-hover-bg);
+  color: var(--app-settings-upload-hover-text);
+}
+
+.app-settings-tab-icon {
+  border: 1px solid var(--app-settings-tab-icon-border);
+  background: var(--app-settings-tab-icon-bg);
+  color: var(--app-settings-tab-icon-color);
+}
+
+.app-settings-tab-icon-active {
+  border-color: var(--app-settings-tab-icon-active-border);
+  background: var(--app-settings-tab-icon-active-bg);
+  color: var(--app-settings-tab-icon-active-color);
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.08),
+    0 12px 28px rgba(59, 130, 246, 0.1);
+}
+
+:root[data-theme="light"] .app-settings-page-ambient {
+  background:
+    radial-gradient(circle at 14% 12%, rgba(37, 99, 235, 0.12), transparent 23%),
+    radial-gradient(circle at 82% 18%, rgba(14, 165, 233, 0.1), transparent 19%),
+    linear-gradient(180deg, transparent, rgba(148, 163, 184, 0.1) 100%);
+}
+
+:root[data-theme="light"] .app-settings-page-grid {
+  opacity: 0.18;
+  background-image: radial-gradient(
+    circle at center,
+    rgba(71, 85, 105, 0.32) 0.7px,
+    transparent 0.8px
+  );
+}
+
+:root[data-theme="light"] .app-settings-shell-grid {
+  opacity: 0.13;
+  background-image: radial-gradient(
+    circle at center,
+    rgba(71, 85, 105, 0.26) 0.7px,
+    transparent 0.8px
+  );
+}
+
+:root[data-theme="light"] .app-settings-brand-icon {
+  border-color: rgba(59, 130, 246, 0.22);
+  background: radial-gradient(
+    circle at 30% 28%,
+    rgba(147, 197, 253, 0.5),
+    rgba(219, 234, 254, 0.72) 44%,
+    rgba(240, 247, 255, 0.96) 100%
+  );
+  box-shadow:
+    0 14px 32px rgba(37, 99, 235, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.58);
+}
+
+:root[data-theme="light"] .app-settings-section {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 10px 28px rgba(15, 23, 42, 0.04);
+}
+
+:root[data-theme="light"] .app-editor-quiet-field {
+  border-color: rgba(100, 116, 139, 0.2);
+  background: rgba(244, 249, 255, 0.7);
+}
+
+:root[data-theme="light"] .app-editor-quiet-field:hover {
+  border-color: rgba(100, 116, 139, 0.28);
+  background: rgba(249, 252, 255, 0.9);
+}

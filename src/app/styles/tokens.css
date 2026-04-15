@@ -1,0 +1,439 @@
+:root {
+  color-scheme: dark;
+  --app-text-strong: #f4f7fb;
+  --app-text-muted: rgba(226, 232, 240, 0.62);
+  --app-text-soft: rgba(226, 232, 240, 0.5);
+  --app-text-faint: rgba(226, 232, 240, 0.34);
+  --app-body-background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 24%),
+    radial-gradient(circle at 88% 12%, rgba(59, 130, 246, 0.08), transparent 20%),
+    linear-gradient(180deg, #070b15 0%, #060913 54%, #050814 100%);
+  --app-panel-bg: linear-gradient(
+    180deg,
+    rgba(10, 15, 28, 0.92) 0%,
+    rgba(8, 13, 24, 0.88) 100%
+  );
+  --app-panel-border: rgba(255, 255, 255, 0.1);
+  --app-panel-shadow: 0 24px 70px rgba(3, 7, 18, 0.28);
+  --app-panel-subtle-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  --app-panel-subtle-border: rgba(255, 255, 255, 0.08);
+  --app-option-bg: rgba(255, 255, 255, 0.03);
+  --app-option-border: rgba(255, 255, 255, 0.08);
+  --app-option-active-bg: rgba(37, 99, 235, 0.14);
+  --app-option-active-border: rgba(96, 165, 250, 0.34);
+  --app-option-icon-bg: rgba(37, 99, 235, 0.12);
+  --app-option-icon-border: rgba(96, 165, 250, 0.16);
+  --app-grid-line: rgba(255, 255, 255, 0.06);
+  --app-code-keyword: #3b82f6;
+  --app-code-identifier: #f4f7fb;
+  --app-code-call: #60a5fa;
+  --app-code-builtin: #93c5fd;
+  --app-code-text: rgba(226, 232, 240, 0.78);
+  --app-code-comment: rgba(148, 163, 184, 0.44);
+  --app-code-constant: #f87171;
+  --app-code-shell-ring: rgba(96, 165, 250, 0.08);
+  --app-surface-strong: linear-gradient(
+    180deg,
+    rgba(10, 15, 28, 0.92) 0%,
+    rgba(8, 13, 24, 0.88) 100%
+  );
+  --app-surface-strong-border: rgba(255, 255, 255, 0.1);
+  --app-surface-soft: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.72) 0%,
+    rgba(10, 15, 28, 0.88) 100%
+  );
+  --app-surface-soft-border: rgba(255, 255, 255, 0.08);
+  --app-surface-contrast: linear-gradient(
+    180deg,
+    rgba(7, 11, 21, 0.94) 0%,
+    rgba(7, 10, 19, 0.98) 100%
+  );
+  --app-surface-contrast-border: rgba(255, 255, 255, 0.06);
+  --app-profile-card-solid-bg: linear-gradient(180deg, #0b1220 0%, #09111d 100%);
+  --app-profile-card-soft-bg: linear-gradient(180deg, #131c31 0%, #0d1526 100%);
+  --app-stats-band-bg: linear-gradient(180deg, #11192c 0%, #0d1425 54%, #0b1222 100%);
+  --app-surface-overlay: rgba(5, 9, 22, 0.92);
+  --app-surface-overlay-card: rgba(255, 255, 255, 0.03);
+  --app-surface-overlay-card-border: rgba(255, 255, 255, 0.08);
+  --app-surface-code: linear-gradient(
+    180deg,
+    rgba(9, 14, 26, 0.96) 0%,
+    rgba(12, 18, 34, 0.92) 100%
+  );
+  --app-surface-code-topbar: rgba(0, 0, 0, 0.5);
+  --app-surface-code-border: rgba(255, 255, 255, 0.1);
+  --app-surface-footer: #060b18;
+  --app-surface-input: linear-gradient(
+    180deg,
+    rgba(18, 27, 46, 0.86) 0%,
+    rgba(9, 16, 30, 0.92) 100%
+  );
+  --app-surface-input-focus: linear-gradient(
+    180deg,
+    rgba(19, 31, 54, 0.92) 0%,
+    rgba(11, 19, 37, 0.96) 100%
+  );
+  --app-input-border: rgba(255, 255, 255, 0.1);
+  --app-input-focus-border: rgba(96, 165, 250, 0.24);
+  --app-input-icon: rgba(255, 255, 255, 0.38);
+  --app-input-placeholder: rgba(255, 255, 255, 0.28);
+  --app-input-text: rgba(255, 255, 255, 0.88);
+  --app-header-elevated-bg: rgba(10, 15, 28, 0.82);
+  --app-header-flat-bg: rgba(16, 22, 34, 0.8);
+  --app-header-border-strong: rgba(255, 255, 255, 0.1);
+  --app-header-border-soft: #18181b;
+  --app-focus-ring-offset: #050816;
+  --app-control-ghost-text: rgba(255, 255, 255, 0.8);
+  --app-control-ghost-hover-text: #eff6ff;
+  --app-control-ghost-hover-bg: rgba(59, 130, 246, 0.1);
+  --app-control-ghost-hover-border: rgba(96, 165, 250, 0.2);
+  --app-control-secondary-text: rgba(255, 255, 255, 0.88);
+  --app-control-secondary-bg: rgba(255, 255, 255, 0.04);
+  --app-control-secondary-border: rgba(255, 255, 255, 0.1);
+  --app-control-secondary-hover-text: #ffffff;
+  --app-control-secondary-hover-bg: rgba(255, 255, 255, 0.07);
+  --app-control-secondary-hover-border: rgba(255, 255, 255, 0.18);
+  --app-disabled-surface: rgba(255, 255, 255, 0.04);
+  --app-disabled-text: rgba(226, 232, 240, 0.34);
+  --app-accent-soft-bg: rgba(37, 99, 235, 0.14);
+  --app-accent-text: #60a5fa;
+  --app-popover-bg: linear-gradient(
+    180deg,
+    rgba(8, 12, 24, 0.98) 0%,
+    rgba(7, 11, 22, 0.96) 100%
+  );
+  --app-popover-border: rgba(255, 255, 255, 0.1);
+  --app-popover-divider: rgba(255, 255, 255, 0.08);
+  --app-popover-section-bg: rgba(255, 255, 255, 0.03);
+  --app-popover-section-border: rgba(255, 255, 255, 0.06);
+  --app-popover-shadow: 0 30px 70px rgba(3, 7, 18, 0.34);
+  --app-card-shadow: 0 24px 80px rgba(3, 7, 18, 0.32);
+  --app-settings-shell-bg: linear-gradient(
+    180deg,
+    rgba(8, 12, 23, 0.94) 0%,
+    rgba(6, 10, 19, 0.96) 100%
+  );
+  --app-settings-shell-border: rgba(255, 255, 255, 0.08);
+  --app-settings-rail-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.015) 100%
+  );
+  --app-settings-section-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.018) 100%
+  );
+  --app-settings-section-border: rgba(255, 255, 255, 0.08);
+  --app-settings-divider: rgba(255, 255, 255, 0.08);
+  --app-settings-nav-bg: rgba(255, 255, 255, 0.03);
+  --app-settings-nav-border: rgba(255, 255, 255, 0.08);
+  --app-settings-nav-active-bg: rgba(59, 130, 246, 0.12);
+  --app-settings-nav-active-border: rgba(96, 165, 250, 0.22);
+  --app-settings-row-hover: rgba(255, 255, 255, 0.03);
+  --app-settings-row-active: rgba(37, 99, 235, 0.1);
+  --app-settings-badge-bg: rgba(255, 255, 255, 0.04);
+  --app-settings-badge-border: rgba(255, 255, 255, 0.08);
+  --app-settings-kicker-color: rgba(96, 165, 250, 0.78);
+  --app-settings-upload-text: #dbeafe;
+  --app-settings-upload-bg: linear-gradient(
+    180deg,
+    rgba(59, 130, 246, 0.12) 0%,
+    rgba(37, 99, 235, 0.1) 100%
+  );
+  --app-settings-upload-border: rgba(96, 165, 250, 0.28);
+  --app-settings-upload-hover-text: #eff6ff;
+  --app-settings-upload-hover-bg: linear-gradient(
+    180deg,
+    rgba(59, 130, 246, 0.18) 0%,
+    rgba(37, 99, 235, 0.14) 100%
+  );
+  --app-settings-upload-hover-border: rgba(147, 197, 253, 0.42);
+  --app-settings-upload-shadow: 0 14px 34px rgba(37, 99, 235, 0.18);
+  --app-settings-tab-icon-bg: rgba(255, 255, 255, 0.05);
+  --app-settings-tab-icon-border: rgba(255, 255, 255, 0.1);
+  --app-settings-tab-icon-color: rgba(226, 232, 240, 0.5);
+  --app-settings-tab-icon-active-bg: rgba(59, 130, 246, 0.12);
+  --app-settings-tab-icon-active-border: rgba(96, 165, 250, 0.2);
+  --app-settings-tab-icon-active-color: #bfdbfe;
+  --app-profile-meta-bg: rgba(255, 255, 255, 0.04);
+  --app-profile-meta-border: rgba(255, 255, 255, 0.1);
+  --app-profile-meta-text: rgba(226, 232, 240, 0.58);
+  --app-profile-meta-icon: #93c5fd;
+  --app-avatar-frame-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  --app-avatar-frame-border: rgba(255, 255, 255, 0.12);
+  --app-avatar-frame-shadow: 0 22px 50px rgba(2, 6, 23, 0.28);
+  --app-avatar-glow:
+    radial-gradient(circle at 24% 18%, rgba(96, 165, 250, 0.24), transparent 52%),
+    radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.14), transparent 26%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(8, 15, 30, 0.96));
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --app-text-strong: #111827;
+  --app-text-muted: rgba(30, 41, 59, 0.78);
+  --app-text-soft: rgba(51, 65, 85, 0.68);
+  --app-text-faint: rgba(71, 85, 105, 0.58);
+  --app-body-background:
+    radial-gradient(circle at 8% 0%, rgba(59, 130, 246, 0.13), transparent 25%),
+    radial-gradient(circle at 88% 12%, rgba(14, 165, 233, 0.12), transparent 22%),
+    linear-gradient(180deg, #edf5ff 0%, #e6eef8 48%, #dce7f2 100%);
+  --app-panel-bg: linear-gradient(
+    180deg,
+    rgba(250, 253, 255, 0.96) 0%,
+    rgba(240, 246, 253, 0.98) 100%
+  );
+  --app-panel-border: rgba(100, 116, 139, 0.26);
+  --app-panel-shadow:
+    0 24px 58px rgba(15, 23, 42, 0.13), 0 8px 22px rgba(59, 130, 246, 0.06);
+  --app-panel-subtle-bg: linear-gradient(
+    180deg,
+    rgba(247, 251, 255, 0.82) 0%,
+    rgba(235, 243, 253, 0.9) 100%
+  );
+  --app-panel-subtle-border: rgba(100, 116, 139, 0.22);
+  --app-option-bg: linear-gradient(
+    180deg,
+    rgba(250, 253, 255, 0.92) 0%,
+    rgba(239, 246, 255, 0.96) 100%
+  );
+  --app-option-border: rgba(100, 116, 139, 0.28);
+  --app-option-active-bg: linear-gradient(
+    180deg,
+    rgba(219, 234, 254, 0.82) 0%,
+    rgba(191, 219, 254, 0.58) 100%
+  );
+  --app-option-active-border: rgba(37, 99, 235, 0.42);
+  --app-option-icon-bg: linear-gradient(
+    180deg,
+    rgba(219, 234, 254, 0.9) 0%,
+    rgba(191, 219, 254, 0.52) 100%
+  );
+  --app-option-icon-border: rgba(59, 130, 246, 0.28);
+  --app-grid-line: rgba(71, 85, 105, 0.16);
+  --app-code-keyword: #1d4ed8;
+  --app-code-identifier: #0f172a;
+  --app-code-call: #2563eb;
+  --app-code-builtin: #0f766e;
+  --app-code-text: rgba(15, 23, 42, 0.88);
+  --app-code-comment: rgba(71, 85, 105, 0.76);
+  --app-code-constant: #dc2626;
+  --app-code-shell-ring: rgba(59, 130, 246, 0.2);
+  --app-surface-strong: linear-gradient(
+    180deg,
+    rgba(250, 253, 255, 0.96) 0%,
+    rgba(239, 246, 255, 0.98) 100%
+  );
+  --app-surface-strong-border: rgba(100, 116, 139, 0.26);
+  --app-surface-soft: linear-gradient(
+    180deg,
+    rgba(244, 249, 255, 0.92) 0%,
+    rgba(231, 240, 252, 0.98) 100%
+  );
+  --app-surface-soft-border: rgba(100, 116, 139, 0.22);
+  --app-surface-contrast: linear-gradient(
+    180deg,
+    rgba(232, 240, 251, 0.96) 0%,
+    rgba(218, 230, 244, 0.98) 100%
+  );
+  --app-surface-contrast-border: rgba(100, 116, 139, 0.24);
+  --app-stats-band-bg: linear-gradient(180deg, #e6eef8 0%, #dce7f2 56%, #d5e1ee 100%);
+  --app-surface-overlay: rgba(232, 240, 251, 0.94);
+  --app-surface-overlay-card: rgba(248, 251, 255, 0.9);
+  --app-surface-overlay-card-border: rgba(100, 116, 139, 0.24);
+  --app-surface-code: linear-gradient(
+    180deg,
+    rgba(247, 251, 255, 0.98) 0%,
+    rgba(235, 243, 252, 1) 100%
+  );
+  --app-surface-code-topbar: rgba(224, 234, 247, 0.95);
+  --app-surface-code-border: rgba(100, 116, 139, 0.26);
+  --app-surface-footer: #dce7f2;
+  --app-surface-input: linear-gradient(
+    180deg,
+    rgba(249, 252, 255, 0.98) 0%,
+    rgba(235, 243, 252, 0.98) 100%
+  );
+  --app-surface-input-focus: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(231, 241, 255, 1) 100%
+  );
+  --app-input-border: rgba(100, 116, 139, 0.3);
+  --app-input-focus-border: rgba(37, 99, 235, 0.52);
+  --app-input-icon: rgba(71, 85, 105, 0.68);
+  --app-input-placeholder: rgba(71, 85, 105, 0.58);
+  --app-input-text: rgba(15, 23, 42, 0.96);
+  --app-header-elevated-bg: rgba(247, 251, 255, 0.9);
+  --app-header-flat-bg: rgba(239, 246, 255, 0.9);
+  --app-header-border-strong: rgba(100, 116, 139, 0.24);
+  --app-header-border-soft: rgba(148, 163, 184, 0.34);
+  --app-focus-ring-offset: #edf5ff;
+  --app-control-ghost-text: rgba(30, 41, 59, 0.82);
+  --app-control-ghost-hover-text: #0f172a;
+  --app-control-ghost-hover-bg: rgba(37, 99, 235, 0.1);
+  --app-control-ghost-hover-border: rgba(37, 99, 235, 0.24);
+  --app-control-secondary-text: rgba(15, 23, 42, 0.88);
+  --app-control-secondary-bg: linear-gradient(
+    180deg,
+    rgba(249, 252, 255, 0.96) 0%,
+    rgba(232, 241, 253, 0.98) 100%
+  );
+  --app-control-secondary-border: rgba(100, 116, 139, 0.3);
+  --app-control-secondary-hover-text: #0f172a;
+  --app-control-secondary-hover-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(219, 234, 254, 1) 100%
+  );
+  --app-control-secondary-hover-border: rgba(37, 99, 235, 0.38);
+  --app-disabled-surface: rgba(226, 232, 240, 0.7);
+  --app-disabled-text: rgba(71, 85, 105, 0.46);
+  --app-accent-soft-bg: rgba(219, 234, 254, 0.74);
+  --app-accent-text: #1d4ed8;
+  --app-popover-bg: linear-gradient(
+    180deg,
+    rgba(250, 253, 255, 0.99) 0%,
+    rgba(235, 243, 252, 0.99) 100%
+  );
+  --app-popover-border: rgba(100, 116, 139, 0.34);
+  --app-popover-divider: rgba(100, 116, 139, 0.22);
+  --app-popover-section-bg: rgba(226, 236, 249, 0.76);
+  --app-popover-section-border: rgba(100, 116, 139, 0.2);
+  --app-popover-shadow: 0 28px 64px rgba(15, 23, 42, 0.18);
+  --app-card-shadow:
+    0 28px 68px rgba(15, 23, 42, 0.12), 0 12px 28px rgba(59, 130, 246, 0.07);
+  --app-surface-strong: linear-gradient(
+    180deg,
+    rgba(250, 253, 255, 0.96) 0%,
+    rgba(239, 246, 255, 0.98) 100%
+  );
+  --app-surface-soft: linear-gradient(
+    180deg,
+    rgba(244, 249, 255, 0.92) 0%,
+    rgba(231, 240, 252, 0.98) 100%
+  );
+  --app-surface-contrast: linear-gradient(
+    180deg,
+    rgba(232, 240, 251, 0.96) 0%,
+    rgba(218, 230, 244, 0.98) 100%
+  );
+  --app-profile-card-solid-bg: linear-gradient(
+    135deg,
+    rgba(249, 252, 255, 0.98) 0%,
+    rgba(238, 246, 255, 0.98) 48%,
+    rgba(221, 234, 249, 0.98) 100%
+  );
+  --app-profile-card-soft-bg: linear-gradient(
+    180deg,
+    rgba(248, 252, 255, 0.98) 0%,
+    rgba(232, 241, 252, 1) 100%
+  );
+  --app-settings-shell-bg: linear-gradient(
+    135deg,
+    rgba(248, 252, 255, 0.97) 0%,
+    rgba(235, 244, 255, 0.98) 46%,
+    rgba(221, 234, 249, 0.98) 100%
+  );
+  --app-settings-shell-border: rgba(100, 116, 139, 0.28);
+  --app-settings-rail-bg: linear-gradient(
+    180deg,
+    rgba(242, 248, 255, 0.9) 0%,
+    rgba(226, 237, 250, 0.94) 100%
+  );
+  --app-settings-section-bg: linear-gradient(
+    180deg,
+    rgba(249, 252, 255, 0.94) 0%,
+    rgba(235, 244, 255, 0.96) 100%
+  );
+  --app-settings-section-border: rgba(100, 116, 139, 0.28);
+  --app-settings-divider: rgba(100, 116, 139, 0.26);
+  --app-settings-nav-bg: linear-gradient(
+    180deg,
+    rgba(249, 252, 255, 0.9) 0%,
+    rgba(231, 240, 252, 0.95) 100%
+  );
+  --app-settings-nav-border: rgba(59, 130, 246, 0.32);
+  --app-settings-nav-active-bg: linear-gradient(
+    180deg,
+    rgba(219, 234, 254, 0.86) 0%,
+    rgba(191, 219, 254, 0.62) 100%
+  );
+  --app-settings-nav-active-border: rgba(37, 99, 235, 0.44);
+  --app-settings-row-hover: linear-gradient(
+    180deg,
+    rgba(235, 244, 255, 0.96) 0%,
+    rgba(219, 234, 254, 0.9) 100%
+  );
+  --app-settings-row-active: linear-gradient(
+    180deg,
+    rgba(219, 234, 254, 0.9) 0%,
+    rgba(191, 219, 254, 0.66) 100%
+  );
+  --app-settings-badge-bg: linear-gradient(
+    180deg,
+    rgba(249, 252, 255, 0.96) 0%,
+    rgba(231, 240, 252, 0.98) 100%
+  );
+  --app-settings-badge-border: rgba(100, 116, 139, 0.26);
+  --app-settings-kicker-color: rgba(29, 78, 216, 0.86);
+  --app-settings-upload-text: #1d4ed8;
+  --app-settings-upload-bg: linear-gradient(
+    180deg,
+    rgba(219, 234, 254, 0.9) 0%,
+    rgba(191, 219, 254, 0.62) 100%
+  );
+  --app-settings-upload-border: rgba(37, 99, 235, 0.42);
+  --app-settings-upload-hover-text: #1e40af;
+  --app-settings-upload-hover-bg: linear-gradient(
+    180deg,
+    rgba(191, 219, 254, 0.98) 0%,
+    rgba(147, 197, 253, 0.56) 100%
+  );
+  --app-settings-upload-hover-border: rgba(29, 78, 216, 0.5);
+  --app-settings-upload-shadow: 0 16px 34px rgba(37, 99, 235, 0.14);
+  --app-settings-tab-icon-bg: linear-gradient(
+    180deg,
+    rgba(249, 252, 255, 0.96) 0%,
+    rgba(231, 240, 252, 0.98) 100%
+  );
+  --app-settings-tab-icon-border: rgba(100, 116, 139, 0.26);
+  --app-settings-tab-icon-color: rgba(51, 65, 85, 0.82);
+  --app-settings-tab-icon-active-bg: linear-gradient(
+    180deg,
+    rgba(219, 234, 254, 0.92) 0%,
+    rgba(147, 197, 253, 0.44) 100%
+  );
+  --app-settings-tab-icon-active-border: rgba(37, 99, 235, 0.42);
+  --app-settings-tab-icon-active-color: #2563eb;
+  --app-profile-meta-bg: linear-gradient(
+    180deg,
+    rgba(249, 252, 255, 0.92) 0%,
+    rgba(231, 240, 252, 0.96) 100%
+  );
+  --app-profile-meta-border: rgba(100, 116, 139, 0.28);
+  --app-profile-meta-text: rgba(30, 41, 59, 0.82);
+  --app-profile-meta-icon: #3b82f6;
+  --app-avatar-frame-bg: linear-gradient(
+    180deg,
+    rgba(249, 252, 255, 0.96) 0%,
+    rgba(224, 234, 247, 0.98) 100%
+  );
+  --app-avatar-frame-border: rgba(100, 116, 139, 0.26);
+  --app-avatar-frame-shadow:
+    0 24px 54px rgba(71, 85, 105, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  --app-avatar-glow:
+    radial-gradient(circle at 24% 18%, rgba(59, 130, 246, 0.22), transparent 52%),
+    radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.82), transparent 30%),
+    linear-gradient(180deg, rgba(191, 219, 254, 0.42), rgba(96, 165, 250, 0.2));
+}

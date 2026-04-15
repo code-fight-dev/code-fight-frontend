@@ -1,14 +1,15 @@
-import { Gauge, Palette, UserRound } from "lucide-react";
+import { Gauge, Palette, SquareTerminal, UserRound } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import {
-  SETTINGS_PROFILE_HREF,
   SETTINGS_APPEARANCE_HREF,
+  SETTINGS_EDITOR_HREF,
   SETTINGS_PERFORMANCE_HREF,
+  SETTINGS_PROFILE_HREF,
   type SettingsRoute,
   type SettingsSectionId,
 } from "@/shared/config/routes";
 
-type SettingsSection = Readonly<{
+export type SettingsSection = Readonly<{
   id: SettingsSectionId;
   href: SettingsRoute;
   label: string;
@@ -35,6 +36,15 @@ const SETTINGS_SECTION_BY_ID = {
     description: "Choose the shell palette with the best contrast for your environment.",
     icon: Palette,
   },
+  editor: {
+    id: "editor",
+    href: SETTINGS_EDITOR_HREF,
+    label: "Editor",
+    meta: "Workspace",
+    description:
+      "Tune Monaco editor behavior, typography, cursor animation, padding, and layout for coding sessions.",
+    icon: SquareTerminal,
+  },
   performance: {
     id: "performance",
     href: SETTINGS_PERFORMANCE_HREF,
@@ -48,6 +58,7 @@ const SETTINGS_SECTION_BY_ID = {
 export const SETTINGS_SECTIONS = [
   SETTINGS_SECTION_BY_ID.profile,
   SETTINGS_SECTION_BY_ID.appearance,
+  SETTINGS_SECTION_BY_ID.editor,
   SETTINGS_SECTION_BY_ID.performance,
 ] as const;
 

@@ -2,9 +2,13 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import {
+  DEFAULT_EDITOR_PREFERENCES,
+  type EditorPreferences,
+} from "@/features/preferences/model/editor";
+import {
   applyPreferencesToDocument,
   persistPreferences,
-  readPreferencesFromDocument,
+  readPreferencesFromStorage,
 } from "@/features/preferences/model/document";
 import type {
   MotionPreference,
@@ -16,6 +20,8 @@ type PreferencesContextValue = {
   preferences: PreferencesState;
   setTheme: (theme: ThemePreference) => void;
   setMotion: (motion: MotionPreference) => void;
+  updateEditorPreferences: (patch: Partial<EditorPreferences>) => void;
+  resetEditorPreferences: () => void;
 };
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
@@ -31,7 +37,7 @@ export function PreferencesProvider({ children, initialPreferences }: Props) {
       return initialPreferences;
     }
 
-    return readPreferencesFromDocument();
+    return readPreferencesFromStorage();
   });
 
   useEffect(() => {
@@ -48,6 +54,21 @@ export function PreferencesProvider({ children, initialPreferences }: Props) {
         },
         setMotion: (motion) => {
           setPreferences((currentPreferences) => ({ ...currentPreferences, motion }));
+        },
+        updateEditorPreferences: (patch) => {
+          setPreferences((currentPreferences) => ({
+            ...currentPreferences,
+            editor: {
+              ...currentPreferences.editor,
+              ...patch,
+            },
+          }));
+        },
+        resetEditorPreferences: () => {
+          setPreferences((currentPreferences) => ({
+            ...currentPreferences,
+            editor: DEFAULT_EDITOR_PREFERENCES,
+          }));
         },
       }}
     >
