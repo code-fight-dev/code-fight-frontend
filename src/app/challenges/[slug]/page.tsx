@@ -1,19 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ChallengeWorkspace } from "@/views/challenges";
-import { getChallengeBySlug, getChallengeSlugs } from "@/views/challenges/server";
+import { getChallengeBySlug } from "@/views/challenges/server";
 
 type Props = {
   params: Promise<{
     slug: string;
   }>;
 };
-
-export async function generateStaticParams() {
-  const slugs = await getChallengeSlugs();
-
-  return slugs.map((slug) => ({ slug }));
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
