@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ChallengesPageView } from "@/views/challenges";
-import { getChallengeTopics, getChallenges } from "@/views/challenges/server";
+import { getChallengesPageData } from "@/views/challenges/server";
 
 export const metadata: Metadata = {
   title: "Challenges | CodeFight",
@@ -8,7 +8,20 @@ export const metadata: Metadata = {
 };
 
 export default async function ChallengesPage() {
-  const [challenges, topics] = await Promise.all([getChallenges(), getChallengeTopics()]);
+  const { challenges, topics } = await getChallengesPageData();
+  const solvedCount = challenges.filter(
+    (challenge) => challenge.progress === "solved",
+  ).length;
+  const activeCount = challenges.filter(
+    (challenge) => challenge.progress === "in-progress",
+  ).length;
 
-  return <ChallengesPageView challenges={challenges} topics={topics} />;
+  return (
+    <ChallengesPageView
+      challenges={challenges}
+      topics={topics}
+      solvedCount={solvedCount}
+      activeCount={activeCount}
+    />
+  );
 }
