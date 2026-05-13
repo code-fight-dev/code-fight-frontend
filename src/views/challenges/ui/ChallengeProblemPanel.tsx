@@ -1,7 +1,7 @@
 "use client";
 
 import { BookOpen, FileCode2, History } from "lucide-react";
-import type { Challenge } from "@/entities/challenge";
+import type { Challenge, TaskSubmissionSummary } from "@/entities/challenge";
 import { cn } from "@/shared/lib/cn";
 import { getChallengeLanguageScope } from "../model/presentation";
 import type { ChallengeProblemTab } from "../model/workspace";
@@ -23,10 +23,40 @@ const PROBLEM_TABS: Array<{
 type Props = {
   challenge: Challenge;
   activeTab: ChallengeProblemTab;
+  submissions: TaskSubmissionSummary[];
   onTabChange: (tab: ChallengeProblemTab) => void;
 };
 
-export function ChallengeProblemPanel({ challenge, activeTab, onTabChange }: Props) {
+function toReadableLabel(value: string) {
+  return value
+    .replaceAll("_", " ")
+    .replaceAll("-", " ")
+    .split(" ")
+    .filter(Boolean)
+    .map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
+    .join(" ");
+}
+
+function formatSubmissionDate(value: string) {
+  const timestamp = Date.parse(value);
+  if (!Number.isFinite(timestamp)) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(timestamp));
+}
+
+export function ChallengeProblemPanel({
+  challenge,
+  activeTab,
+  submissions,
+  onTabChange,
+}: Props) {
   return (
     <section className="challenge-panel flex min-h-136 flex-col overflow-hidden rounded-lg">
       <div className="challenge-panel-header border-b p-4 sm:p-5">
@@ -135,14 +165,68 @@ export function ChallengeProblemPanel({ challenge, activeTab, onTabChange }: Pro
         ) : null}
 
         {activeTab === "submissions" ? (
-          <section className="challenge-panel-muted rounded-lg border-dashed p-6">
-            <h2 className="text-[18px] font-semibold text-(--app-text-strong)">
-              No submissions yet
-            </h2>
-            <p className="mt-2 max-w-xl text-[14px] leading-7 text-(--app-text-muted)">
-              No accepted runs or failed attempts have been recorded for this challenge.
-            </p>
-          </section>
+          submissions.length === 0 ? (
+            <section className="challenge-panel-muted rounded-lg border-dashed p-6">
+              <h2 className="text-[18px] font-semibold text-(--app-text-strong)">
+                No submissions yet
+              </h2>
+              <p className="mt-2 max-w-xl text-[14px] leading-7 text-(--app-text-muted)">
+                No accepted runs or failed attempts have been recorded for this challenge.
+              </p>
+            </section>
+          ) : (
+            <div className="grid gap-3">
+              {submissions.map((submission) => (
+                <article
+                  key={submission.id}
+                  className="challenge-panel-muted rounded-lg border px-4 py-3"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-[12px] font-semibold tracking-[0.04em] text-(--app-text-faint) uppercase">
+                      {formatSubmissionDate(submission.createdAt)}
+                    </span>
+                    <span className="text-[12px] font-semibold text-(--app-text-soft)">
+                      {submission.language.toUpperCase()}
+                    </span>
+                  </div>
+
+                  <div className="mt-2 text-[13px] text-(--app-text-muted)">
+                    Status:{" "}
+                    <span className="font-semibold text-(--app-text-strong)">
+                      {toReadableLabel(submission.status)}
+                    </span>
+                    {submission.verdict ? (
+                      <>
+                        {" | "}Verdict:{" "}
+                        <span className="font-semibold text-(--app-text-strong)">
+                          {toReadableLabel(submission.verdict)}
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
+
+                  <div className="mt-1 text-[13px] text-(--app-text-muted)">
+                    Passed:{" "}
+                    <span className="font-semibold text-(--app-text-strong)">
+                      {submission.passedTests}/{submission.totalTests}
+                    </span>
+                    {" | "}Runtime:{" "}
+                    <span className="font-semibold text-(--app-text-strong)">
+                      {typeof submission.runTimeMs === "number"
+                        ? `${submission.runTimeMs} ms`
+                        : "n/a"}
+                    </span>
+                  </div>
+
+                  {submission.errorMessage ? (
+                    <p className="mt-2 text-[13px] text-rose-200/95">
+                      {submission.errorMessage}
+                    </p>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          )
         ) : null}
       </div>
     </section>
