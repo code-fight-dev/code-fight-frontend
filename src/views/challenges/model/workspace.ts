@@ -3,19 +3,20 @@ import {
   type Challenge,
   type ChallengeLanguage,
 } from "@/entities/challenge";
+import type {
+  ChallengeExecutionAction,
+  ChallengeExecutionUiStatus,
+} from "@/features/challenge-execution";
 
 export type WorkspaceTab = "testcases" | "console";
 export type ChallengeProblemTab = "description" | "editorial" | "submissions";
-export type ChallengeWorkspaceAction = "run" | "submit";
-export type ExecutionStatus = "idle" | "running" | "ran" | "submitted";
+export type ChallengeWorkspaceAction = ChallengeExecutionAction;
+export type ExecutionStatus = ChallengeExecutionUiStatus;
 
 export const WORKSPACE_TABS: Array<{ value: WorkspaceTab; label: string }> = [
   { value: "testcases", label: "Testcases" },
   { value: "console", label: "Console" },
 ];
-
-export const DEFAULT_OUTPUT_MESSAGE =
-  "Choose a testcase, draft a solution, then run or submit when execution is available.";
 
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
