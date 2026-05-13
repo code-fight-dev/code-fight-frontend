@@ -2,6 +2,13 @@ import "server-only";
 
 import { headers } from "next/headers";
 import { API_BASE_URL } from "@/shared/config/api";
+import { parseTaskSubmissionSummaryFromCamelCase } from "../model/parsers/execution";
+import {
+  isRecord,
+  readNumber,
+  readString,
+  readStringArray,
+} from "../model/parsers/scalars";
 import { PROGRAMMING_LANGUAGE_BY_ID } from "../model/languages";
 import type {
   Challenge,
@@ -11,6 +18,7 @@ import type {
   ChallengeLanguage,
   ChallengeListItem,
   ChallengeProgress,
+  TaskSubmissionSummary,
   ChallengeTestCase,
 } from "../model/types";
 
@@ -25,40 +33,6 @@ type ChallengeResponseBody = {
 const CHALLENGE_LANGUAGE_IDS = new Set<ChallengeLanguage>(
   Object.keys(PROGRAMMING_LANGUAGE_BY_ID) as ChallengeLanguage[],
 );
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
-}
-
-function readString(value: unknown, fallback = "") {
-  return typeof value === "string" ? value : fallback;
-}
-
-function readNumber(value: unknown, fallback = 0) {
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return value;
-  }
-
-  if (typeof value === "string") {
-    const normalized = value.trim();
-    if (normalized !== "") {
-      const parsed = Number(normalized);
-      if (Number.isFinite(parsed)) {
-        return parsed;
-      }
-    }
-  }
-
-  return fallback;
-}
-
-function readStringArray(value: unknown): string[] {
-  if (!Array.isArray(value)) {
-    return [];
-  }
-
-  return value.filter((item): item is string => typeof item === "string");
-}
 
 function parseDifficulty(value: unknown): ChallengeDifficulty {
   const normalized = readString(value).trim().toLowerCase();
@@ -143,6 +117,30 @@ function parseStarterCodeByLanguage(
   }
 
   return starterCodeByLanguage;
+}
+
+function parseLanguageVersions(
+  value: unknown,
+): Partial<Record<ChallengeLanguage, string>> {
+  if (!isRecord(value)) {
+    return {};
+  }
+
+  const languageVersions: Partial<Record<ChallengeLanguage, string>> = {};
+
+  for (const [key, rawVersion] of Object.entries(value)) {
+    const normalizedLanguage = key.trim().toLowerCase() as ChallengeLanguage;
+
+    if (!CHALLENGE_LANGUAGE_IDS.has(normalizedLanguage)) {
+      continue;
+    }
+
+    if (typeof rawVersion === "string" && rawVersion.trim() !== "") {
+      languageVersions[normalizedLanguage] = rawVersion;
+    }
+  }
+
+  return languageVersions;
 }
 
 function parseChallengeExample(value: unknown): ChallengeExample | null {
@@ -235,7 +233,9 @@ function parseChallenge(value: unknown): Challenge | null {
   }
 
   const supportedLanguages = parseSupportedLanguages(value.supportedLanguages);
+  const taskId = readString(value.taskId, id).trim();
   const notes = readStringArray(value.notes);
+  const languageVersions = parseLanguageVersions(value.languageVersions);
   const examples = Array.isArray(value.examples)
     ? value.examples
         .map(parseChallengeExample)
@@ -246,9 +246,15 @@ function parseChallenge(value: unknown): Challenge | null {
         .map(parseChallengeTestCase)
         .filter((testCase): testCase is ChallengeTestCase => testCase !== null)
     : [];
+  const submissionHistory = Array.isArray(value.submissionHistory)
+    ? value.submissionHistory
+        .map(parseTaskSubmissionSummaryFromCamelCase)
+        .filter((submission): submission is TaskSubmissionSummary => submission !== null)
+    : [];
 
   return {
     id,
+    taskId,
     slug,
     title,
     difficulty: parseDifficulty(value.difficulty),
@@ -261,6 +267,7 @@ function parseChallenge(value: unknown): Challenge | null {
     category: readString(value.category),
     kind: parseKind(value.kind),
     supportedLanguages,
+    languageVersions,
     starterCodeByLanguage: parseStarterCodeByLanguage(
       value.starterCodeByLanguage,
       supportedLanguages,
@@ -272,6 +279,7 @@ function parseChallenge(value: unknown): Challenge | null {
     createdAt: readString(value.createdAt),
     progress: parseProgress(value.progress),
     testCases,
+    submissionHistory,
   };
 }
 
