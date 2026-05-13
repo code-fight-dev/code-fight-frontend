@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import type { ChallengeLanguage, ChallengeTestCase } from "@/entities/challenge";
 import { PROGRAMMING_LANGUAGE_BY_ID } from "@/entities/challenge";
 import type {
@@ -13,7 +16,6 @@ import { OutputPanel } from "./OutputPanel";
 import { TestcasePanel } from "./TestcasePanel";
 
 type Props = {
-  activeTestCaseIndex: number;
   code: string;
   customInput: string;
   executionStatus: ExecutionStatus;
@@ -24,7 +26,6 @@ type Props = {
   testCases: ChallengeTestCase[];
   workspaceTab: WorkspaceTab;
   onAction: (action: ChallengeWorkspaceAction) => void;
-  onActiveTestCaseChange: (index: number) => void;
   onCodeChange: (value: string) => void;
   onCustomInputChange: (value: string) => void;
   onLanguageChange: (language: ChallengeLanguage) => void;
@@ -32,7 +33,6 @@ type Props = {
 };
 
 export function ChallengeWorkspaceEditorPanel({
-  activeTestCaseIndex,
   code,
   customInput,
   executionStatus,
@@ -43,13 +43,15 @@ export function ChallengeWorkspaceEditorPanel({
   testCases,
   workspaceTab,
   onAction,
-  onActiveTestCaseChange,
   onCodeChange,
   onCustomInputChange,
   onLanguageChange,
   onWorkspaceTabChange,
 }: Props) {
+  const [activeTestCaseIndex, setActiveTestCaseIndex] = useState(0);
   const selectedLanguageMeta = PROGRAMMING_LANGUAGE_BY_ID[selectedLanguage];
+  const safeActiveTestCaseIndex =
+    activeTestCaseIndex < testCases.length ? activeTestCaseIndex : 0;
 
   return (
     <section className="challenge-panel flex min-h-136 flex-col overflow-hidden rounded-lg">
@@ -90,9 +92,9 @@ export function ChallengeWorkspaceEditorPanel({
         {workspaceTab === "testcases" ? (
           <TestcasePanel
             testCases={testCases}
-            activeIndex={activeTestCaseIndex}
+            activeIndex={safeActiveTestCaseIndex}
             customInput={customInput}
-            onActiveIndexChange={onActiveTestCaseChange}
+            onActiveIndexChange={setActiveTestCaseIndex}
             onCustomInputChange={onCustomInputChange}
           />
         ) : (
