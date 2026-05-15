@@ -15,10 +15,10 @@ type Props = {
 
 export function ChallengeWorkspace({ challenge }: Props) {
   const {
-    activeTestCaseIndex,
     currentCode,
     customInput,
     executionStatus,
+    handleAction,
     handleCodeChange,
     handleLanguageChange,
     handleResizeStart,
@@ -26,12 +26,11 @@ export function ChallengeWorkspace({ challenge }: Props) {
     outputMessage,
     problemTab,
     selectedLanguage,
-    setActiveTestCaseIndex,
     setCustomInput,
     setProblemTab,
     setWorkspaceTab,
     shellRef,
-    showMockResult,
+    submissions,
     workspaceStyle,
     workspaceTab,
   } = useChallengeWorkspaceState(challenge);
@@ -75,13 +74,13 @@ export function ChallengeWorkspace({ challenge }: Props) {
           <ChallengeProblemPanel
             challenge={challenge}
             activeTab={problemTab}
+            submissions={submissions}
             onTabChange={setProblemTab}
           />
 
           <ChallengeWorkspaceResizeHandle onResizeStart={handleResizeStart} />
 
           <ChallengeWorkspaceEditorPanel
-            activeTestCaseIndex={activeTestCaseIndex}
             code={currentCode}
             customInput={customInput}
             executionStatus={executionStatus}
@@ -91,8 +90,7 @@ export function ChallengeWorkspace({ challenge }: Props) {
             selectedLanguage={selectedLanguage}
             testCases={challenge.testCases}
             workspaceTab={workspaceTab}
-            onAction={showMockResult}
-            onActiveTestCaseChange={setActiveTestCaseIndex}
+            onAction={handleAction}
             onCodeChange={handleCodeChange}
             onCustomInputChange={setCustomInput}
             onLanguageChange={handleLanguageChange}

@@ -26,6 +26,11 @@ const eslintConfig = defineConfig([
               group: ["@/shared/ui/*/*"],
               message: "Import shared UI through public API: @/shared/ui/<slice>.",
             },
+            {
+              group: ["@/entities/*/api/*", "@/entities/*/model/*"],
+              message:
+                "Import entities through public API: @/entities/<slice> or allowed entrypoints like @/entities/challenge/client and @/entities/challenge/server.",
+            },
           ],
         },
       ],

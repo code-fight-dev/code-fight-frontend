@@ -3,9 +3,12 @@ export {
   PROGRAMMING_LANGUAGE_BY_ID,
   PROGRAMMING_LANGUAGES,
 } from "./model/languages";
+export { toTaskSubmissionSummary } from "./model/submission";
 export { getChallengeTopicLabels } from "./model/topics";
 export type { ChallengeTopicSource } from "./model/topics";
 export type {
+  ChallengeExecutionStatus,
+  ChallengeJudgeStatus,
   Challenge,
   ChallengeDifficulty,
   ChallengeExample,
@@ -14,6 +17,12 @@ export type {
   ChallengeLanguageMeta,
   ChallengeListItem,
   ChallengeProgress,
+  ChallengeVerdict,
+  CodeRun,
+  CodeRunTestResult,
   ChallengeTestCase,
+  TaskSubmission,
+  TaskSubmissionSummary,
+  TaskSubmissionTestResult,
   ChallengeTopicCount,
 } from "./model/types";

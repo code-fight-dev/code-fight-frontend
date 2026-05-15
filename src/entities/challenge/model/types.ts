@@ -28,8 +28,123 @@ export type ChallengeTestCase = {
   locked?: boolean;
 };
 
+export type ChallengeExecutionStatus =
+  | "queued"
+  | "sent_to_judge"
+  | "running"
+  | "finished"
+  | "failed";
+
+export type ChallengeJudgeStatus =
+  | "pending"
+  | "queued"
+  | "running"
+  | "finished"
+  | "failed";
+
+export type ChallengeVerdict =
+  | "accepted"
+  | "wrong_answer"
+  | "time_limit_exceeded"
+  | "memory_limit_exceeded"
+  | "runtime_error"
+  | "compile_error"
+  | "presentation_error"
+  | "system_error";
+
+export type TaskSubmissionTestResult = {
+  testCaseId: string;
+  status: string;
+  timeMs?: number;
+  memoryKb?: number;
+  exitCode?: number;
+  checkerMessage?: string;
+};
+
+export type TaskSubmission = {
+  id: string;
+  matchId?: string;
+  taskId: string;
+  userId: string;
+  language: string;
+  languageVersion: string;
+  sourceCode: string;
+  status: ChallengeExecutionStatus;
+  verdict?: ChallengeVerdict;
+  judgeSubmissionId?: string;
+  judgeStatus?: ChallengeJudgeStatus;
+  errorMessage?: string;
+  passedTests: number;
+  totalTests: number;
+  compileTimeMs?: number;
+  runTimeMs?: number;
+  peakMemoryKb?: number;
+  score: number;
+  exitCode?: number;
+  compileLog?: string;
+  stdoutTruncated?: string;
+  stderrTruncated?: string;
+  createdAt: string;
+  startedAt?: string;
+  finishedAt?: string;
+  updatedAt: string;
+  testResults: TaskSubmissionTestResult[];
+};
+
+export type TaskSubmissionSummary = {
+  id: string;
+  createdAt: string;
+  language: string;
+  status: ChallengeExecutionStatus;
+  verdict?: ChallengeVerdict;
+  passedTests: number;
+  totalTests: number;
+  runTimeMs?: number;
+  errorMessage?: string;
+};
+
+export type CodeRunTestResult = {
+  testCaseId?: string;
+  testName?: string;
+  isCustom: boolean;
+  status: string;
+  timeMs?: number;
+  memoryKb?: number;
+  exitCode?: number;
+  checkerMessage?: string;
+};
+
+export type CodeRun = {
+  id: string;
+  taskId: string;
+  userId: string;
+  language: string;
+  languageVersion: string;
+  status: ChallengeExecutionStatus;
+  verdict?: ChallengeVerdict;
+  judgeSubmissionId?: string;
+  judgeStatus?: ChallengeJudgeStatus;
+  errorMessage?: string;
+  passedTests: number;
+  totalTests: number;
+  compileTimeMs?: number;
+  runTimeMs?: number;
+  peakMemoryKb?: number;
+  score: number;
+  exitCode?: number;
+  compileLog?: string;
+  stdoutTruncated?: string;
+  stderrTruncated?: string;
+  createdAt: string;
+  startedAt?: string;
+  finishedAt?: string;
+  updatedAt: string;
+  testResults: CodeRunTestResult[];
+};
+
 export type Challenge = {
   id: string;
+  taskId: string;
   slug: string;
   title: string;
   difficulty: ChallengeDifficulty;
@@ -42,6 +157,7 @@ export type Challenge = {
   category: string;
   kind: ChallengeKind;
   supportedLanguages: ChallengeLanguage[];
+  languageVersions: Partial<Record<ChallengeLanguage, string>>;
   starterCodeByLanguage: Partial<Record<ChallengeLanguage, string>>;
   acceptanceRate: number;
   estimatedMinutes: number;
@@ -50,6 +166,7 @@ export type Challenge = {
   createdAt: string;
   progress: ChallengeProgress;
   testCases: ChallengeTestCase[];
+  submissionHistory: TaskSubmissionSummary[];
 };
 
 export type ChallengeListItem = Pick<

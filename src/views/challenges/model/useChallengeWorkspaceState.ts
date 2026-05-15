@@ -1,34 +1,23 @@
 "use client";
 
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  PROGRAMMING_LANGUAGE_BY_ID,
-  type Challenge,
-  type ChallengeLanguage,
-} from "@/entities/challenge";
+import { useMemo, useRef, useState } from "react";
+import type { Challenge, ChallengeLanguage } from "@/entities/challenge";
+import { useChallengeExecution } from "@/features/challenge-execution";
 import {
   clamp,
-  DEFAULT_OUTPUT_MESSAGE,
   getInitialChallengeLanguage,
   getInitialCodeByLanguage,
-  getWorkspaceActionLabel,
   type ChallengeProblemTab,
-  type ChallengeWorkspaceAction,
-  type ExecutionStatus,
   type WorkspaceTab,
 } from "./workspace";
 
 export function useChallengeWorkspaceState(challenge: Challenge) {
   const shellRef = useRef<HTMLDivElement | null>(null);
-  const timeoutRef = useRef<number | null>(null);
   const [leftPanelWidth, setLeftPanelWidth] = useState(43);
   const [problemTab, setProblemTab] = useState<ChallengeProblemTab>("description");
   const [workspaceTab, setWorkspaceTab] = useState<WorkspaceTab>("testcases");
-  const [activeTestCaseIndex, setActiveTestCaseIndex] = useState(0);
   const [customInput, setCustomInput] = useState("");
-  const [executionStatus, setExecutionStatus] = useState<ExecutionStatus>("idle");
-  const [outputMessage, setOutputMessage] = useState(DEFAULT_OUTPUT_MESSAGE);
 
   const initialLanguage = useMemo(
     () => getInitialChallengeLanguage(challenge),
@@ -40,20 +29,23 @@ export function useChallengeWorkspaceState(challenge: Challenge) {
     getInitialCodeByLanguage(challenge),
   );
 
-  const selectedLanguageMeta = PROGRAMMING_LANGUAGE_BY_ID[selectedLanguage];
   const currentCode = codeByLanguage[selectedLanguage] ?? "";
-  const isBusy = executionStatus === "running";
   const workspaceStyle = {
     "--challenge-left-panel": `${leftPanelWidth}%`,
   } as CSSProperties;
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        window.clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
+  const { executionStatus, outputMessage, isBusy, submissions, handleAction } =
+    useChallengeExecution({
+      challenge: {
+        taskId: challenge.taskId,
+        languageVersions: challenge.languageVersions,
+        submissionHistory: challenge.submissionHistory,
+      },
+      selectedLanguage,
+      sourceCode: currentCode,
+      customInput,
+      onOpenConsole: () => setWorkspaceTab("console"),
+    });
 
   function handleLanguageChange(language: ChallengeLanguage) {
     setSelectedLanguage(language);
@@ -71,34 +63,6 @@ export function useChallengeWorkspaceState(challenge: Challenge) {
       ...currentCodeByLanguage,
       [selectedLanguage]: value,
     }));
-  }
-
-  function showMockResult(action: ChallengeWorkspaceAction) {
-    if (timeoutRef.current) {
-      window.clearTimeout(timeoutRef.current);
-    }
-
-    const activeTestCase =
-      challenge.testCases[activeTestCaseIndex] ?? challenge.testCases[0];
-    const actionLabel = getWorkspaceActionLabel(action);
-
-    setWorkspaceTab("console");
-    setExecutionStatus("running");
-    setOutputMessage(
-      `${actionLabel} queued for ${selectedLanguageMeta.label}.\n\nPreparing sample input...`,
-    );
-
-    timeoutRef.current = window.setTimeout(() => {
-      const nextStatus: ExecutionStatus = action === "run" ? "ran" : "submitted";
-      const testcaseLine = activeTestCase
-        ? `Selected testcase: ${activeTestCase.name}\nExpected output: ${activeTestCase.expectedOutput}`
-        : "No sample testcase selected.";
-
-      setExecutionStatus(nextStatus);
-      setOutputMessage(
-        `${actionLabel} is ready for the execution service.\n\n${testcaseLine}\n\nExecution is not connected yet.`,
-      );
-    }, 700);
   }
 
   function handleResizeStart(event: ReactPointerEvent<HTMLButtonElement>) {
@@ -130,10 +94,10 @@ export function useChallengeWorkspaceState(challenge: Challenge) {
   }
 
   return {
-    activeTestCaseIndex,
     currentCode,
     customInput,
     executionStatus,
+    handleAction,
     handleCodeChange,
     handleLanguageChange,
     handleResizeStart,
@@ -141,13 +105,11 @@ export function useChallengeWorkspaceState(challenge: Challenge) {
     outputMessage,
     problemTab,
     selectedLanguage,
-    selectedLanguageMeta,
-    setActiveTestCaseIndex,
     setCustomInput,
     setProblemTab,
     setWorkspaceTab,
     shellRef,
-    showMockResult,
+    submissions,
     workspaceStyle,
     workspaceTab,
   };

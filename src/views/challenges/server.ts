@@ -5,7 +5,7 @@ import {
   type ChallengeListItem,
   type ChallengeTopicCount,
 } from "@/entities/challenge";
-import { getChallengeBySlug, getChallenges } from "@/entities/challenge/api/server";
+import { getChallengeBySlug, getChallenges } from "@/entities/challenge/server";
 
 export { getChallengeBySlug };
 
