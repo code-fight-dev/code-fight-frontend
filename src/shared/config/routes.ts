@@ -1,6 +1,7 @@
 import type { Route } from "next";
 
 export const HOME_HREF: Route = "/";
+export const ARENA_HREF: Route = "/arena";
 export const RANKING_HREF: Route = "/ranking";
 export const CHALLENGES_HREF: Route = "/challenges";
 
@@ -21,4 +22,8 @@ export const SETTINGS_EDITOR_HREF = SETTINGS_ROUTES.editor;
 
 export function buildViewerProfileHref(username: string): Route {
   return `/u/${encodeURIComponent(username)}` as Route;
+}
+
+export function buildArenaMatchHref(matchId: string): Route {
+  return `/arena/match/${encodeURIComponent(matchId)}` as Route;
 }

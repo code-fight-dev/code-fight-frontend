@@ -11,6 +11,19 @@ type GetLeaderboardPageOptions = {
   offset?: number;
 };
 
+export type RatedWinrateStats = {
+  winRate: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  ratedGames: number;
+};
+
+type GetRatedWinrateOptions = {
+  mode?: string;
+  globalRank?: number | null;
+};
+
 function toQueryString({ mode, limit, offset }: GetLeaderboardPageOptions) {
   const query = new URLSearchParams();
 
@@ -52,4 +65,67 @@ export async function getLeaderboardPage(
   }
 
   return body;
+}
+
+function toRatedWinrateStats(entry: LeaderboardPage["items"][number]): RatedWinrateStats {
+  return {
+    winRate: entry.winRate,
+    wins: entry.wins,
+    losses: entry.losses,
+    draws: entry.draws,
+    ratedGames: entry.ratedGames,
+  };
+}
+
+export async function getRatedWinrateByUsername(
+  username: string,
+  options: GetRatedWinrateOptions = {},
+): Promise<RatedWinrateStats | null> {
+  const mode = options.mode ?? "global";
+  const globalRank = options.globalRank ?? null;
+  const normalizedUsername = username.trim().toLowerCase();
+  if (normalizedUsername === "") {
+    return null;
+  }
+
+  const limit = 100;
+
+  if (globalRank !== null && Number.isInteger(globalRank) && globalRank > 0) {
+    const offset = Math.floor((globalRank - 1) / limit) * limit;
+    const rankPage = await getLeaderboardPage({ mode, limit, offset });
+    const rankPageHit = rankPage.items.find(
+      (entry) => entry.username.toLowerCase() === normalizedUsername,
+    );
+    if (rankPageHit) {
+      return toRatedWinrateStats(rankPageHit);
+    }
+  }
+
+  const firstPage = await getLeaderboardPage({ mode, limit, offset: 0 });
+
+  if (
+    firstPage.viewerRank &&
+    firstPage.viewerRank.username.toLowerCase() === normalizedUsername
+  ) {
+    return toRatedWinrateStats(firstPage.viewerRank);
+  }
+
+  const firstPageHit = firstPage.items.find(
+    (entry) => entry.username.toLowerCase() === normalizedUsername,
+  );
+  if (firstPageHit) {
+    return toRatedWinrateStats(firstPageHit);
+  }
+
+  for (let offset = limit; offset < firstPage.total; offset += limit) {
+    const page = await getLeaderboardPage({ mode, limit, offset });
+    const hit = page.items.find(
+      (entry) => entry.username.toLowerCase() === normalizedUsername,
+    );
+    if (hit) {
+      return toRatedWinrateStats(hit);
+    }
+  }
+
+  return null;
 }

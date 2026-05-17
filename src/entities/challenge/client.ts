@@ -1,5 +1,6 @@
 "use client";
 
+export { getChallengeByTaskId } from "./api/challenge";
 export {
   createTaskRun,
   createTaskSubmission,

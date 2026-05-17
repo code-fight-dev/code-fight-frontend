@@ -24,9 +24,9 @@ export function StatsCards({ stats }: Props) {
   cards.push(
     {
       key: "winrate",
-      label: "Winrate",
+      label: "Rated Winrate",
       value: formatPercent(stats.winRate),
-      meta: `${stats.wins}W / ${stats.losses}L / ${stats.draws}D`,
+      meta: `${stats.wins}W / ${stats.losses}L / ${stats.draws}D (rated)`,
       icon: Trophy,
     },
     {

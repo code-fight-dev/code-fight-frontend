@@ -1,0 +1,21 @@
+.arena-accept-button,
+.arena-room-submit {
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  background: linear-gradient(
+    180deg,
+    rgba(20, 184, 166, 0.24) 0%,
+    rgba(16, 185, 129, 0.36) 100%
+  );
+  color: #ecfdf5;
+}
+
+:root[data-theme="light"] .arena-accept-button,
+:root[data-theme="light"] .arena-room-submit {
+  border-color: rgba(5, 150, 105, 0.38);
+  background: linear-gradient(
+    180deg,
+    rgba(16, 185, 129, 0.18) 0%,
+    rgba(5, 150, 105, 0.27) 100%
+  );
+  color: #064e3b;
+}
