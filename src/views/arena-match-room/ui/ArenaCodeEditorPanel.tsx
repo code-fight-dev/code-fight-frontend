@@ -1,27 +1,15 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { loader, useMonaco } from "@monaco-editor/react";
-import * as monaco from "monaco-editor";
 import { useEffect, useMemo, useState } from "react";
 import { buildMonacoEditorOptions } from "@/features/preferences/model/editor";
 import {
-  defineCodeFightMonacoThemes,
   getCurrentAppTheme,
   resolveMonacoThemeName,
 } from "@/features/preferences/model/editorMonaco";
 import { usePreferences } from "@/features/preferences/ui/PreferencesProvider";
-
-loader.config({ monaco });
-
-const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
-  ssr: false,
-  loading: () => (
-    <div className="challenge-code-block flex h-full min-h-100 items-center justify-center text-[13px] text-(--app-text-faint)">
-      Loading editor
-    </div>
-  ),
-});
+import { ConfiguredMonacoEditor } from "./code-editor/ConfiguredMonacoEditor";
+import { MonacoLoadingView } from "./code-editor/MonacoLoadingView";
+import { ensureMonacoConfigured } from "./code-editor/ensureMonacoConfigured";
 
 type Props = {
   language: string;
@@ -31,9 +19,29 @@ type Props = {
 };
 
 export function ArenaCodeEditorPanel({ language, value, fileName, onChange }: Props) {
-  const monacoInstance = useMonaco();
   const { preferences } = usePreferences();
+  const [isMonacoConfigured, setIsMonacoConfigured] = useState(false);
   const [appTheme, setAppTheme] = useState<"dark" | "light">(() => getCurrentAppTheme());
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void ensureMonacoConfigured()
+      .then(() => {
+        if (!cancelled) {
+          setIsMonacoConfigured(true);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setIsMonacoConfigured(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -56,14 +64,6 @@ export function ArenaCodeEditorPanel({ language, value, fileName, onChange }: Pr
     [appTheme, preferences.editor.useAppTheme],
   );
 
-  useEffect(() => {
-    if (!monacoInstance) {
-      return;
-    }
-
-    monacoInstance.editor.setTheme(editorTheme);
-  }, [editorTheme, monacoInstance]);
-
   const editorOptions = useMemo(
     () => buildMonacoEditorOptions(preferences.editor),
     [preferences.editor],
@@ -77,22 +77,23 @@ export function ArenaCodeEditorPanel({ language, value, fileName, onChange }: Pr
           <span className="h-2.5 w-2.5 rounded-md bg-amber-300/80" />
           <span className="h-2.5 w-2.5 rounded-md bg-emerald-300/80" />
         </div>
-
         <span className="font-accent text-[12px] text-(--app-text-faint)">
           {fileName}
         </span>
       </div>
 
       <div className="min-h-0 flex-1">
-        <MonacoEditor
-          height="100%"
-          language={language}
-          theme={editorTheme}
-          value={value}
-          beforeMount={defineCodeFightMonacoThemes}
-          onChange={(nextValue) => onChange(nextValue ?? "")}
-          options={editorOptions}
-        />
+        {isMonacoConfigured ? (
+          <ConfiguredMonacoEditor
+            language={language}
+            value={value}
+            editorTheme={editorTheme}
+            editorOptions={editorOptions}
+            onChange={onChange}
+          />
+        ) : (
+          <MonacoLoadingView />
+        )}
       </div>
     </div>
   );
