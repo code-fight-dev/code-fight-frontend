@@ -3,6 +3,9 @@
 @import "./styles/base.css";
 @import "./styles/surfaces.css";
 @import "./styles/challenges.css";
+@import "./styles/arena-shared.css";
+@import "./styles/arena-lobby.css";
+@import "./styles/arena-room.css";
 @import "./styles/controls.css";
 @import "./styles/settings.css";
 @import "./styles/profile.css";
