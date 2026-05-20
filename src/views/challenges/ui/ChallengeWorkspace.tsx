@@ -39,11 +39,11 @@ export function ChallengeWorkspace({ challenge }: Props) {
     <section className="challenge-page relative overflow-hidden py-4 sm:py-5 lg:py-6">
       <div
         aria-hidden
-        className="challenge-grid-layer pointer-events-none absolute inset-0 opacity-32"
+        className="app-motion-decorative challenge-grid-layer pointer-events-none absolute inset-0 opacity-32"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,12,24,0.1)_100%)]"
+        className="app-motion-decorative pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,12,24,0.1)_100%)]"
       />
 
       <Container className="relative max-w-none 2xl:max-w-470">

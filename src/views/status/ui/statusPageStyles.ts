@@ -14,13 +14,14 @@ type ComponentStatusVisual = {
 
 export const statusPageClassNames = {
   root: "status-page challenge-page relative overflow-hidden bg-(--app-surface-base) py-20 sm:py-24",
-  gridLayer: "challenge-grid-layer pointer-events-none absolute inset-0 opacity-35",
+  gridLayer:
+    "app-motion-decorative challenge-grid-layer pointer-events-none absolute inset-0 opacity-35",
   gridFade:
-    "pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,12,24,0.14)_100%)]",
+    "app-motion-decorative pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,12,24,0.14)_100%)]",
   primaryGlow:
-    "pointer-events-none absolute -top-24 -left-20 h-80 w-96 rounded-full bg-[#1d4ed8]/10 blur-3xl",
+    "app-motion-decorative pointer-events-none absolute -top-24 -left-20 h-80 w-96 rounded-full bg-[#1d4ed8]/10 blur-3xl",
   secondaryGlow:
-    "pointer-events-none absolute right-0 bottom-0 h-96 w-96 rounded-full bg-[#2563eb]/10 blur-3xl",
+    "app-motion-decorative pointer-events-none absolute right-0 bottom-0 h-96 w-96 rounded-full bg-[#2563eb]/10 blur-3xl",
   content: "relative",
   componentsGrid: "mt-8 grid gap-4 md:grid-cols-2",
   emptyState:

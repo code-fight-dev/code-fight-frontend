@@ -8,16 +8,16 @@ export function NotFoundPageView() {
     <section className="relative overflow-hidden py-12 sm:py-16 lg:py-20">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(96,165,250,0.28),transparent)]"
+        className="app-motion-decorative pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(96,165,250,0.28),transparent)]"
       />
       <AmbientGrid className="mask-[radial-gradient(circle_at_center,black,transparent_84%)]" />
       <div
         aria-hidden
-        className="pointer-events-none absolute top-14 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-[#1d4ed8]/14 blur-3xl sm:h-112 sm:w-md"
+        className="app-motion-decorative pointer-events-none absolute top-14 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-[#1d4ed8]/14 blur-3xl sm:h-112 sm:w-md"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-28 -bottom-16 h-72 w-72 rounded-full bg-[#2563eb]/10 blur-3xl"
+        className="app-motion-decorative pointer-events-none absolute -right-28 -bottom-16 h-72 w-72 rounded-full bg-[#2563eb]/10 blur-3xl"
       />
 
       <Container className="relative">

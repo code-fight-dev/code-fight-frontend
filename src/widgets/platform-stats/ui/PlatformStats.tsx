@@ -21,7 +21,7 @@ export function PlatformStats({ stats }: Props) {
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_50%,rgba(37,99,235,0.08),transparent_24%),radial-gradient(circle_at_84%_100%,rgba(37,99,235,0.08),transparent_22%)]"
+        className="app-motion-decorative pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_50%,rgba(37,99,235,0.08),transparent_24%),radial-gradient(circle_at_84%_100%,rgba(37,99,235,0.08),transparent_22%)]"
       />
 
       <Container className="relative">

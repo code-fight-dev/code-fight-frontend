@@ -50,11 +50,11 @@ export function ChallengesPageView({
     <section className="challenge-page relative overflow-hidden py-8 sm:py-10 lg:py-12">
       <div
         aria-hidden
-        className="challenge-grid-layer pointer-events-none absolute inset-0 opacity-35"
+        className="app-motion-decorative challenge-grid-layer pointer-events-none absolute inset-0 opacity-35"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,12,24,0.12)_100%)]"
+        className="app-motion-decorative pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,12,24,0.12)_100%)]"
       />
 
       <Container className="relative">

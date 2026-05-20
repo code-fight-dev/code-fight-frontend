@@ -39,17 +39,17 @@ export function ProfileSummary({
     <section className="app-shell-card profile-card-solid relative overflow-hidden rounded-[34px] p-5 sm:p-6 lg:p-7">
       <div
         aria-hidden
-        className="app-profile-ambient pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(59,130,246,0.16),transparent_26%),radial-gradient(circle_at_88%_16%,rgba(6,182,212,0.08),transparent_18%),linear-gradient(180deg,transparent,rgba(8,12,24,0.22)_100%)]"
+        className="app-motion-decorative app-profile-ambient pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(59,130,246,0.16),transparent_26%),radial-gradient(circle_at_88%_16%,rgba(6,182,212,0.08),transparent_18%),linear-gradient(180deg,transparent,rgba(8,12,24,0.22)_100%)]"
       />
       <div
         aria-hidden
-        className="app-profile-grid pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.56)_0.7px,transparent_0.8px)] mask-[linear-gradient(180deg,transparent,black_12%,black_88%,transparent)] bg-size-[28px_28px] opacity-[0.06]"
+        className="app-motion-decorative app-profile-grid pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.56)_0.7px,transparent_0.8px)] mask-[linear-gradient(180deg,transparent,black_12%,black_88%,transparent)] bg-size-[28px_28px] opacity-[0.06]"
       />
 
       <div className="relative grid items-start gap-7 xl:grid-cols-[180px_minmax(0,1fr)]">
         <div className="flex w-fit flex-col items-center justify-self-center">
           <div className="relative">
-            <div className="app-avatar-display-glow absolute inset-0 rounded-[34px] blur-xl" />
+            <div className="app-motion-decorative app-avatar-display-glow absolute inset-0 rounded-[34px] blur-xl" />
 
             <div className="app-avatar-display-frame relative flex h-30 w-30 items-center justify-center overflow-hidden rounded-[30px] sm:h-34 sm:w-34">
               {showGeneratedAvatar ? (

@@ -58,7 +58,7 @@ export function ProfileSettingsAvatarCard({
     >
       <>
         <div className="relative mx-auto w-fit">
-          <div className="app-avatar-display-glow absolute inset-0 rounded-[36px] blur-xl" />
+          <div className="app-motion-decorative app-avatar-display-glow absolute inset-0 rounded-[36px] blur-xl" />
           <div className="app-avatar-display-frame relative flex h-34 w-34 items-center justify-center overflow-hidden rounded-[34px]">
             {showGeneratedAvatar ? (
               <div className="flex h-full w-full items-center justify-center bg-white text-[3rem] font-semibold tracking-[-0.08em] text-slate-900">

@@ -10,11 +10,11 @@ export function HeroPreview() {
     >
       <div
         aria-hidden
-        className="absolute inset-x-[8%] top-[18%] h-[56%] rounded-full bg-[#2563eb]/28 blur-3xl"
+        className="app-motion-decorative absolute inset-x-[8%] top-[18%] h-[56%] rounded-full bg-[#2563eb]/28 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-[12%] -bottom-3 h-12 rounded-full bg-[#2563eb]/12 blur-2xl"
+        className="app-motion-decorative pointer-events-none absolute inset-x-[12%] -bottom-3 h-12 rounded-full bg-[#2563eb]/12 blur-2xl"
       />
 
       <div className="app-code-shell relative overflow-hidden rounded-[26px]">
@@ -24,7 +24,7 @@ export function HeroPreview() {
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-[20%] -top-10 h-16 rounded-full bg-[#60a5fa]/8 blur-2xl"
+          className="app-motion-decorative pointer-events-none absolute inset-x-[20%] -top-10 h-16 rounded-full bg-[#60a5fa]/8 blur-2xl"
         />
 
         <div className="app-code-topbar flex items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
@@ -128,7 +128,7 @@ export function HeroPreview() {
 
         <div
           aria-hidden
-          className="absolute inset-x-6 bottom-0 h-px bg-[linear-gradient(90deg,transparent,rgba(96,165,250,0.4),transparent)]"
+          className="app-motion-decorative absolute inset-x-6 bottom-0 h-px bg-[linear-gradient(90deg,transparent,rgba(96,165,250,0.4),transparent)]"
         />
       </div>
     </Reveal>

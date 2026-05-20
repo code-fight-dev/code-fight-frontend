@@ -21,15 +21,15 @@ export function AuthPageView({ config, oauthErrorCode }: Props) {
 
       <div
         aria-hidden
-        className="pointer-events-none absolute top-0 left-[8%] h-80 w-80 rounded-full bg-[#1d4ed8]/12 blur-3xl"
+        className="app-motion-decorative pointer-events-none absolute top-0 left-[8%] h-80 w-80 rounded-full bg-[#1d4ed8]/12 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-20 -bottom-8 h-96 w-96 rounded-full bg-[#2563eb]/10 blur-3xl"
+        className="app-motion-decorative pointer-events-none absolute -right-20 -bottom-8 h-96 w-96 rounded-full bg-[#2563eb]/10 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-y-0 left-[18%] w-px bg-[linear-gradient(180deg,transparent,var(--app-grid-line),transparent)]"
+        className="app-motion-decorative pointer-events-none absolute inset-y-0 left-[18%] w-px bg-[linear-gradient(180deg,transparent,var(--app-grid-line),transparent)]"
       />
 
       <Container className="relative">

@@ -39,7 +39,7 @@ export function AvatarSection({
   return (
     <div className="flex flex-col items-start gap-4">
       <div className="relative">
-        <div className="absolute inset-0 rounded-[34px] bg-[radial-gradient(circle_at_24%_18%,rgba(96,165,250,0.24),transparent_52%),radial-gradient(circle_at_82%_18%,rgba(255,255,255,0.14),transparent_26%),linear-gradient(180deg,rgba(15,23,42,0.84),rgba(8,15,30,0.96))] blur-xl" />
+        <div className="app-motion-decorative absolute inset-0 rounded-[34px] bg-[radial-gradient(circle_at_24%_18%,rgba(96,165,250,0.24),transparent_52%),radial-gradient(circle_at_82%_18%,rgba(255,255,255,0.14),transparent_26%),linear-gradient(180deg,rgba(15,23,42,0.84),rgba(8,15,30,0.96))] blur-xl" />
 
         <div className="relative flex h-28 w-28 items-center justify-center overflow-hidden rounded-4xl border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] shadow-[0_22px_50px_rgba(2,6,23,0.28)] sm:h-34 sm:w-34">
           {showGeneratedAvatar ? (

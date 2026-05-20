@@ -29,11 +29,11 @@ export function ViewerProfilePageView({ profile }: Props) {
     <section className="app-profile-page relative overflow-hidden py-10 sm:py-12 lg:py-16">
       <div
         aria-hidden
-        className="app-profile-ambient pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_10%,rgba(59,130,246,0.14),transparent_24%),radial-gradient(circle_at_86%_14%,rgba(34,211,238,0.07),transparent_20%),linear-gradient(180deg,transparent,rgba(8,12,24,0.2)_100%)]"
+        className="app-motion-decorative app-profile-ambient pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_10%,rgba(59,130,246,0.14),transparent_24%),radial-gradient(circle_at_86%_14%,rgba(34,211,238,0.07),transparent_20%),linear-gradient(180deg,transparent,rgba(8,12,24,0.2)_100%)]"
       />
       <div
         aria-hidden
-        className="app-profile-grid pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.56)_0.7px,transparent_0.8px)] mask-[linear-gradient(180deg,transparent,black_12%,black_88%,transparent)] bg-size-[30px_30px] opacity-[0.08]"
+        className="app-motion-decorative app-profile-grid pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.56)_0.7px,transparent_0.8px)] mask-[linear-gradient(180deg,transparent,black_12%,black_88%,transparent)] bg-size-[30px_30px] opacity-[0.08]"
       />
 
       <Container className="relative">
