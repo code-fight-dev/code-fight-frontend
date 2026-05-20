@@ -36,7 +36,7 @@ export function LeaderboardPageView({ page }: Props) {
 
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,12,24,0.14)_100%)]"
+        className="app-motion-decorative pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,12,24,0.14)_100%)]"
       />
 
       <Container className="relative">
