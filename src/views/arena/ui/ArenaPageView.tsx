@@ -74,11 +74,11 @@ export function ArenaPageView({ data }: Props) {
 
       <div
         aria-hidden
-        className="arena-grid-layer challenge-grid-layer pointer-events-none absolute inset-0 opacity-62"
+        className="app-motion-decorative arena-grid-layer challenge-grid-layer pointer-events-none absolute inset-0 opacity-62"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(7,11,24,0.1)_0%,rgba(8,12,24,0.36)_100%)]"
+        className="app-motion-decorative pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(7,11,24,0.1)_0%,rgba(8,12,24,0.36)_100%)]"
       />
 
       <Container className="relative">
