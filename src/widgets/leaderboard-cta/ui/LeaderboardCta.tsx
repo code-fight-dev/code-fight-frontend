@@ -17,11 +17,11 @@ export function LeaderboardCta({ snapshot }: Props) {
         >
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_22%_0%,rgba(37,99,235,0.08),transparent_20%),radial-gradient(circle_at_88%_82%,rgba(76,29,149,0.06),transparent_18%)]"
+            className="app-motion-decorative pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_22%_0%,rgba(37,99,235,0.08),transparent_20%),radial-gradient(circle_at_88%_82%,rgba(76,29,149,0.06),transparent_18%)]"
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute -bottom-12 left-[10%] h-40 w-40 rounded-full bg-[#2563eb]/10 blur-3xl"
+            className="app-motion-decorative pointer-events-none absolute -bottom-12 left-[10%] h-40 w-40 rounded-full bg-[#2563eb]/10 blur-3xl"
           />
 
           <div className="relative mx-auto max-w-4xl">

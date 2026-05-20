@@ -24,11 +24,11 @@ export function ArenaEdge({ snapshot }: Props) {
     <section className="relative overflow-hidden bg-(--app-surface-contrast) py-20 sm:py-24 lg:py-28 xl:py-32">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_14%,rgba(37,99,235,0.1),transparent_22%),radial-gradient(circle_at_86%_78%,rgba(37,99,235,0.08),transparent_24%)]"
+        className="app-motion-decorative pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_14%,rgba(37,99,235,0.1),transparent_22%),radial-gradient(circle_at_86%_78%,rgba(37,99,235,0.08),transparent_24%)]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-y-0 right-[8%] w-px bg-[linear-gradient(180deg,transparent,var(--app-grid-line),transparent)]"
+        className="app-motion-decorative pointer-events-none absolute inset-y-0 right-[8%] w-px bg-[linear-gradient(180deg,transparent,var(--app-grid-line),transparent)]"
       />
 
       <Container className="relative">
@@ -58,7 +58,7 @@ export function ArenaEdge({ snapshot }: Props) {
             >
               <div
                 aria-hidden
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.08),transparent_28%)] opacity-70"
+                className="app-motion-decorative pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.08),transparent_28%)] opacity-70"
               />
 
               <div className="relative">
