@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
+import { shouldReduceMotion } from "@/shared/lib/motion";
 
 export type HeaderSurfaceStyles = {
   leftGlowStyle: CSSProperties;
@@ -23,11 +24,18 @@ export function useHeaderState() {
       frameId = 0;
       const scrollY = window.scrollY;
       const nextValue = scrollY > 24;
-      const nextProgress = Math.round(Math.min(scrollY / 320, 1) * 100) / 100;
+      const reducedMotion = shouldReduceMotion();
 
       setIsScrolled((currentValue) =>
         currentValue === nextValue ? currentValue : nextValue,
       );
+
+      if (reducedMotion) {
+        setScrollProgress((currentValue) => (currentValue === 0 ? currentValue : 0));
+        return;
+      }
+
+      const nextProgress = Math.round(Math.min(scrollY / 320, 1) * 100) / 100;
       setScrollProgress((currentValue) =>
         currentValue === nextProgress ? currentValue : nextProgress,
       );
@@ -99,22 +107,23 @@ export function useHeaderState() {
   }, [isMenuOpen]);
 
   const isElevated = isScrolled || isMenuOpen;
+  const effectiveScrollProgress = shouldReduceMotion() ? 0 : scrollProgress;
 
   const surfaceStyles: HeaderSurfaceStyles = {
     leftGlowStyle: {
-      transform: `translate3d(${scrollProgress * 28}px, ${scrollProgress * 14}px, 0) scale(${1 - scrollProgress * 0.08})`,
-      opacity: 0.7 + scrollProgress * 0.2,
+      transform: `translate3d(${effectiveScrollProgress * 28}px, ${effectiveScrollProgress * 14}px, 0) scale(${1 - effectiveScrollProgress * 0.08})`,
+      opacity: 0.7 + effectiveScrollProgress * 0.2,
     },
     rightGlowStyle: {
-      transform: `translate3d(${-scrollProgress * 34}px, ${scrollProgress * 18}px, 0) scale(${1 - scrollProgress * 0.12})`,
-      opacity: 0.68 + scrollProgress * 0.18,
+      transform: `translate3d(${-effectiveScrollProgress * 34}px, ${effectiveScrollProgress * 18}px, 0) scale(${1 - effectiveScrollProgress * 0.12})`,
+      opacity: 0.68 + effectiveScrollProgress * 0.18,
     },
     shimmerStyle: {
-      transform: `translate3d(${scrollProgress * 180 - 120}px, 0, 0) rotate(8deg)`,
-      opacity: 0.08 + scrollProgress * 0.14,
+      transform: `translate3d(${effectiveScrollProgress * 180 - 120}px, 0, 0) rotate(8deg)`,
+      opacity: 0.08 + effectiveScrollProgress * 0.14,
     },
     trailStyle: {
-      transform: `translate3d(${scrollProgress * 64}px, 0, 0)`,
+      transform: `translate3d(${effectiveScrollProgress * 64}px, 0, 0)`,
     },
   };
 
