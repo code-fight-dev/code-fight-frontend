@@ -12,15 +12,15 @@ export function Footer() {
     <footer className="relative overflow-hidden border-t border-(--app-header-border-soft) bg-(--app-surface-footer)">
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-12 -left-16 h-72 w-80 rounded-full bg-[#1d4ed8]/10 blur-3xl"
+        className="app-motion-decorative pointer-events-none absolute -top-12 -left-16 h-72 w-80 rounded-full bg-[#1d4ed8]/10 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-14 -bottom-10 h-64 w-72 rounded-full bg-[#2563eb]/10 blur-3xl"
+        className="app-motion-decorative pointer-events-none absolute -right-14 -bottom-10 h-64 w-72 rounded-full bg-[#2563eb]/10 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.08),transparent_26%),radial-gradient(circle_at_82%_68%,rgba(59,130,246,0.09),transparent_22%)]"
+        className="app-motion-decorative pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.08),transparent_26%),radial-gradient(circle_at_82%_68%,rgba(59,130,246,0.09),transparent_22%)]"
       />
 
       <Container className="relative flex flex-col pt-16 pb-8 sm:pt-18 sm:pb-10 lg:min-h-94.5 lg:pt-20">

@@ -32,15 +32,15 @@ export function HeaderMobileOverlay({
       <div className="absolute inset-0 bg-(--app-surface-overlay) backdrop-blur-2xl" />
       <div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(37,99,235,0.18),transparent_24%),radial-gradient(circle_at_82%_14%,rgba(59,130,246,0.12),transparent_20%),radial-gradient(circle_at_50%_100%,rgba(29,78,216,0.14),transparent_24%)]"
+        className="app-motion-decorative absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(37,99,235,0.18),transparent_24%),radial-gradient(circle_at_82%_14%,rgba(59,130,246,0.12),transparent_20%),radial-gradient(circle_at_50%_100%,rgba(29,78,216,0.14),transparent_24%)]"
       />
       <div
         aria-hidden
-        className="absolute inset-y-0 left-[20%] w-px bg-[linear-gradient(180deg,transparent,var(--app-grid-line),transparent)]"
+        className="app-motion-decorative absolute inset-y-0 left-[20%] w-px bg-[linear-gradient(180deg,transparent,var(--app-grid-line),transparent)]"
       />
       <div
         aria-hidden
-        className="absolute top-[18%] right-[-10%] h-72 w-72 rounded-full bg-[#2563eb]/16 blur-3xl"
+        className="app-motion-decorative absolute top-[18%] right-[-10%] h-72 w-72 rounded-full bg-[#2563eb]/16 blur-3xl"
       />
 
       <div className="pointer-events-auto relative flex min-h-dvh flex-col px-4 pt-23 pb-6 sm:px-5 sm:pt-25 sm:pb-8">
