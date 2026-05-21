@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 
 const DESKTOP_MEDIA_QUERY = "(min-width: 1024px)";
 const FOCUS_DURATION_MS = 2200;
-const MAX_SCROLL_ATTEMPTS = 12;
-const SCROLL_RETRY_DELAY_MS = 80;
+const MAX_SCROLL_ATTEMPTS = 40;
+const SCROLL_RETRY_DELAY_MS = 120;
 
 type Options = {
   goToEntry: (userId: string) => boolean;

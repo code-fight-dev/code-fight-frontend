@@ -16,13 +16,15 @@ type Props = {
   viewerRank?: LeaderboardEntry;
   viewerUserId: string | null;
   query: string;
-  filteredCount: number;
+  totalCount: number;
   loadedCount: number;
   currentPage: number;
   totalPages: number;
   setQuery: (value: string) => void;
   goToPrevPage: () => void;
   goToNextPage: () => void;
+  canGoPrevPage: boolean;
+  canGoNextPage: boolean;
   goToEntry: (userId: string) => boolean;
 };
 
@@ -31,13 +33,15 @@ export function LeaderboardRanking({
   viewerRank,
   viewerUserId,
   query,
-  filteredCount,
+  totalCount,
   loadedCount,
   currentPage,
   totalPages,
   setQuery,
   goToPrevPage,
   goToNextPage,
+  canGoPrevPage,
+  canGoNextPage,
   goToEntry,
 }: Props) {
   const { focusedUserId, handleJumpToMe } = useLeaderboardEntryFocus({
@@ -54,8 +58,8 @@ export function LeaderboardRanking({
           </h2>
 
           <p className="mt-1 text-[13px] text-(--app-text-muted)">
-            Top {formatInteger(loadedCount)} loaded players · Showing{" "}
-            {formatInteger(items.length)} of {formatInteger(filteredCount)}
+            Total {formatInteger(totalCount)} players | Showing{" "}
+            {formatInteger(items.length)} of {formatInteger(loadedCount)} loaded this page
           </p>
         </div>
 
@@ -85,6 +89,8 @@ export function LeaderboardRanking({
       <LeaderboardPaginationControls
         currentPage={currentPage}
         totalPages={totalPages}
+        canGoPrevPage={canGoPrevPage}
+        canGoNextPage={canGoNextPage}
         onPrevPage={goToPrevPage}
         onNextPage={goToNextPage}
       />
