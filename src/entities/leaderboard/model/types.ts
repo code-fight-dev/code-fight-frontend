@@ -14,6 +14,14 @@ export type LeaderboardEntry = {
   winRate: number;
 };
 
+export type LeaderboardStats = {
+  rankedPlayers: number;
+  matchesToday: number;
+  averageDailyMatches: number;
+  matchesTodayGrowthPercent: number;
+  cachedAt: string;
+};
+
 export type LeaderboardPage = {
   mode: string;
   limit: number;
@@ -21,6 +29,7 @@ export type LeaderboardPage = {
   total: number;
   items: LeaderboardEntry[];
   viewerRank?: LeaderboardEntry;
+  stats?: LeaderboardStats;
 };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -50,6 +59,17 @@ function isLeaderboardEntry(value: unknown): value is LeaderboardEntry {
   );
 }
 
+function isLeaderboardStats(value: unknown): value is LeaderboardStats {
+  return (
+    isRecord(value) &&
+    isNumber(value.rankedPlayers) &&
+    isNumber(value.matchesToday) &&
+    isNumber(value.averageDailyMatches) &&
+    isNumber(value.matchesTodayGrowthPercent) &&
+    typeof value.cachedAt === "string"
+  );
+}
+
 export function isLeaderboardPage(value: unknown): value is LeaderboardPage {
   return (
     isRecord(value) &&
@@ -59,6 +79,7 @@ export function isLeaderboardPage(value: unknown): value is LeaderboardPage {
     isNumber(value.total) &&
     Array.isArray(value.items) &&
     value.items.every(isLeaderboardEntry) &&
-    (value.viewerRank === undefined || isLeaderboardEntry(value.viewerRank))
+    (value.viewerRank === undefined || isLeaderboardEntry(value.viewerRank)) &&
+    (value.stats === undefined || isLeaderboardStats(value.stats))
   );
 }

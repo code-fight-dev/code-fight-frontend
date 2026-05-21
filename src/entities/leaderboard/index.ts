@@ -1,5 +1,5 @@
 export { isLeaderboardPage } from "./model/types";
-export type { LeaderboardEntry, LeaderboardPage } from "./model/types";
+export type { LeaderboardEntry, LeaderboardPage, LeaderboardStats } from "./model/types";
 export {
   formatInteger,
   formatWinRate,
