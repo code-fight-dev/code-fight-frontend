@@ -1,5 +1,6 @@
 import "server-only";
 
+import { getPublicMatchStats } from "@/entities/match/server";
 import type { ArenaEdgeSnapshot } from "@/widgets/arena-edge";
 import type { HeroSnapshot } from "@/widgets/hero";
 import type { LeaderboardCtaSnapshot } from "@/widgets/leaderboard-cta";
@@ -84,10 +85,60 @@ const LEADERBOARD_CTA_SNAPSHOT: LeaderboardCtaSnapshot = {
   actionHref: "/arena",
 };
 
+const compactIntegerFormatter = new Intl.NumberFormat("en", {
+  notation: "compact",
+  maximumFractionDigits: 1,
+});
+
+function toNonNegativeInteger(value: number) {
+  return Number.isFinite(value) ? Math.max(0, Math.round(value)) : 0;
+}
+
+function formatCompactInteger(value: number) {
+  return compactIntegerFormatter.format(toNonNegativeInteger(value)).toUpperCase();
+}
+
+async function resolvePublicMatchStats() {
+  try {
+    return await getPublicMatchStats();
+  } catch {
+    return null;
+  }
+}
+
 export async function getHomePageData(): Promise<HomePageData> {
+  const publicMatchStats = await resolvePublicMatchStats();
+
+  const heroSnapshot: HeroSnapshot = publicMatchStats
+    ? {
+        ...HERO_SNAPSHOT,
+        queueCount: toNonNegativeInteger(publicMatchStats.queuedPlayers),
+      }
+    : HERO_SNAPSHOT;
+
+  const platformStats: PlatformStat[] = publicMatchStats
+    ? [
+        {
+          id: "active-match-players",
+          label: "Active Match Players",
+          value: formatCompactInteger(publicMatchStats.activeMatchPlayers),
+          badge: "Live",
+          badgeTone: "info",
+        },
+        {
+          id: "queued-players",
+          label: "Players In Queue",
+          value: formatCompactInteger(publicMatchStats.queuedPlayers),
+          badge: "Live",
+          badgeTone: "info",
+        },
+        PLATFORM_STATS[2],
+      ]
+    : PLATFORM_STATS;
+
   return {
-    heroSnapshot: HERO_SNAPSHOT,
-    platformStats: PLATFORM_STATS,
+    heroSnapshot,
+    platformStats,
     arenaEdgeSnapshot: ARENA_EDGE_SNAPSHOT,
     leaderboardCtaSnapshot: LEADERBOARD_CTA_SNAPSHOT,
   };

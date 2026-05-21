@@ -1,14 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { LeaderboardEntry } from "@/entities/leaderboard";
 import { getSearchableLabel } from "@/entities/leaderboard";
 
-const DEFAULT_PAGE_SIZE = 10;
-
 type Options = {
   items: LeaderboardEntry[];
-  pageSize?: number;
+  viewerRank?: LeaderboardEntry;
+  pageSize: number;
+  pageOffset: number;
+  totalItems: number;
 };
 
 function normalizeQuery(value: string) {
@@ -17,13 +19,18 @@ function normalizeQuery(value: string) {
 
 export function useLeaderboardNavigation({
   items,
-  pageSize = DEFAULT_PAGE_SIZE,
+  viewerRank,
+  pageSize,
+  pageOffset,
+  totalItems,
 }: Options) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [query, setQueryState] = useState("");
-  const [page, setPage] = useState(1);
 
   const normalizedQuery = normalizeQuery(query);
-  const filteredItems = useMemo(() => {
+  const visibleItems = useMemo(() => {
     if (!normalizedQuery) {
       return items;
     }
@@ -31,39 +38,62 @@ export function useLeaderboardNavigation({
     return items.filter((entry) => getSearchableLabel(entry).includes(normalizedQuery));
   }, [items, normalizedQuery]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
-  const currentPage = Math.min(Math.max(page, 1), totalPages);
-  const offset = (currentPage - 1) * pageSize;
-  const pageItems = filteredItems.slice(offset, offset + pageSize);
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const currentPage = Math.min(
+    Math.max(Math.floor(pageOffset / pageSize) + 1, 1),
+    totalPages,
+  );
+
+  const navigateToPage = useCallback(
+    (nextPage: number) => {
+      const normalizedPage = Math.min(Math.max(nextPage, 1), totalPages);
+      if (normalizedPage === currentPage) {
+        return;
+      }
+
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", String(normalizedPage));
+      params.set("pageSize", String(pageSize));
+      params.delete("limit");
+      params.delete("offset");
+
+      const queryString = params.toString();
+      router.push(queryString ? `${pathname}?${queryString}` : pathname);
+    },
+    [currentPage, pageSize, pathname, router, searchParams, totalPages],
+  );
 
   return {
     query,
     page: currentPage,
     totalPages,
-    filteredCount: filteredItems.length,
-    pageItems,
+    visibleItems,
+    canGoPrevPage: currentPage > 1,
+    canGoNextPage: currentPage < totalPages,
     setQuery: (nextQuery: string) => {
       setQueryState(nextQuery);
-      setPage(1);
     },
     goToEntry: (userId: string) => {
-      const index = filteredItems.findIndex((entry) => entry.userId === userId);
-      if (index >= 0) {
-        setPage(Math.floor(index / pageSize) + 1);
+      const visibleItemIndex = visibleItems.findIndex((entry) => entry.userId === userId);
+      if (visibleItemIndex >= 0) {
         return true;
       }
 
-      const globalIndex = items.findIndex((entry) => entry.userId === userId);
-      if (globalIndex < 0) {
-        return false;
+      const pageItemIndex = items.findIndex((entry) => entry.userId === userId);
+      if (pageItemIndex >= 0) {
+        setQueryState("");
+        return true;
       }
 
-      setQueryState("");
-      setPage(Math.floor(globalIndex / pageSize) + 1);
-      return true;
+      if (viewerRank && viewerRank.userId === userId) {
+        setQueryState("");
+        navigateToPage(Math.floor((viewerRank.rank - 1) / pageSize) + 1);
+        return true;
+      }
+
+      return false;
     },
-    goToPrevPage: () => setPage((currentPageValue) => Math.max(1, currentPageValue - 1)),
-    goToNextPage: () =>
-      setPage((currentPageValue) => Math.min(totalPages, currentPageValue + 1)),
+    goToPrevPage: () => navigateToPage(currentPage - 1),
+    goToNextPage: () => navigateToPage(currentPage + 1),
   };
 }

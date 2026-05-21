@@ -55,6 +55,12 @@ export type QueueResult = {
   match?: Match;
 };
 
+export type PublicMatchStats = {
+  queuedPlayers: number;
+  activeMatchPlayers: number;
+  cachedAt: string;
+};
+
 export type MatchSubmissionExecutionStatus =
   | "queued"
   | "sent_to_judge"
