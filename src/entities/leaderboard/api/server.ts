@@ -9,6 +9,8 @@ type GetLeaderboardPageOptions = {
   mode?: string;
   limit?: number;
   offset?: number;
+  page?: number;
+  pageSize?: number;
 };
 
 export type RatedWinrateStats = {
@@ -24,7 +26,13 @@ type GetRatedWinrateOptions = {
   globalRank?: number | null;
 };
 
-function toQueryString({ mode, limit, offset }: GetLeaderboardPageOptions) {
+function toQueryString({
+  mode,
+  limit,
+  offset,
+  page,
+  pageSize,
+}: GetLeaderboardPageOptions) {
   const query = new URLSearchParams();
 
   if (mode && mode.trim() !== "") {
@@ -32,9 +40,14 @@ function toQueryString({ mode, limit, offset }: GetLeaderboardPageOptions) {
   }
   if (typeof limit === "number") {
     query.set("limit", String(limit));
+  } else if (typeof pageSize === "number") {
+    query.set("pageSize", String(pageSize));
   }
   if (typeof offset === "number") {
     query.set("offset", String(offset));
+  }
+  if (typeof page === "number") {
+    query.set("page", String(page));
   }
 
   const queryString = query.toString();
