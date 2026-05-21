@@ -13,6 +13,7 @@ export type {
   MatchTaskDifficulty,
   MatchTaskMode,
   MatchWinningReason,
+  PublicMatchStats,
   QueueResult,
   QueueStatus,
 } from "./model/types";
