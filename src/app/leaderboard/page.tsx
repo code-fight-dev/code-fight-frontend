@@ -1,8 +1,21 @@
-import { LeaderboardPageView } from "@/views/leaderboard";
-import { getLeaderboardViewData } from "@/views/leaderboard/server";
+import {
+  getLeaderboardViewData,
+  LeaderboardPageView,
+  parseLeaderboardViewQuery,
+} from "@/views/leaderboard";
 
-export default async function LeaderboardPage() {
-  const page = await getLeaderboardViewData();
+export default async function LeaderboardPage({
+  searchParams,
+}: PageProps<"/leaderboard">) {
+  const query = parseLeaderboardViewQuery(await searchParams);
 
-  return <LeaderboardPageView page={page} />;
+  const leaderboard = await getLeaderboardViewData({
+    mode: query.mode,
+    page: query.page,
+    pageSize: query.pageSize,
+  });
+
+  return (
+    <LeaderboardPageView page={leaderboard.page} podiumItems={leaderboard.podiumItems} />
+  );
 }

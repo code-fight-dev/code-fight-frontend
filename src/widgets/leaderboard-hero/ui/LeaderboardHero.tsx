@@ -1,6 +1,35 @@
 import Link from "next/link";
+import { formatInteger } from "@/entities/leaderboard";
+import type { LeaderboardStats } from "@/entities/leaderboard";
 
-export function LeaderboardHero() {
+type Props = {
+  stats?: LeaderboardStats;
+  totalPlayers: number;
+};
+
+function toNonNegativeInteger(value: number) {
+  return Number.isFinite(value) ? Math.max(0, Math.round(value)) : 0;
+}
+
+export function LeaderboardHero({ stats, totalPlayers }: Props) {
+  const rankedPlayers = stats
+    ? toNonNegativeInteger(stats.rankedPlayers)
+    : toNonNegativeInteger(totalPlayers);
+  const matchesToday = stats ? toNonNegativeInteger(stats.matchesToday) : null;
+
+  const cards = [
+    {
+      label: "Players",
+      value: formatInteger(rankedPlayers),
+      meta: "ranked in global mode",
+    },
+    {
+      label: "Matches Today",
+      value: matchesToday === null ? "N/A" : formatInteger(matchesToday),
+      meta: matchesToday === null ? "stats unavailable" : "live public stats",
+    },
+  ];
+
   return (
     <section className="relative">
       <div className="px-1 sm:px-2 lg:px-3">
@@ -28,10 +57,7 @@ export function LeaderboardHero() {
       </div>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
-        {[
-          { label: "Players", value: "—", meta: "coming soon" },
-          { label: "Matches Today", value: "—", meta: "coming soon" },
-        ].map((card) => (
+        {cards.map((card) => (
           <article
             key={card.label}
             className="rounded-2xl border border-white/10 bg-white/3 px-4 py-3"
