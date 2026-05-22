@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useArenaRoomState } from "@/features/arena-room";
 import { Container } from "@/shared/ui/Container";
+import { ArenaMatchFinishedOverlay } from "./ArenaMatchFinishedOverlay";
 import { ArenaRoomHeaderBar } from "./ArenaRoomHeaderBar";
 import { ArenaRoomProblemPanel } from "./ArenaRoomProblemPanel";
 import { ArenaRoomScoreStrip } from "./ArenaRoomScoreStrip";
@@ -123,6 +124,10 @@ export function ArenaMatchRoomPageView({ matchId }: Props) {
           />
         </div>
       </Container>
+
+      {match.status === "finished" ? (
+        <ArenaMatchFinishedOverlay match={match} viewerId={viewerId} />
+      ) : null}
     </section>
   );
 }
