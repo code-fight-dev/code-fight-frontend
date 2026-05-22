@@ -63,6 +63,7 @@ type ExecutionSummaryResult = Pick<
   | "totalTests"
   | "runTimeMs"
   | "errorMessage"
+  | "stderrTruncated"
 >;
 
 export function getExecutionSummaryLines(
@@ -87,6 +88,10 @@ export function getExecutionSummaryLines(
 
   if (result.errorMessage) {
     lines.push(`Error: ${result.errorMessage}`);
+  }
+
+  if (result.stderrTruncated) {
+    lines.push(`Stderr: ${result.stderrTruncated}`);
   }
 
   if (options?.timedOut) {
