@@ -1,3 +1,5 @@
+import type { ViewerProfileRecentMatchResult } from "@/entities/viewer";
+
 export function formatJoinedDate(value: string) {
   return new Intl.DateTimeFormat("en-US", {
     month: "long",
@@ -44,4 +46,34 @@ export function formatCompactNumber(value: number) {
 
 export function formatInteger(value: number) {
   return new Intl.NumberFormat("en-US").format(value);
+}
+
+export function formatRecentMatchResult(value: ViewerProfileRecentMatchResult) {
+  switch (value) {
+    case "win":
+      return "Win";
+    case "loss":
+      return "Loss";
+    case "draw":
+      return "Draw";
+    case "cancelled":
+      return "Cancelled";
+    default:
+      return value;
+  }
+}
+
+export function formatRecentMatchFinishedAt(value: string, timeZone?: string) {
+  const timestamp = Date.parse(value);
+  if (!Number.isFinite(timestamp)) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    ...(timeZone ? { timeZone } : {}),
+  }).format(new Date(timestamp));
 }
