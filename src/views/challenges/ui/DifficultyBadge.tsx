@@ -1,6 +1,6 @@
+import { getDifficultyClassName } from "@/entities/challenge";
 import type { ChallengeDifficulty } from "@/entities/challenge";
 import { cn } from "@/shared/lib/cn";
-import { getDifficultyClassName } from "../model/presentation";
 
 type Props = {
   difficulty: ChallengeDifficulty;
