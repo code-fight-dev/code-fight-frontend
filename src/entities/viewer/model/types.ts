@@ -34,8 +34,25 @@ export type ViewerProfileTopLanguage = {
   usageShare: number;
 };
 
+export type ViewerProfileRecentMatchResult = "win" | "loss" | "draw" | "cancelled";
+
+export type ViewerProfileRecentMatchDifficulty = "easy" | "medium" | "hard";
+
+export type ViewerProfileRecentMatchOpponent = {
+  id: string;
+  username: string;
+  displayName: string;
+  avatarUrl: string;
+};
+
 export type ViewerProfileRecentMatch = {
   id: string;
+  result: ViewerProfileRecentMatchResult;
+  opponent: ViewerProfileRecentMatchOpponent;
+  difficulty: ViewerProfileRecentMatchDifficulty | null;
+  eloDelta: number | null;
+  isRated: boolean;
+  finishedAt: string;
 };
 
 export type ViewerProfileAchievement = {
@@ -128,6 +145,44 @@ function isViewerProfileTopLanguage(value: unknown): value is ViewerProfileTopLa
   return isRecord(value) && typeof value.name === "string" && isNumber(value.usageShare);
 }
 
+function isViewerProfileRecentMatchResult(
+  value: unknown,
+): value is ViewerProfileRecentMatchResult {
+  return value === "win" || value === "loss" || value === "draw" || value === "cancelled";
+}
+
+function isViewerProfileRecentMatchDifficulty(
+  value: unknown,
+): value is ViewerProfileRecentMatchDifficulty {
+  return value === "easy" || value === "medium" || value === "hard";
+}
+
+function isViewerProfileRecentMatchOpponent(
+  value: unknown,
+): value is ViewerProfileRecentMatchOpponent {
+  return (
+    isRecord(value) &&
+    typeof value.id === "string" &&
+    typeof value.username === "string" &&
+    typeof value.displayName === "string" &&
+    typeof value.avatarUrl === "string"
+  );
+}
+
+function isViewerProfileRecentMatch(value: unknown): value is ViewerProfileRecentMatch {
+  return (
+    isRecord(value) &&
+    typeof value.id === "string" &&
+    isViewerProfileRecentMatchResult(value.result) &&
+    isViewerProfileRecentMatchOpponent(value.opponent) &&
+    (value.difficulty === null ||
+      isViewerProfileRecentMatchDifficulty(value.difficulty)) &&
+    isNullableNumber(value.eloDelta) &&
+    typeof value.isRated === "boolean" &&
+    typeof value.finishedAt === "string"
+  );
+}
+
 export function isViewer(value: unknown): value is Viewer {
   return (
     isRecord(value) &&
@@ -160,7 +215,7 @@ export function isViewerProfile(value: unknown): value is ViewerProfile {
     Array.isArray(value.topLanguages) &&
     value.topLanguages.every(isViewerProfileTopLanguage) &&
     Array.isArray(value.recentMatches) &&
-    value.recentMatches.every(isRecordWithStringID) &&
+    value.recentMatches.every(isViewerProfileRecentMatch) &&
     Array.isArray(value.achievements) &&
     value.achievements.every(isRecordWithStringID)
   );
