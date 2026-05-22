@@ -11,7 +11,7 @@ import type {
   ViewerProfileRecentMatch,
   ViewerProfileRecentMatchResult,
 } from "@/entities/viewer";
-import { buildArenaMatchHref } from "@/shared/config/routes";
+import { buildArenaReplayHref } from "@/shared/config/routes";
 import { cn } from "@/shared/lib/cn";
 import { formatRecentMatchResult } from "@/views/viewer-profile/model/format";
 import { getResultBadgeClassName } from "./formatters";
@@ -67,7 +67,7 @@ type ReplayLinkProps = {
 export function ReplayLink({ matchId, fullWidth = false }: ReplayLinkProps) {
   return (
     <Link
-      href={buildArenaMatchHref(matchId)}
+      href={buildArenaReplayHref(matchId)}
       className={cn(
         "group inline-flex min-h-8 items-center justify-center gap-1.5 rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-[12px] font-medium tracking-[-0.02em] text-(--app-text-soft) transition-all duration-300 hover:border-blue-400/28 hover:bg-blue-500/10 hover:text-(--app-text-strong)",
         fullWidth ? "w-full" : "w-auto",

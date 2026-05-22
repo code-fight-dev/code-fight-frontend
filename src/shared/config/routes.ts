@@ -27,3 +27,7 @@ export function buildViewerProfileHref(username: string): Route {
 export function buildArenaMatchHref(matchId: string): Route {
   return `/arena/match/${encodeURIComponent(matchId)}` as Route;
 }
+
+export function buildArenaReplayHref(matchId: string): Route {
+  return `/arena/replay/${encodeURIComponent(matchId)}` as Route;
+}
