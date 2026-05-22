@@ -55,10 +55,6 @@ export type ViewerProfileRecentMatch = {
   finishedAt: string;
 };
 
-export type ViewerProfileAchievement = {
-  id: string;
-};
-
 export type ViewerProfile = {
   id: string;
   username: string;
@@ -77,7 +73,6 @@ export type ViewerProfile = {
   eloHistory: ViewerProfileEloHistoryPoint[];
   topLanguages: ViewerProfileTopLanguage[];
   recentMatches: ViewerProfileRecentMatch[];
-  achievements: ViewerProfileAchievement[];
 };
 
 export type UpdateViewerProfileInput = {
@@ -101,10 +96,6 @@ function isNumber(value: unknown): value is number {
 
 function isNullableNumber(value: unknown): value is number | null {
   return value === null || isNumber(value);
-}
-
-function isRecordWithStringID(value: unknown): value is { id: string } {
-  return isRecord(value) && typeof value.id === "string";
 }
 
 function isAvatarSource(value: unknown): value is AvatarSource {
@@ -215,8 +206,6 @@ export function isViewerProfile(value: unknown): value is ViewerProfile {
     Array.isArray(value.topLanguages) &&
     value.topLanguages.every(isViewerProfileTopLanguage) &&
     Array.isArray(value.recentMatches) &&
-    value.recentMatches.every(isViewerProfileRecentMatch) &&
-    Array.isArray(value.achievements) &&
-    value.achievements.every(isRecordWithStringID)
+    value.recentMatches.every(isViewerProfileRecentMatch)
   );
 }

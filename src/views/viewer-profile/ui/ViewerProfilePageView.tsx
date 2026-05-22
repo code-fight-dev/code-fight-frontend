@@ -9,7 +9,6 @@ import { formatJoinedDate } from "@/views/viewer-profile/model/format";
 import { EloHistoryChart } from "@/views/viewer-profile/ui/EloHistoryChart";
 import { ProfileSummary } from "@/views/viewer-profile/ui/ProfileSummary";
 import { RankProgression } from "@/views/viewer-profile/ui/RankProgression";
-import { RecentAchievements } from "@/views/viewer-profile/ui/RecentAchievements";
 import { RecentMatches } from "@/views/viewer-profile/ui/RecentMatches";
 import { StatsCards } from "@/views/viewer-profile/ui/StatsCards";
 import { TopLanguages } from "@/views/viewer-profile/ui/TopLanguages";
@@ -71,7 +70,6 @@ export function ViewerProfilePageView({ profile }: Props) {
               regionalPlayersCount={profile.stats.regionalPlayersCount}
             />
             <TopLanguages languages={profile.topLanguages} />
-            <RecentAchievements />
           </div>
         </div>
       </Container>
