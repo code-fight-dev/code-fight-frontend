@@ -1,4 +1,4 @@
-import type { ChallengeDifficulty, ChallengeKind } from "@/entities/challenge";
+import type { ChallengeKind } from "@/entities/challenge";
 
 export function formatAttempts(attempts: number) {
   if (attempts >= 1000) {
@@ -6,16 +6,6 @@ export function formatAttempts(attempts: number) {
   }
 
   return attempts.toString();
-}
-
-export function getDifficultyClassName(difficulty: ChallengeDifficulty) {
-  const styles: Record<ChallengeDifficulty, string> = {
-    Easy: "challenge-difficulty-easy",
-    Medium: "challenge-difficulty-medium",
-    Hard: "challenge-difficulty-hard",
-  };
-
-  return styles[difficulty];
 }
 
 export function getChallengeLanguageScope(kind: ChallengeKind) {

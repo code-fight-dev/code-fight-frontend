@@ -57,7 +57,7 @@ export function ViewerProfilePageView({ profile }: Props) {
               points={profile.eloHistory}
               accentColor={currentRank.color}
             />
-            <RecentMatches />
+            <RecentMatches matches={profile.recentMatches} />
           </div>
 
           <div className="space-y-6">

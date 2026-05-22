@@ -3,6 +3,7 @@ export {
   PROGRAMMING_LANGUAGE_BY_ID,
   PROGRAMMING_LANGUAGES,
 } from "./model/languages";
+export { getDifficultyClassName, parseChallengeDifficulty } from "./model/difficulty";
 export { toTaskSubmissionSummary } from "./model/submission";
 export { getChallengeTopicLabels } from "./model/topics";
 export type { ChallengeTopicSource } from "./model/topics";
