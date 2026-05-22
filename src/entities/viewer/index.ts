@@ -14,7 +14,6 @@ export type {
   UpdateViewerProfileInput,
   Viewer,
   ViewerProfile,
-  ViewerProfileAchievement,
   ViewerProfileRecentMatchDifficulty,
   ViewerProfileRecentMatchOpponent,
   ViewerProfileRecentMatchResult,
