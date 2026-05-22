@@ -6,7 +6,7 @@ import type {
 import type { ChallengeExecutionAction } from "./types";
 
 export const POLL_INTERVAL_MS = 1500;
-export const POLL_TIMEOUT_MS = 45_000;
+export const POLL_TIMEOUT_MS = 120_000;
 
 export const DEFAULT_EXECUTION_OUTPUT_MESSAGE =
   "Choose a testcase, draft a solution, then run or submit when execution is available.";

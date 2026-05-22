@@ -116,6 +116,14 @@ export function useChallengeExecution({
       }
     }
 
+    latestRun = await getCodeRun(latestRun.id, signal);
+    setOutputMessage(
+      getExecutionSummaryLines(actionLabel, latestRun, { customInputProvided }),
+    );
+    if (isFinalExecutionStatus(latestRun.status)) {
+      return { codeRun: latestRun, timedOut: false };
+    }
+
     return { codeRun: latestRun, timedOut: true };
   }
 
@@ -142,6 +150,15 @@ export function useChallengeExecution({
       if (isFinalExecutionStatus(latestSubmission.status)) {
         return { submission: latestSubmission, timedOut: false };
       }
+    }
+
+    latestSubmission = await getSubmission(latestSubmission.id, signal);
+    setSubmissions((current) =>
+      upsertSubmission(current, toTaskSubmissionSummary(latestSubmission)),
+    );
+    setOutputMessage(getExecutionSummaryLines(actionLabel, latestSubmission));
+    if (isFinalExecutionStatus(latestSubmission.status)) {
+      return { submission: latestSubmission, timedOut: false };
     }
 
     return { submission: latestSubmission, timedOut: true };
