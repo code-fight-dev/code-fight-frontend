@@ -124,6 +124,51 @@ export type MatchSubmission = {
   testResults: MatchSubmissionTestResult[];
 };
 
+export type MatchReplayPermissions = {
+  canViewReplay: boolean;
+  canViewSourceCode: boolean;
+};
+
+export type MatchReplayPlayer = {
+  id: string;
+  username: string;
+  displayName: string;
+  avatarUrl: string;
+};
+
+export type MatchReplayTimelineEventPayload = Record<string, unknown>;
+
+export type MatchReplayTimelineEvent = {
+  userId: string;
+  seq: number;
+  tMs: number;
+  type: string;
+  payload: MatchReplayTimelineEventPayload;
+};
+
+export type MatchReplayTimelineSnapshot = {
+  userId: string;
+  seq: number;
+  tMs: number;
+  language: string;
+  sourceCode: string;
+};
+
+export type MatchReplayTimeline = {
+  version: number;
+  durationMs: number;
+  events: MatchReplayTimelineEvent[];
+  snapshots: MatchReplayTimelineSnapshot[];
+  submissions: MatchSubmission[];
+};
+
+export type MatchReplay = {
+  permissions: MatchReplayPermissions;
+  match: Match;
+  players: MatchReplayPlayer[];
+  timeline: MatchReplayTimeline;
+};
+
 export type ArenaEventName =
   | "connected"
   | "matchmaking.queued"
