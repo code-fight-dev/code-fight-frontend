@@ -138,6 +138,8 @@ export function parseMatchFromSnakeCase(value: unknown): Match | null {
   const player2Score = readRequiredNumber(value.player2_score);
   const player1Attempts = readRequiredNumber(value.player1_attempts);
   const player2Attempts = readRequiredNumber(value.player2_attempts);
+  const player1RatingDelta = readOptionalNumber(value.player1_rating_delta);
+  const player2RatingDelta = readOptionalNumber(value.player2_rating_delta);
   const player1Solved = readOptionalBoolean(value.player1_solved);
   const player2Solved = readOptionalBoolean(value.player2_solved);
 
@@ -206,6 +208,8 @@ export function parseMatchFromSnakeCase(value: unknown): Match | null {
     ...(winningReason ? { winningReason } : {}),
     isRated,
     ratingApplied,
+    ...(player1RatingDelta !== undefined ? { player1RatingDelta } : {}),
+    ...(player2RatingDelta !== undefined ? { player2RatingDelta } : {}),
     player1Score,
     player2Score,
     player1Attempts,

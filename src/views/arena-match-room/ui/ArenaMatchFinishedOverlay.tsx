@@ -2,8 +2,79 @@
 
 import Link from "next/link";
 import { LogOut, Trophy } from "lucide-react";
+import type { Match, MatchWinningReason } from "@/entities/match";
 
-export function ArenaMatchFinishedOverlay() {
+type Props = {
+  match: Match;
+  viewerId: string | null;
+};
+
+const WINNING_REASON_LABELS: Record<MatchWinningReason, string> = {
+  accepted_faster: "Solved first",
+  accepted_more_tests: "Higher score when time expired",
+  opponent_failed: "Opponent failed",
+  surrender: "Surrender",
+  draw: "Draw by equal result",
+  cancelled: "Match cancelled",
+};
+
+function formatSignedDelta(value: number) {
+  return value > 0 ? `+${value}` : String(value);
+}
+
+function getOutcome(match: Match, viewerId: string | null) {
+  const isPlayer1 = viewerId === match.player1Id;
+  const isPlayer2 = viewerId === match.player2Id;
+  const isParticipant = isPlayer1 || isPlayer2;
+  const selfRatingDelta = isPlayer1
+    ? match.player1RatingDelta
+    : isPlayer2
+      ? match.player2RatingDelta
+      : undefined;
+
+  if (match.resultType === "draw" || !match.winnerId) {
+    return {
+      title: "Match ended in a draw",
+      winnerLabel: "No winner",
+      resultLabel: "Draw",
+      viewerWon: false,
+      selfRatingDelta,
+    };
+  }
+
+  const viewerWon = isParticipant && match.winnerId === viewerId;
+  const winnerLabel = match.winnerId === match.player1Id ? "Player 1" : "Player 2";
+
+  return {
+    title: viewerWon ? "You won the match" : "Opponent won the match",
+    winnerLabel: viewerWon ? "You" : isParticipant ? "Opponent" : winnerLabel,
+    resultLabel: viewerWon ? "Victory" : "Defeat",
+    viewerWon,
+    selfRatingDelta,
+  };
+}
+
+function getReasonLabel(match: Match, viewerWon: boolean) {
+  if (match.winningReason === "surrender") {
+    return viewerWon ? "Opponent surrendered" : "You surrendered";
+  }
+
+  return match.winningReason
+    ? WINNING_REASON_LABELS[match.winningReason]
+    : "Final result received";
+}
+
+export function ArenaMatchFinishedOverlay({ match, viewerId }: Props) {
+  const outcome = getOutcome(match, viewerId);
+  const reasonLabel = getReasonLabel(match, outcome.viewerWon);
+  const scoreLabel = `${match.player1Score} : ${match.player2Score}`;
+  const ratingLabel =
+    match.isRated && typeof outcome.selfRatingDelta === "number"
+      ? `${formatSignedDelta(outcome.selfRatingDelta)} ELO`
+      : match.isRated
+        ? "Rating update pending"
+        : "Unrated match";
+
   return (
     <div
       role="dialog"
@@ -21,11 +92,38 @@ export function ArenaMatchFinishedOverlay() {
           id="arena-finished-title"
           className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-(--app-text-strong)"
         >
-          Final score is locked
+          {outcome.title}
         </h3>
         <p className="mt-2 text-[15px] leading-7 text-(--app-text-muted)">
           The duel has ended. You can return to matchmaking and look for another match.
         </p>
+
+        <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="arena-accept-state rounded-xl px-3 py-2 text-[13px]">
+            <span className="block text-(--app-text-faint)">Result</span>
+            <span className="font-semibold text-(--app-text-strong)">
+              {outcome.resultLabel}
+            </span>
+          </div>
+          <div className="arena-accept-state rounded-xl px-3 py-2 text-[13px]">
+            <span className="block text-(--app-text-faint)">Winner</span>
+            <span className="font-semibold text-(--app-text-strong)">
+              {outcome.winnerLabel}
+            </span>
+          </div>
+          <div className="arena-accept-state rounded-xl px-3 py-2 text-[13px]">
+            <span className="block text-(--app-text-faint)">Reason</span>
+            <span className="font-semibold text-(--app-text-strong)">{reasonLabel}</span>
+          </div>
+          <div className="arena-accept-state rounded-xl px-3 py-2 text-[13px]">
+            <span className="block text-(--app-text-faint)">Score</span>
+            <span className="font-semibold text-(--app-text-strong)">{scoreLabel}</span>
+          </div>
+          <div className="arena-accept-state rounded-xl px-3 py-2 text-[13px]">
+            <span className="block text-(--app-text-faint)">Rating</span>
+            <span className="font-semibold text-(--app-text-strong)">{ratingLabel}</span>
+          </div>
+        </div>
 
         <Link
           href="/arena"

@@ -125,7 +125,9 @@ export function ArenaMatchRoomPageView({ matchId }: Props) {
         </div>
       </Container>
 
-      {match.status === "finished" ? <ArenaMatchFinishedOverlay /> : null}
+      {match.status === "finished" ? (
+        <ArenaMatchFinishedOverlay match={match} viewerId={viewerId} />
+      ) : null}
     </section>
   );
 }

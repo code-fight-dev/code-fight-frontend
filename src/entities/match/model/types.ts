@@ -33,6 +33,8 @@ export type Match = {
   winningReason?: MatchWinningReason;
   isRated: boolean;
   ratingApplied: boolean;
+  player1RatingDelta?: number;
+  player2RatingDelta?: number;
   player1Score: number;
   player2Score: number;
   player1Attempts: number;
