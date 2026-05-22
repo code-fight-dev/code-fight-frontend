@@ -4,6 +4,7 @@ export {
   createMatchSubmission,
   getCurrentMatch,
   getMatch,
+  getMatchReplay,
   joinQueue,
   leaveQueue,
   startMatch,
