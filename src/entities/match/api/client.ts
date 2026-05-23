@@ -103,6 +103,19 @@ export async function startMatch(matchId: string): Promise<Match> {
   });
 }
 
+export async function surrenderMatch(matchId: string): Promise<void> {
+  const normalizedMatchID = requireNormalizedId(matchId, "Match id");
+
+  return requestNoContent({
+    input: `${API_BASE_URL}/api/matches/${encodeURIComponent(normalizedMatchID)}/surrender`,
+    init: {
+      method: "POST",
+      credentials: "include",
+    },
+    fallbackMessage: "Failed to surrender match",
+  });
+}
+
 export async function createMatchSubmission(
   matchId: string,
   payload: CreateMatchSubmissionPayload,
