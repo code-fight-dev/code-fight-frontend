@@ -35,7 +35,7 @@ export function useProfileSettingsAvatarState({
       ...currentDraft,
       avatarUrl: profileState.avatarUrl || fallback.avatarUrl,
       avatarSource: profileState.avatarSource || fallback.avatarSource,
-      pendingAvatarDataUrl: "",
+      pendingAvatarFile: null,
       removeCustomAvatar: false,
     }));
   }
@@ -60,7 +60,7 @@ export function useProfileSettingsAvatarState({
         ...currentDraft,
         avatarUrl: avatarDataUrl,
         avatarSource: "custom",
-        pendingAvatarDataUrl: avatarDataUrl,
+        pendingAvatarFile: file,
         removeCustomAvatar: false,
       }));
     } catch (error) {
@@ -77,7 +77,7 @@ export function useProfileSettingsAvatarState({
       ...currentDraft,
       avatarUrl: fallback.avatarUrl,
       avatarSource: fallback.avatarSource,
-      pendingAvatarDataUrl: "",
+      pendingAvatarFile: null,
       removeCustomAvatar: profileState.avatarSource === "custom",
     }));
   }

@@ -10,7 +10,7 @@ export type ProfileSettingsDraft = {
   city: string;
   avatarUrl: string;
   avatarSource: AvatarSource;
-  pendingAvatarDataUrl: string;
+  pendingAvatarFile: File | null;
   removeCustomAvatar: boolean;
 };
 
@@ -48,7 +48,7 @@ export function createProfileSettingsDraft(profile: ViewerProfile): ProfileSetti
     ...createProfileSettingsLocationDraft(profile),
     avatarUrl: profile.avatarUrl,
     avatarSource: profile.avatarSource,
-    pendingAvatarDataUrl: "",
+    pendingAvatarFile: null,
     removeCustomAvatar: false,
   };
 }

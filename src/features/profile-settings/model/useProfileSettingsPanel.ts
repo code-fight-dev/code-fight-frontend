@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { updateViewerProfile } from "@/entities/viewer";
+import { updateViewerAvatar, updateViewerProfile } from "@/entities/viewer";
 import type { ViewerProfile } from "@/entities/viewer";
 import {
   PROFILE_SETTINGS_SAVE_INDICATOR_DELAY_MS,
@@ -132,10 +132,13 @@ export function useProfileSettingsPanel(profile: ViewerProfile) {
     }, PROFILE_SETTINGS_SAVE_INDICATOR_DELAY_MS);
 
     try {
-      const updatedProfile = await updateViewerProfile(
-        profileState.username,
-        buildTargetPayload(target, profileState, draft),
-      );
+      const updatedProfile =
+        target === "photo" && draft.pendingAvatarFile
+          ? await updateViewerAvatar(profileState.username, draft.pendingAvatarFile)
+          : await updateViewerProfile(
+              profileState.username,
+              buildTargetPayload(target, profileState, draft),
+            );
 
       setProfileState(updatedProfile);
       setDraft((currentDraft) =>

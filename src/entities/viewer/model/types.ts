@@ -82,7 +82,6 @@ export type UpdateViewerProfileInput = {
   countryCode: string;
   stateProvince: string;
   city: string;
-  avatarDataUrl?: string;
   removeCustomAvatar?: boolean;
 };
 
