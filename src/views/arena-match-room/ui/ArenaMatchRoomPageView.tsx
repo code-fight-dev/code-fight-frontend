@@ -27,6 +27,7 @@ export function ArenaMatchRoomPageView({ matchId }: Props) {
     activeWorkspaceTab,
     ownSubmission,
     isSubmitting,
+    isSurrendering,
     selfScore,
     opponentScore,
     selfAttempts,
@@ -37,6 +38,7 @@ export function ArenaMatchRoomPageView({ matchId }: Props) {
     setSelectedLanguage,
     setCurrentCode,
     submitSolution,
+    surrenderMatch,
   } = useArenaRoomState(matchId);
 
   if (loadState === "loading") {
@@ -95,6 +97,10 @@ export function ArenaMatchRoomPageView({ matchId }: Props) {
           matchId={match.id}
           opponentId={opponentId}
           status={match.status}
+          isSurrendering={isSurrendering}
+          onSurrender={() => {
+            void surrenderMatch();
+          }}
         />
 
         <ArenaRoomScoreStrip

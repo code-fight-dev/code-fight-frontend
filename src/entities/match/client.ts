@@ -8,6 +8,7 @@ export {
   joinQueue,
   leaveQueue,
   startMatch,
+  surrenderMatch,
   type CreateMatchSubmissionPayload,
   type JoinQueueInput,
 } from "./api/client";

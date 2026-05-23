@@ -3,7 +3,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Challenge, ChallengeLanguage, TaskSubmission } from "@/entities/challenge";
 import type { Match } from "@/entities/match";
-import { createMatchSubmission, getMatch } from "@/entities/match/client";
+import {
+  createMatchSubmission,
+  getMatch,
+  surrenderMatch as surrenderMatchRequest,
+} from "@/entities/match/client";
 import { useViewerSession } from "@/entities/viewer";
 import { bootstrapArenaRoom } from "./bootstrap";
 import {
@@ -33,6 +37,7 @@ export function useArenaRoomState(matchId: string): UseArenaRoomStateResult {
   const [submissionStatus, setSubmissionStatus] = useState<
     "idle" | "running" | "submitted" | "error"
   >("idle");
+  const [isSurrendering, setIsSurrendering] = useState(false);
   const [outputMessage, setOutputMessage] = useState(INITIAL_OUTPUT_MESSAGE);
   const [activeWorkspaceTab, setActiveWorkspaceTab] =
     useState<ArenaRoomWorkspaceTab>("testcases");
@@ -217,6 +222,42 @@ export function useArenaRoomState(matchId: string): UseArenaRoomStateResult {
     }
   }, [challenge, currentCode, loadState, match, selectedLanguage]);
 
+  const surrenderMatch = useCallback(async () => {
+    if (loadState !== "ready" || !match || isSurrendering) {
+      return;
+    }
+
+    if (match.status !== "running") {
+      setOutputMessage("Match is no longer running, surrender is disabled.");
+      return;
+    }
+
+    setIsSurrendering(true);
+    setOutputMessage("Surrendering match...");
+
+    try {
+      await surrenderMatchRequest(match.id);
+      if (!isMountedRef.current) {
+        return;
+      }
+
+      setOutputMessage("You surrendered. Waiting for the final match snapshot...");
+      await refreshMatch();
+    } catch (error) {
+      if (!isMountedRef.current) {
+        return;
+      }
+
+      setOutputMessage(
+        error instanceof Error ? error.message : "Failed to surrender match",
+      );
+    } finally {
+      if (isMountedRef.current) {
+        setIsSurrendering(false);
+      }
+    }
+  }, [isSurrendering, loadState, match, refreshMatch]);
+
   const perspective = useMemo(
     () => getMatchPerspective(match, viewerId),
     [match, viewerId],
@@ -235,6 +276,7 @@ export function useArenaRoomState(matchId: string): UseArenaRoomStateResult {
     activeWorkspaceTab,
     ownSubmission,
     isSubmitting: submissionStatus === "running",
+    isSurrendering,
     selfScore: perspective.selfScore,
     opponentScore: perspective.opponentScore,
     selfAttempts: perspective.selfAttempts,
@@ -260,6 +302,7 @@ export function useArenaRoomState(matchId: string): UseArenaRoomStateResult {
       }));
     },
     submitSolution,
+    surrenderMatch,
     refreshMatch,
   };
 }

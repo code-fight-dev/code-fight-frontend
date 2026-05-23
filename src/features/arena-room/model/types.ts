@@ -17,6 +17,7 @@ export type UseArenaRoomStateResult = {
   activeWorkspaceTab: ArenaRoomWorkspaceTab;
   ownSubmission: TaskSubmission | null;
   isSubmitting: boolean;
+  isSurrendering: boolean;
   selfScore: number;
   opponentScore: number;
   selfAttempts: number;
@@ -27,5 +28,6 @@ export type UseArenaRoomStateResult = {
   setSelectedLanguage: (language: ChallengeLanguage) => void;
   setCurrentCode: (value: string) => void;
   submitSolution: () => Promise<void>;
+  surrenderMatch: () => Promise<void>;
   refreshMatch: () => Promise<void>;
 };

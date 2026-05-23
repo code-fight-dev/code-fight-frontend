@@ -1,14 +1,35 @@
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Flag } from "lucide-react";
+import { cn } from "@/shared/lib/cn";
 import { toReadableStatus, toShortID } from "../model/presentation";
 
 type Props = {
   matchId: string;
   opponentId: string;
   status: string;
+  isSurrendering: boolean;
+  onSurrender: () => void;
 };
 
-export function ArenaRoomHeaderBar({ matchId, opponentId, status }: Props) {
+export function ArenaRoomHeaderBar({
+  matchId,
+  opponentId,
+  status,
+  isSurrendering,
+  onSurrender,
+}: Props) {
+  const canSurrender = status === "running";
+
+  const handleSurrenderClick = () => {
+    if (!canSurrender || isSurrendering) {
+      return;
+    }
+
+    if (window.confirm("Surrender this match?")) {
+      onSurrender();
+    }
+  };
+
   return (
     <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
       <Link
@@ -19,7 +40,7 @@ export function ArenaRoomHeaderBar({ matchId, opponentId, status }: Props) {
         Back to arena
       </Link>
 
-      <div className="flex flex-wrap items-center gap-2 text-[12px]">
+      <div className="flex flex-wrap items-center justify-end gap-2 text-[12px]">
         <span className="challenge-panel-muted rounded-md px-2.5 py-1.5 text-(--app-text-soft)">
           Match #{toShortID(matchId)}
         </span>
@@ -29,6 +50,21 @@ export function ArenaRoomHeaderBar({ matchId, opponentId, status }: Props) {
         <span className="challenge-panel-muted rounded-md px-2.5 py-1.5 text-(--app-text-soft)">
           {toReadableStatus(status)}
         </span>
+        <button
+          type="button"
+          disabled={!canSurrender || isSurrendering}
+          onClick={handleSurrenderClick}
+          className={cn(
+            "challenge-focus-ring inline-flex h-9 items-center gap-2 rounded-lg border px-3 text-[13px] font-semibold transition-colors",
+            canSurrender
+              ? "border-red-400/25 bg-red-500/8 text-red-200 hover:border-red-300/45 hover:bg-red-500/14 hover:text-red-100"
+              : "border-(--app-option-border) bg-(--app-option-bg) text-(--app-text-faint)",
+            "disabled:cursor-not-allowed disabled:opacity-55",
+          )}
+        >
+          <Flag className="h-4 w-4" />
+          {isSurrendering ? "Surrendering" : "Surrender"}
+        </button>
       </div>
     </div>
   );
