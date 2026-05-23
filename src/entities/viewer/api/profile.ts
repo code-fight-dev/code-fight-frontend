@@ -50,7 +50,6 @@ export async function updateViewerProfile(
       countryCode: input.countryCode,
       stateProvince: input.stateProvince,
       city: input.city,
-      avatarDataUrl: input.avatarDataUrl ?? "",
       removeCustomAvatar: input.removeCustomAvatar ?? false,
     }),
   });
@@ -68,6 +67,37 @@ export async function updateViewerProfile(
       error?: { message?: string };
     } | null;
     throw new Error(body?.error?.message || "Failed to update profile");
+  }
+
+  return parseProfileResponse(response, "Invalid updated profile response");
+}
+
+export async function updateViewerAvatar(username: string, file: File) {
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  const response = await fetch(
+    `${API_BASE_URL}/users/${encodeURIComponent(username)}/avatar`,
+    {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    },
+  );
+
+  if (response.status === 401) {
+    throw new Error("You need to sign in to edit this profile");
+  }
+
+  if (response.status === 403) {
+    throw new Error("You can edit only your own profile");
+  }
+
+  if (!response.ok) {
+    const body = (await response.json().catch(() => null)) as {
+      error?: { message?: string };
+    } | null;
+    throw new Error(body?.error?.message || "Failed to update profile photo");
   }
 
   return parseProfileResponse(response, "Invalid updated profile response");

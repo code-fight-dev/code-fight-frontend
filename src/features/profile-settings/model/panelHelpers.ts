@@ -48,7 +48,7 @@ export function buildProfileSettingsChangeFlags(
   const profileCountryCode = getResolvedProfileCountryCode(profileState);
 
   return {
-    photo: draft.pendingAvatarDataUrl !== "" || draft.removeCustomAvatar,
+    photo: draft.pendingAvatarFile !== null || draft.removeCustomAvatar,
     "display-name": profileState.displayName !== draft.displayName,
     location:
       profileState.country !== draft.country ||
@@ -82,7 +82,6 @@ export function buildTargetPayload(
     case "photo":
       return {
         ...persistedProfileInput,
-        avatarDataUrl: draft.pendingAvatarDataUrl || undefined,
         removeCustomAvatar: draft.removeCustomAvatar,
       };
     case "display-name":
@@ -117,7 +116,7 @@ export function syncDraftAfterSave(
         ...currentDraft,
         avatarUrl: updatedProfile.avatarUrl,
         avatarSource: updatedProfile.avatarSource,
-        pendingAvatarDataUrl: "",
+        pendingAvatarFile: null,
         removeCustomAvatar: false,
       };
     case "display-name":

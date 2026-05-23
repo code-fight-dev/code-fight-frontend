@@ -1,5 +1,5 @@
 export { getCurrentViewer, signOutViewer } from "./api/session";
-export { getViewerProfile, updateViewerProfile } from "./api/profile";
+export { getViewerProfile, updateViewerAvatar, updateViewerProfile } from "./api/profile";
 export {
   getAvatarAlt,
   getProfileInitial,
