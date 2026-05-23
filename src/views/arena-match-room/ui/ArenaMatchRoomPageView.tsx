@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useArenaRoomState } from "@/features/arena-room";
 import { Container } from "@/shared/ui/Container";
+import { useSurrenderConfirm } from "../model/useSurrenderConfirm";
 import { ArenaMatchFinishedOverlay } from "./ArenaMatchFinishedOverlay";
 import { ArenaRoomHeaderBar } from "./ArenaRoomHeaderBar";
 import { ArenaRoomProblemPanel } from "./ArenaRoomProblemPanel";
 import { ArenaRoomScoreStrip } from "./ArenaRoomScoreStrip";
+import { ArenaSurrenderConfirmDialog } from "./ArenaSurrenderConfirmDialog";
 import { ArenaRoomWorkspaceShell } from "./ArenaRoomWorkspaceShell";
 
 type Props = {
@@ -40,6 +42,18 @@ export function ArenaMatchRoomPageView({ matchId }: Props) {
     submitSolution,
     surrenderMatch,
   } = useArenaRoomState(matchId);
+  const {
+    isDialogOpen: isSurrenderDialogOpen,
+    openDialog: openSurrenderDialog,
+    closeDialog: closeSurrenderDialog,
+    confirmSurrender,
+  } = useSurrenderConfirm({
+    canSurrender: match?.status === "running",
+    isSurrendering,
+    onSurrender: () => {
+      void surrenderMatch();
+    },
+  });
 
   if (loadState === "loading") {
     return (
@@ -98,9 +112,7 @@ export function ArenaMatchRoomPageView({ matchId }: Props) {
           opponentId={opponentId}
           status={match.status}
           isSurrendering={isSurrendering}
-          onSurrender={() => {
-            void surrenderMatch();
-          }}
+          onSurrenderClick={openSurrenderDialog}
         />
 
         <ArenaRoomScoreStrip
@@ -130,6 +142,13 @@ export function ArenaMatchRoomPageView({ matchId }: Props) {
           />
         </div>
       </Container>
+
+      <ArenaSurrenderConfirmDialog
+        isOpen={isSurrenderDialogOpen}
+        isSurrendering={isSurrendering}
+        onClose={closeSurrenderDialog}
+        onConfirm={confirmSurrender}
+      />
 
       {match.status === "finished" ? (
         <ArenaMatchFinishedOverlay match={match} viewerId={viewerId} />

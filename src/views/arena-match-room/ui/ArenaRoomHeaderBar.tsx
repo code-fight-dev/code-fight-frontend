@@ -8,7 +8,7 @@ type Props = {
   opponentId: string;
   status: string;
   isSurrendering: boolean;
-  onSurrender: () => void;
+  onSurrenderClick: () => void;
 };
 
 export function ArenaRoomHeaderBar({
@@ -16,19 +16,9 @@ export function ArenaRoomHeaderBar({
   opponentId,
   status,
   isSurrendering,
-  onSurrender,
+  onSurrenderClick,
 }: Props) {
   const canSurrender = status === "running";
-
-  const handleSurrenderClick = () => {
-    if (!canSurrender || isSurrendering) {
-      return;
-    }
-
-    if (window.confirm("Surrender this match?")) {
-      onSurrender();
-    }
-  };
 
   return (
     <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
@@ -53,7 +43,7 @@ export function ArenaRoomHeaderBar({
         <button
           type="button"
           disabled={!canSurrender || isSurrendering}
-          onClick={handleSurrenderClick}
+          onClick={onSurrenderClick}
           className={cn(
             "challenge-focus-ring inline-flex h-9 items-center gap-2 rounded-lg border px-3 text-[13px] font-semibold transition-colors",
             canSurrender
