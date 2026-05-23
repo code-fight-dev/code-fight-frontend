@@ -111,19 +111,19 @@ export function useHeaderState() {
 
   const surfaceStyles: HeaderSurfaceStyles = {
     leftGlowStyle: {
-      transform: `translate3d(${effectiveScrollProgress * 28}px, ${effectiveScrollProgress * 14}px, 0) scale(${1 - effectiveScrollProgress * 0.08})`,
+      transform: `translate(${effectiveScrollProgress * 28}px, ${effectiveScrollProgress * 14}px) scale(${1 - effectiveScrollProgress * 0.08})`,
       opacity: 0.7 + effectiveScrollProgress * 0.2,
     },
     rightGlowStyle: {
-      transform: `translate3d(${-effectiveScrollProgress * 34}px, ${effectiveScrollProgress * 18}px, 0) scale(${1 - effectiveScrollProgress * 0.12})`,
+      transform: `translate(${-effectiveScrollProgress * 34}px, ${effectiveScrollProgress * 18}px) scale(${1 - effectiveScrollProgress * 0.12})`,
       opacity: 0.68 + effectiveScrollProgress * 0.18,
     },
     shimmerStyle: {
-      transform: `translate3d(${effectiveScrollProgress * 180 - 120}px, 0, 0) rotate(8deg)`,
+      transform: `translateX(${effectiveScrollProgress * 180 - 120}px) rotate(8deg)`,
       opacity: 0.08 + effectiveScrollProgress * 0.14,
     },
     trailStyle: {
-      transform: `translate3d(${effectiveScrollProgress * 64}px, 0, 0)`,
+      transform: `translateX(${effectiveScrollProgress * 64}px)`,
     },
   };
 

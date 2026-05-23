@@ -96,7 +96,7 @@ export function ViewerAccountDesktopMenu({
         className={cn(
           "app-popover absolute top-[calc(100%+0.75rem)] right-0 z-20 min-w-56 overflow-hidden rounded-3xl p-2.5 transition-all duration-200",
           isDropdownVisible
-            ? "pointer-events-auto translate-y-0 opacity-100"
+            ? "pointer-events-auto transform-none opacity-100"
             : "pointer-events-none -translate-y-2 opacity-0",
         )}
       >

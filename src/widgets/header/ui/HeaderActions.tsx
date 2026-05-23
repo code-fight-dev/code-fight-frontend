@@ -57,9 +57,7 @@ export function HeaderActions({
             strokeWidth={2}
             className={cn(
               "absolute h-4.5 w-4.5 transition-all duration-300",
-              isMenuOpen
-                ? "scale-75 -rotate-90 opacity-0"
-                : "scale-100 rotate-0 opacity-100",
+              isMenuOpen ? "scale-75 -rotate-90 opacity-0" : "transform-none opacity-100",
             )}
           />
           <X
@@ -67,9 +65,7 @@ export function HeaderActions({
             strokeWidth={2.1}
             className={cn(
               "absolute h-4.5 w-4.5 transition-all duration-300",
-              isMenuOpen
-                ? "scale-100 rotate-0 opacity-100"
-                : "scale-75 rotate-90 opacity-0",
+              isMenuOpen ? "transform-none opacity-100" : "scale-75 rotate-90 opacity-0",
             )}
           />
         </span>

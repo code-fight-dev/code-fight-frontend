@@ -71,7 +71,7 @@ export function Toast({ message }: ToastProps) {
         className={cn(
           "flex min-h-13 w-full max-w-fit items-center gap-3 rounded-[18px] border border-white/10 bg-[rgba(18,18,20,0.94)] px-4 py-3 text-[15px] tracking-[-0.02em] text-white shadow-[0_18px_42px_rgba(2,6,23,0.34)] backdrop-blur-xl transition-all duration-300 ease-out",
           isVisible
-            ? "translate-y-0 scale-100 opacity-100"
+            ? "transform-none opacity-100"
             : "pointer-events-none -translate-y-3 scale-95 opacity-0",
         )}
       >

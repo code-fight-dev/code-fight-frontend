@@ -47,7 +47,7 @@ export function HeaderMobileOverlay({
         <div
           className={cn(
             "transition-all duration-300",
-            isMenuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+            isMenuOpen ? "transform-none opacity-100" : "translate-y-4 opacity-0",
           )}
         >
           <div className="font-accent text-[11px] tracking-[0.24em] text-blue-300/72 uppercase">
@@ -62,7 +62,7 @@ export function HeaderMobileOverlay({
                 onClick={onClose}
                 className={cn(
                   "font-accent app-overlay-card rounded-[28px] px-5 py-4 text-[1.55rem] font-medium tracking-[-0.05em] text-(--app-text-strong) transition-[transform,opacity,border-color,background-color,color] duration-300 hover:border-blue-400/24 hover:bg-blue-500/10 hover:text-(--app-text-strong) sm:px-6 sm:py-5 sm:text-[1.9rem]",
-                  isMenuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+                  isMenuOpen ? "transform-none opacity-100" : "translate-y-4 opacity-0",
                 )}
                 style={{
                   transitionDelay: isMenuOpen ? `${80 + index * 45}ms` : "0ms",

@@ -28,7 +28,7 @@ export function ViewerAccountMobilePanel({
     <div
       className={cn(
         "grid gap-3 transition-all duration-300",
-        isOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+        isOpen ? "transform-none opacity-100" : "translate-y-4 opacity-0",
       )}
       style={{ transitionDelay: isOpen ? "220ms" : "0ms" }}
     >

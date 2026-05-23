@@ -42,7 +42,7 @@ export function HeroContent({ snapshot }: Props) {
         </Button>
 
         <Button
-          href="/practice"
+          href="/challenges"
           variant="secondary"
           className="min-h-14 w-full rounded-2xl px-6 py-4 text-[14px] sm:min-h-15 sm:w-auto sm:px-7 sm:text-[15px] 2xl:min-h-16 2xl:px-8 2xl:text-[16px]"
         >
