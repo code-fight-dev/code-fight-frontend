@@ -20,7 +20,7 @@ export function Header() {
         <div
           className={cn(
             "pointer-events-auto relative transition-[margin,transform,opacity,background-color,border-radius,box-shadow,height] duration-500 ease-out",
-            isReady ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0",
+            isReady ? "transform-none opacity-100" : "-translate-y-4 opacity-0",
             isElevated
               ? "mx-2 mt-2 rounded-[22px] border border-(--app-header-border-strong) bg-(--app-header-elevated-bg) shadow-[0_22px_60px_rgba(3,7,18,0.24)] backdrop-blur-xl sm:mx-3 sm:mt-3 sm:rounded-3xl"
               : "mx-0 mt-0 rounded-none border-b border-(--app-header-border-soft) bg-(--app-header-flat-bg) backdrop-blur-[6px]",
