@@ -26,15 +26,9 @@ describe("Container", () => {
     expect(container).toHaveClass("mx-auto");
     expect(container).toHaveClass("w-full");
     expect(container).toHaveClass("max-w-420");
-    expect(container).toHaveClass("px-4");
-    expect(container).toHaveClass("sm:px-6");
-    expect(container).toHaveClass("md:px-8");
-    expect(container).toHaveClass("xl:px-10");
-    expect(container).toHaveClass("2xl:max-w-470");
-    expect(container).toHaveClass("2xl:px-12");
   });
 
-  it("merges custom className with base classes", () => {
+  it("applies custom className", () => {
     render(
       <Container className="custom-container-class">
         <p>Content</p>

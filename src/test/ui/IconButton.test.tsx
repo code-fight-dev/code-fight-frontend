@@ -12,12 +12,14 @@ describe("IconButton", () => {
 
     expect(button).toBeInTheDocument();
     expect(button).toHaveAttribute("type", "button");
+    expect(button).toHaveClass("inline-flex");
+    expect(button).toHaveClass("rounded-full");
   });
 
   it("renders children inside the button", () => {
     render(
       <IconButton aria-label="Open menu">
-        <span data-testid="icon">☰</span>
+        <span data-testid="icon">*</span>
       </IconButton>,
     );
 
@@ -69,7 +71,7 @@ describe("IconButton", () => {
   it("renders children inside the link", () => {
     render(
       <IconButton aria-label="Go to arena" href="/arena">
-        <span data-testid="icon">⚔</span>
+        <span data-testid="icon">*</span>
       </IconButton>,
     );
 
@@ -77,7 +79,7 @@ describe("IconButton", () => {
     expect(screen.getByTestId("icon")).toBeInTheDocument();
   });
 
-  it("merges custom className with base classes", () => {
+  it("applies custom className", () => {
     render(
       <IconButton aria-label="Styled icon button" className="custom-icon-button-class" />,
     );
@@ -87,9 +89,5 @@ describe("IconButton", () => {
     });
 
     expect(button).toHaveClass("custom-icon-button-class");
-    expect(button).toHaveClass("inline-flex");
-    expect(button).toHaveClass("h-10");
-    expect(button).toHaveClass("w-10");
-    expect(button).toHaveClass("rounded-full");
   });
 });

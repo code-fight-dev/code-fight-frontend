@@ -51,7 +51,7 @@ describe("shouldBypassAvatarOptimization", () => {
 
 describe("shouldShowGeneratedAvatar", () => {
   it("returns true when avatar URL is empty", () => {
-    expect(shouldShowGeneratedAvatar("", "uploaded" as never)).toBe(true);
+    expect(shouldShowGeneratedAvatar("", "custom")).toBe(true);
   });
 
   it("returns true when avatar source is none", () => {
@@ -61,9 +61,9 @@ describe("shouldShowGeneratedAvatar", () => {
   });
 
   it("returns false when avatar URL is present and source is not none", () => {
-    expect(
-      shouldShowGeneratedAvatar("https://example.com/avatar.png", "uploaded" as never),
-    ).toBe(false);
+    expect(shouldShowGeneratedAvatar("https://example.com/avatar.png", "provider")).toBe(
+      false,
+    );
   });
 });
 
