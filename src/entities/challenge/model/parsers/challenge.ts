@@ -183,7 +183,7 @@ export function parseChallengeFromTaskPayload(value: unknown): Challenge | null 
   }
 
   const supportedLanguages = parseSupportedLanguages(value.supportedLanguages);
-  const taskId = readString(value.taskId, id).trim();
+  const taskId = readString(value.taskId).trim() || id;
   const notes = readStringArray(value.notes);
   const languageVersions = parseLanguageVersions(value.languageVersions);
   const examples = Array.isArray(value.examples)
