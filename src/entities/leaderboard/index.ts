@@ -6,6 +6,8 @@ export {
   formatWLD,
   getEntryGames,
   getSearchableLabel,
+  getEntryTier,
+  getEntryTierColor,
 } from "./model/presentation";
 export { LeaderboardAvatar } from "./ui/LeaderboardAvatar";
 export { PlayerIdentity } from "./ui/PlayerIdentity";

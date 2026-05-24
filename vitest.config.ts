@@ -23,9 +23,11 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
 
+    include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    exclude: ["e2e/**", "node_modules/**", ".next/**"],
+
     coverage: {
       provider: "istanbul",
-
       reporter: ["text", "html", "lcov"],
       reportsDirectory: "./coverage",
 
@@ -41,6 +43,8 @@ export default defineConfig({
         "**/node_modules/**",
         "**/.next/**",
         "**/coverage/**",
+        "**/playwright-report/**",
+        "**/test-results/**",
 
         "**/index.ts",
         "**/types.ts",
