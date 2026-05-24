@@ -31,6 +31,11 @@ const eslintConfig = defineConfig([
               message:
                 "Import entities through public API: @/entities/<slice> or allowed entrypoints like @/entities/challenge/client and @/entities/challenge/server.",
             },
+            {
+              group: ["@/entities/*/testing"],
+              message:
+                "Testing entrypoints are allowed only in test files under src/test/**.",
+            },
           ],
         },
       ],
@@ -45,6 +50,31 @@ const eslintConfig = defineConfig([
           cssPath: "./src/app/globals.css",
           rootFontSize: 16,
           calleeFunctions: ["cn", "clsx", "classNames", "twMerge", "cva"],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/test/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/widgets/*/ui/*", "@/widgets/*/model/*"],
+              message: "Import widgets through their public API: @/widgets/<slice>.",
+            },
+            {
+              group: ["@/shared/ui/*/*"],
+              message: "Import shared UI through public API: @/shared/ui/<slice>.",
+            },
+            {
+              group: ["@/entities/*/api/*", "@/entities/*/model/*"],
+              message:
+                "Import entities through public API: @/entities/<slice> or allowed entrypoints like @/entities/challenge/client and @/entities/challenge/server.",
+            },
+          ],
         },
       ],
     },
