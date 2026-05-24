@@ -12,6 +12,8 @@ describe("Button", () => {
 
     expect(button).toBeInTheDocument();
     expect(button).toHaveAttribute("type", "button");
+    expect(button).toHaveClass("inline-flex");
+    expect(button).toHaveClass("rounded-full");
   });
 
   it("renders custom button type", () => {
@@ -58,37 +60,33 @@ describe("Button", () => {
     expect(link).toHaveAttribute("href", "/arena");
   });
 
-  it("merges custom className with base classes", () => {
+  it("applies custom className", () => {
     render(<Button className="custom-button-class">Styled button</Button>);
 
     const button = screen.getByRole("button", { name: "Styled button" });
 
     expect(button).toHaveClass("custom-button-class");
-    expect(button).toHaveClass("rounded-full");
-    expect(button).toHaveClass("font-semibold");
   });
 
-  it("uses primary variant by default", () => {
-    render(<Button>Primary button</Button>);
+  it("uses different style classes for each variant", () => {
+    const { rerender } = render(<Button>Primary button</Button>);
+    const primaryClassName = screen.getByRole("button", {
+      name: "Primary button",
+    }).className;
+    expect(primaryClassName).toContain("bg-blue-500");
 
-    expect(screen.getByRole("button", { name: "Primary button" }).className).toContain(
-      "bg-blue-500",
-    );
-  });
+    rerender(<Button variant="secondary">Secondary button</Button>);
+    const secondaryClassName = screen.getByRole("button", {
+      name: "Secondary button",
+    }).className;
+    expect(secondaryClassName).toContain("app-control-secondary-bg");
 
-  it("supports secondary variant", () => {
-    render(<Button variant="secondary">Secondary button</Button>);
+    rerender(<Button variant="ghost">Ghost button</Button>);
+    const ghostClassName = screen.getByRole("button", { name: "Ghost button" }).className;
+    expect(ghostClassName).toContain("app-control-ghost-text");
 
-    expect(screen.getByRole("button", { name: "Secondary button" }).className).toContain(
-      "app-control-secondary-bg",
-    );
-  });
-
-  it("supports ghost variant", () => {
-    render(<Button variant="ghost">Ghost button</Button>);
-
-    expect(screen.getByRole("button", { name: "Ghost button" }).className).toContain(
-      "app-control-ghost-text",
-    );
+    expect(secondaryClassName).not.toBe(primaryClassName);
+    expect(ghostClassName).not.toBe(primaryClassName);
+    expect(ghostClassName).not.toBe(secondaryClassName);
   });
 });

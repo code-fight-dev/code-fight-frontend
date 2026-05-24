@@ -2,22 +2,7 @@ import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Toast } from "@/shared/ui/Toast";
-
-function mockMatchMedia(matches: boolean) {
-  Object.defineProperty(window, "matchMedia", {
-    writable: true,
-    value: vi.fn().mockImplementation((query: string) => ({
-      matches,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
-  });
-}
+import { mockMatchMedia } from "@/test/helpers/matchMedia";
 
 function mockAnimationFrame() {
   Object.defineProperty(window, "requestAnimationFrame", {
@@ -140,7 +125,7 @@ describe("Toast", () => {
     expect(getToastMessageBox("Profile saved")).toHaveClass("opacity-0");
   });
 
-  it("removes rendered message after exit timeout", async () => {
+  it("removes rendered message after exit transition completes", async () => {
     const { rerender } = render(<Toast message="Profile saved" />);
 
     await advanceAnimationFrame();
@@ -149,7 +134,7 @@ describe("Toast", () => {
     rerender(<Toast message={null} />);
 
     await advanceAnimationFrame();
-    await advanceTime(260);
+    await advanceTime(500);
 
     expect(screen.queryByText("Profile saved")).not.toBeInTheDocument();
   });

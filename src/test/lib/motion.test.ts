@@ -1,22 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { shouldReduceMotion } from "@/shared/lib/motion";
-
-function mockMatchMedia(matches: boolean) {
-  Object.defineProperty(window, "matchMedia", {
-    writable: true,
-    value: vi.fn().mockImplementation((query: string) => ({
-      matches,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
-  });
-}
+import { mockMatchMedia } from "@/test/helpers/matchMedia";
 
 describe("shouldReduceMotion", () => {
   afterEach(() => {

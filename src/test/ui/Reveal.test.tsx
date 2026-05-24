@@ -2,6 +2,7 @@ import { act, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Reveal } from "@/shared/ui/Reveal";
+import { mockMatchMedia } from "@/test/helpers/matchMedia";
 
 class MockIntersectionObserver {
   static instances: MockIntersectionObserver[] = [];
@@ -29,22 +30,6 @@ class MockIntersectionObserver {
       this as unknown as IntersectionObserver,
     );
   }
-}
-
-function mockMatchMedia(matches: boolean) {
-  Object.defineProperty(window, "matchMedia", {
-    writable: true,
-    value: vi.fn().mockImplementation((query: string) => ({
-      matches,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
-  });
 }
 
 function mockAnimationFrame() {
