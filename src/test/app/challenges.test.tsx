@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+import { loadPageModule } from "@/test/app/test-helpers/page-module";
 
 describe("app/challenges/loading", () => {
   it("renders challenge loading skeleton with expected blocks", async () => {
@@ -17,20 +19,18 @@ describe("app/challenges/loading", () => {
 });
 
 describe("app/challenges/page", () => {
-  beforeEach(() => {
-    vi.resetModules();
-    vi.clearAllMocks();
-  });
-
   it("exposes stable metadata", async () => {
-    vi.doMock("@/views/challenges/server", () => ({
-      getChallengesPageData: vi.fn(),
-    }));
-    vi.doMock("@/views/challenges", () => ({
-      ChallengesPageView: vi.fn(() => null),
-    }));
-
-    const pageModule = await import("@/app/challenges/page");
+    const pageModule = await loadPageModule(
+      () => import("@/app/challenges/page"),
+      () => {
+        vi.doMock("@/views/challenges/server", () => ({
+          getChallengesPageData: vi.fn(),
+        }));
+        vi.doMock("@/views/challenges", () => ({
+          ChallengesPageView: vi.fn(() => null),
+        }));
+      },
+    );
 
     expect(pageModule.metadata).toEqual({
       title: "Challenges | CodeFight",
@@ -61,14 +61,17 @@ describe("app/challenges/page", () => {
       ),
     );
 
-    vi.doMock("@/views/challenges/server", () => ({
-      getChallengesPageData: getChallengesPageDataMock,
-    }));
-    vi.doMock("@/views/challenges", () => ({
-      ChallengesPageView: ChallengesPageViewMock,
-    }));
-
-    const { default: ChallengesPage } = await import("@/app/challenges/page");
+    const { default: ChallengesPage } = await loadPageModule(
+      () => import("@/app/challenges/page"),
+      () => {
+        vi.doMock("@/views/challenges/server", () => ({
+          getChallengesPageData: getChallengesPageDataMock,
+        }));
+        vi.doMock("@/views/challenges", () => ({
+          ChallengesPageView: ChallengesPageViewMock,
+        }));
+      },
+    );
     const element = await ChallengesPage();
 
     render(element);

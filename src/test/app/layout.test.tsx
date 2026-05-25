@@ -1,13 +1,10 @@
 import type { ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+import { loadPageModule } from "@/test/app/test-helpers/page-module";
 
 describe("app/layout", () => {
-  beforeEach(() => {
-    vi.resetModules();
-    vi.clearAllMocks();
-  });
-
   it("builds root layout with providers, header/footer and preferences bootstrap", async () => {
     const SpaceGroteskMock = vi.fn(() => ({ variable: "font-space" }));
     const IbmPlexMonoMock = vi.fn(() => ({ variable: "font-accent" }));
@@ -43,33 +40,36 @@ describe("app/layout", () => {
     const HeaderMock = vi.fn(() => <header>Header</header>);
     const FooterMock = vi.fn(() => <footer>Footer</footer>);
 
-    vi.doMock("next/font/google", () => ({
-      Space_Grotesk: SpaceGroteskMock,
-      IBM_Plex_Mono: IbmPlexMonoMock,
-      Fira_Code: FiraCodeMock,
-      JetBrains_Mono: JetbrainsMonoMock,
-    }));
-    vi.doMock("@/entities/viewer/server", () => ({
-      getCurrentViewerServer: getCurrentViewerServerMock,
-    }));
-    vi.doMock("@/features/preferences/server", () => ({
-      getPreferencesServer: getPreferencesServerMock,
-    }));
-    vi.doMock("@/features/preferences", () => ({
-      getPreferencesInitScript: getPreferencesInitScriptMock,
-      PreferencesProvider: PreferencesProviderMock,
-    }));
-    vi.doMock("@/entities/viewer", () => ({
-      ViewerSessionProvider: ViewerSessionProviderMock,
-    }));
-    vi.doMock("@/widgets/header", () => ({
-      Header: HeaderMock,
-    }));
-    vi.doMock("@/widgets/footer", () => ({
-      Footer: FooterMock,
-    }));
-
-    const layoutModule = await import("@/app/layout");
+    const layoutModule = await loadPageModule(
+      () => import("@/app/layout"),
+      () => {
+        vi.doMock("next/font/google", () => ({
+          Space_Grotesk: SpaceGroteskMock,
+          IBM_Plex_Mono: IbmPlexMonoMock,
+          Fira_Code: FiraCodeMock,
+          JetBrains_Mono: JetbrainsMonoMock,
+        }));
+        vi.doMock("@/entities/viewer/server", () => ({
+          getCurrentViewerServer: getCurrentViewerServerMock,
+        }));
+        vi.doMock("@/features/preferences/server", () => ({
+          getPreferencesServer: getPreferencesServerMock,
+        }));
+        vi.doMock("@/features/preferences", () => ({
+          getPreferencesInitScript: getPreferencesInitScriptMock,
+          PreferencesProvider: PreferencesProviderMock,
+        }));
+        vi.doMock("@/entities/viewer", () => ({
+          ViewerSessionProvider: ViewerSessionProviderMock,
+        }));
+        vi.doMock("@/widgets/header", () => ({
+          Header: HeaderMock,
+        }));
+        vi.doMock("@/widgets/footer", () => ({
+          Footer: FooterMock,
+        }));
+      },
+    );
     const { default: RootLayout, metadata } = layoutModule;
 
     expect(metadata).toEqual({

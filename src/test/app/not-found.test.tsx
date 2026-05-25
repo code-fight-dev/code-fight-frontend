@@ -1,22 +1,22 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+import { loadPageModule } from "@/test/app/test-helpers/page-module";
 
 describe("app/not-found", () => {
-  beforeEach(() => {
-    vi.resetModules();
-    vi.clearAllMocks();
-  });
-
   it("renders NotFoundPageView", async () => {
     const NotFoundPageViewMock = vi.fn(() => (
       <div data-testid="not-found-view">Not found</div>
     ));
 
-    vi.doMock("@/views/not-found", () => ({
-      NotFoundPageView: NotFoundPageViewMock,
-    }));
-
-    const { default: NotFound } = await import("@/app/not-found");
+    const { default: NotFound } = await loadPageModule(
+      () => import("@/app/not-found"),
+      () => {
+        vi.doMock("@/views/not-found", () => ({
+          NotFoundPageView: NotFoundPageViewMock,
+        }));
+      },
+    );
     render(<NotFound />);
 
     expect(NotFoundPageViewMock).toHaveBeenCalledTimes(1);

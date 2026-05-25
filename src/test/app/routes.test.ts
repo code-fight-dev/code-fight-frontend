@@ -1,4 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+import { loadPageModule } from "@/test/app/test-helpers/page-module";
 
 const LOCATION_CATALOG_MODULE = "@/features/profile-settings/model/locationCatalog";
 
@@ -9,13 +11,8 @@ function createRequest(url: string) {
 }
 
 describe("app/api/health/route", () => {
-  beforeEach(() => {
-    vi.resetModules();
-    vi.clearAllMocks();
-  });
-
   it("returns frontend health status", async () => {
-    const { GET } = await import("@/app/api/health/route");
+    const { GET } = await loadPageModule(() => import("@/app/api/health/route"));
 
     const response = await GET();
 
@@ -28,19 +25,17 @@ describe("app/api/health/route", () => {
 });
 
 describe("app/api/locations/route", () => {
-  beforeEach(() => {
-    vi.resetModules();
-    vi.clearAllMocks();
-  });
-
   it("returns countries and cache headers for countries scope", async () => {
-    vi.doMock(LOCATION_CATALOG_MODULE, () => ({
-      getCountryOptions: vi.fn(() => ["United States", "Canada"]),
-      getStateProvinceOptions: vi.fn(),
-      getCityOptions: vi.fn(),
-    }));
-
-    const { GET } = await import("@/app/api/locations/route");
+    const { GET } = await loadPageModule(
+      () => import("@/app/api/locations/route"),
+      () => {
+        vi.doMock(LOCATION_CATALOG_MODULE, () => ({
+          getCountryOptions: vi.fn(() => ["United States", "Canada"]),
+          getStateProvinceOptions: vi.fn(),
+          getCityOptions: vi.fn(),
+        }));
+      },
+    );
     const catalog = await import(LOCATION_CATALOG_MODULE);
 
     const response = await GET(
@@ -60,13 +55,16 @@ describe("app/api/locations/route", () => {
   });
 
   it("trims country before resolving states", async () => {
-    vi.doMock(LOCATION_CATALOG_MODULE, () => ({
-      getCountryOptions: vi.fn(),
-      getStateProvinceOptions: vi.fn(() => ["California", "New York"]),
-      getCityOptions: vi.fn(),
-    }));
-
-    const { GET } = await import("@/app/api/locations/route");
+    const { GET } = await loadPageModule(
+      () => import("@/app/api/locations/route"),
+      () => {
+        vi.doMock(LOCATION_CATALOG_MODULE, () => ({
+          getCountryOptions: vi.fn(),
+          getStateProvinceOptions: vi.fn(() => ["California", "New York"]),
+          getCityOptions: vi.fn(),
+        }));
+      },
+    );
     const catalog = await import(LOCATION_CATALOG_MODULE);
 
     const response = await GET(
@@ -84,13 +82,16 @@ describe("app/api/locations/route", () => {
   });
 
   it("trims country and stateProvince before resolving cities", async () => {
-    vi.doMock(LOCATION_CATALOG_MODULE, () => ({
-      getCountryOptions: vi.fn(),
-      getStateProvinceOptions: vi.fn(),
-      getCityOptions: vi.fn(() => ["San Francisco"]),
-    }));
-
-    const { GET } = await import("@/app/api/locations/route");
+    const { GET } = await loadPageModule(
+      () => import("@/app/api/locations/route"),
+      () => {
+        vi.doMock(LOCATION_CATALOG_MODULE, () => ({
+          getCountryOptions: vi.fn(),
+          getStateProvinceOptions: vi.fn(),
+          getCityOptions: vi.fn(() => ["San Francisco"]),
+        }));
+      },
+    );
     const catalog = await import(LOCATION_CATALOG_MODULE);
 
     const response = await GET(
@@ -108,13 +109,16 @@ describe("app/api/locations/route", () => {
   });
 
   it("returns 400 for unsupported scope", async () => {
-    vi.doMock(LOCATION_CATALOG_MODULE, () => ({
-      getCountryOptions: vi.fn(),
-      getStateProvinceOptions: vi.fn(),
-      getCityOptions: vi.fn(),
-    }));
-
-    const { GET } = await import("@/app/api/locations/route");
+    const { GET } = await loadPageModule(
+      () => import("@/app/api/locations/route"),
+      () => {
+        vi.doMock(LOCATION_CATALOG_MODULE, () => ({
+          getCountryOptions: vi.fn(),
+          getStateProvinceOptions: vi.fn(),
+          getCityOptions: vi.fn(),
+        }));
+      },
+    );
     const catalog = await import(LOCATION_CATALOG_MODULE);
 
     const response = await GET(
