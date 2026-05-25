@@ -2,7 +2,7 @@ import type { MatchReplay, MatchSubmission } from "@/entities/match";
 import type { MatchReplayCheckpoint } from "../types";
 import { parseTimestamp } from "./time";
 
-function resolveSubmissionTimestamp(
+export function resolveSubmissionTimestamp(
   submission: MatchSubmission,
   startTimestamp: number,
 ): number {

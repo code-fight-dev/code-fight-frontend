@@ -39,13 +39,14 @@ describe("getAvatarAlt", () => {
 });
 
 describe("shouldBypassAvatarOptimization", () => {
-  it("returns true for data URLs", () => {
+  it("bypasses optimization only for data URLs", () => {
     expect(shouldBypassAvatarOptimization("data:image/png;base64,avatar")).toBe(true);
-  });
-
-  it("returns false for regular URLs", () => {
+    expect(shouldBypassAvatarOptimization("  data:image/png;base64,avatar")).toBe(true);
+    expect(shouldBypassAvatarOptimization("DATA:image/png;base64,avatar")).toBe(true);
     expect(shouldBypassAvatarOptimization("https://example.com/avatar.png")).toBe(false);
+    expect(shouldBypassAvatarOptimization("http://example.com/avatar.png")).toBe(false);
     expect(shouldBypassAvatarOptimization("/avatars/user.png")).toBe(false);
+    expect(shouldBypassAvatarOptimization("")).toBe(false);
   });
 });
 
