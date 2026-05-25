@@ -3,15 +3,7 @@ import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { loadPageModule } from "@/test/app/test-helpers/page-module";
-
-function createViewer(username: string) {
-  return {
-    id: `viewer-${username}`,
-    username,
-    email: `${username}@example.com`,
-    createdAt: "2026-05-24T12:00:00.000Z",
-  };
-}
+import { createViewerWithUsername } from "@/test/fixtures/viewer";
 
 describe("app/settings/layout", () => {
   it("redirects guests to sign in", async () => {
@@ -52,7 +44,9 @@ describe("app/settings/layout", () => {
     const redirectMock = vi.fn(() => {
       throw new Error("NEXT_REDIRECT");
     });
-    const getCurrentViewerServerMock = vi.fn().mockResolvedValue(createViewer("alice"));
+    const getCurrentViewerServerMock = vi
+      .fn()
+      .mockResolvedValue(createViewerWithUsername("alice"));
     const SettingsPageViewMock = vi.fn(({ children }: { children: ReactNode }) => (
       <section data-testid="settings-view">{children}</section>
     ));

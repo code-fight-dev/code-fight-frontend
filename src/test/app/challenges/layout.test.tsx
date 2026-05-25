@@ -2,15 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { loadPageModule } from "@/test/app/test-helpers/page-module";
-
-function createViewer(username: string) {
-  return {
-    id: `viewer-${username}`,
-    username,
-    email: `${username}@example.com`,
-    createdAt: "2026-05-24T12:00:00.000Z",
-  };
-}
+import { createViewerWithUsername } from "@/test/fixtures/viewer";
 
 describe("app/challenges/layout", () => {
   it("redirects guests to sign in", async () => {
@@ -44,7 +36,9 @@ describe("app/challenges/layout", () => {
     const redirectMock = vi.fn(() => {
       throw new Error("NEXT_REDIRECT");
     });
-    const getCurrentViewerServerMock = vi.fn().mockResolvedValue(createViewer("alice"));
+    const getCurrentViewerServerMock = vi
+      .fn()
+      .mockResolvedValue(createViewerWithUsername("alice"));
 
     const { default: ChallengesLayout } = await loadPageModule(
       () => import("@/app/challenges/layout"),
