@@ -15,7 +15,16 @@ export function getAvatarAlt(username: string) {
 }
 
 export function shouldBypassAvatarOptimization(avatarUrl: string) {
-  return avatarUrl.startsWith("data:");
+  if (avatarUrl.startsWith("data:")) {
+    return true;
+  }
+
+  try {
+    const url = new URL(avatarUrl);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
 }
 
 export function shouldShowGeneratedAvatar(avatarUrl: string, avatarSource: AvatarSource) {
