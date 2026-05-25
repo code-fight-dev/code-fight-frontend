@@ -52,435 +52,445 @@ function renderSelect(props: Partial<React.ComponentProps<typeof Select<string>>
 }
 
 describe("Select", () => {
-  it("renders placeholder when no option is selected", () => {
-    const { trigger } = renderSelect();
+  describe("rendering", () => {
+    it("renders placeholder when no option is selected", () => {
+      const { trigger } = renderSelect();
 
-    expect(trigger).toBeInTheDocument();
-    expect(trigger).toHaveAttribute("type", "button");
-    expect(trigger).toHaveAttribute("aria-haspopup", "listbox");
-    expect(trigger).toHaveAttribute("aria-expanded", "false");
+      expect(trigger).toBeInTheDocument();
+      expect(trigger).toHaveAttribute("type", "button");
+      expect(trigger).toHaveAttribute("aria-haspopup", "listbox");
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
 
-    expect(screen.getByText("Choose language")).toBeInTheDocument();
+      expect(screen.getByText("Choose language")).toBeInTheDocument();
+    });
+
+    it("renders selected option label", () => {
+      renderSelect({
+        value: "ts",
+      });
+
+      expect(screen.getByText("TypeScript")).toBeInTheDocument();
+    });
+
+    it("renders hidden input when name is provided", () => {
+      const { container } = renderSelect({
+        value: "py",
+        name: "selectedLanguage",
+      });
+
+      const hiddenInput = container.querySelector(
+        'input[type="hidden"][name="selectedLanguage"]',
+      );
+
+      expect(hiddenInput).toHaveValue("py");
+    });
+
+    it("does not render hidden input when name is not provided", () => {
+      const { container } = renderSelect({
+        name: undefined,
+      });
+
+      expect(container.querySelector('input[type="hidden"]')).not.toBeInTheDocument();
+    });
+
+    it("merges custom className on root element", () => {
+      const { container } = renderSelect({
+        className: "custom-select-class",
+      });
+
+      const root = container.firstElementChild;
+
+      expect(root).toHaveClass("relative");
+      expect(root).toHaveClass("custom-select-class");
+    });
+
+    it("renders options without placeholder when placeholder is not provided", async () => {
+      const user = userEvent.setup();
+
+      const { trigger } = renderSelect({
+        placeholder: undefined,
+        value: "js",
+      });
+
+      expect(screen.getByText("JavaScript")).toBeInTheDocument();
+      expect(screen.queryByText("Choose language")).not.toBeInTheDocument();
+
+      await user.click(trigger);
+
+      const listbox = screen.getByRole("listbox");
+
+      expect(within(listbox).getByText("JavaScript")).toBeInTheDocument();
+      expect(within(listbox).queryByText("Choose language")).not.toBeInTheDocument();
+    });
   });
 
-  it("renders selected option label", () => {
-    renderSelect({
-      value: "ts",
+  describe("pointer interaction", () => {
+    it("opens listbox on trigger click", async () => {
+      const user = userEvent.setup();
+      const { trigger } = renderSelect();
+
+      await user.click(trigger);
+
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+      expect(trigger).toHaveAttribute("aria-controls");
+
+      const listbox = screen.getByRole("listbox");
+
+      expect(listbox).toBeInTheDocument();
+      expect(within(listbox).getByText("JavaScript")).toBeInTheDocument();
+      expect(within(listbox).getByText("TypeScript")).toBeInTheDocument();
+      expect(within(listbox).getByText("Python")).toBeInTheDocument();
+      expect(within(listbox).getByText("Rust")).toBeInTheDocument();
     });
 
-    expect(screen.getByText("TypeScript")).toBeInTheDocument();
+    it("closes listbox when trigger is clicked again", async () => {
+      const user = userEvent.setup();
+      const { trigger } = renderSelect();
+
+      await user.click(trigger);
+
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+
+      await user.click(trigger);
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("selects enabled option by click", async () => {
+      const user = userEvent.setup();
+      const { onValueChange, trigger } = renderSelect();
+
+      await user.click(trigger);
+
+      const listbox = screen.getByRole("listbox");
+
+      await user.click(within(listbox).getByText("Python"));
+
+      expect(onValueChange).toHaveBeenCalledTimes(1);
+      expect(onValueChange).toHaveBeenCalledWith("py");
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("does not select disabled option by click", async () => {
+      const user = userEvent.setup();
+      const { onValueChange, trigger } = renderSelect();
+
+      await user.click(trigger);
+
+      const listbox = screen.getByRole("listbox");
+
+      await user.click(within(listbox).getByText("Rust"));
+
+      expect(onValueChange).not.toHaveBeenCalled();
+    });
+
+    it("closes listbox on outside pointer down", async () => {
+      const user = userEvent.setup();
+      const { trigger } = renderSelect();
+
+      render(<button type="button">Outside button</button>);
+
+      await user.click(trigger);
+
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+
+      fireEvent.pointerDown(screen.getByRole("button", { name: "Outside button" }));
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("keeps listbox open on inside pointer down", async () => {
+      const user = userEvent.setup();
+      const { trigger } = renderSelect();
+
+      await user.click(trigger);
+
+      const listbox = screen.getByRole("listbox");
+
+      fireEvent.pointerDown(listbox);
+
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
   });
 
-  it("renders hidden input when name is provided", () => {
-    const { container } = renderSelect({
-      value: "py",
-      name: "selectedLanguage",
+  describe("keyboard interaction", () => {
+    it("opens listbox with ArrowDown", () => {
+      const { trigger } = renderSelect();
+
+      fireEvent.keyDown(trigger, {
+        key: "ArrowDown",
+      });
+
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
     });
 
-    const hiddenInput = container.querySelector(
-      'input[type="hidden"][name="selectedLanguage"]',
-    );
+    it("opens listbox with ArrowUp", () => {
+      const { trigger } = renderSelect();
 
-    expect(hiddenInput).toHaveValue("py");
+      fireEvent.keyDown(trigger, {
+        key: "ArrowUp",
+      });
+
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("opens listbox with Enter", () => {
+      const { trigger } = renderSelect();
+
+      fireEvent.keyDown(trigger, {
+        key: "Enter",
+      });
+
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("opens listbox with Space", () => {
+      const { trigger } = renderSelect();
+
+      fireEvent.keyDown(trigger, {
+        key: " ",
+      });
+
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("selects active option with Enter when listbox is open", () => {
+      const { onValueChange, trigger } = renderSelect();
+
+      fireEvent.keyDown(trigger, {
+        key: "ArrowDown",
+      });
+
+      fireEvent.keyDown(trigger, {
+        key: "Enter",
+      });
+
+      expect(onValueChange).toHaveBeenCalledWith("js");
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("selects active option with Space when listbox is open", () => {
+      const { onValueChange, trigger } = renderSelect();
+
+      fireEvent.keyDown(trigger, {
+        key: "ArrowDown",
+      });
+
+      fireEvent.keyDown(trigger, {
+        key: " ",
+      });
+
+      expect(onValueChange).toHaveBeenCalledWith("js");
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("skips disabled option during keyboard navigation", () => {
+      const { onValueChange, trigger } = renderSelect({
+        value: "py",
+      });
+
+      fireEvent.keyDown(trigger, {
+        key: "ArrowDown",
+      });
+
+      fireEvent.keyDown(trigger, {
+        key: "Enter",
+      });
+
+      expect(onValueChange).toHaveBeenCalledWith("");
+    });
+
+    it("closes listbox on Escape key", async () => {
+      const user = userEvent.setup();
+      const { trigger } = renderSelect();
+
+      await user.click(trigger);
+
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+
+      fireEvent.keyDown(document, {
+        key: "Escape",
+      });
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("uses first enabled option as preferred active option when selected value is unknown", () => {
+      const { onValueChange, trigger } = renderSelect({
+        placeholder: undefined,
+        value: "unknown",
+      });
+
+      fireEvent.keyDown(trigger, {
+        key: "Enter",
+      });
+
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+
+      fireEvent.keyDown(trigger, {
+        key: "Enter",
+      });
+
+      expect(onValueChange).toHaveBeenCalledWith("js");
+    });
+
+    it("does not select disabled selected option with Enter", () => {
+      const { onValueChange, trigger } = renderSelect({
+        value: "rs",
+      });
+
+      fireEvent.keyDown(trigger, {
+        key: "Enter",
+      });
+
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+
+      fireEvent.keyDown(trigger, {
+        key: "Enter",
+      });
+
+      expect(onValueChange).not.toHaveBeenCalled();
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("opens empty listbox with ArrowDown when there are no options", () => {
+      const { trigger } = renderSelect({
+        options: [],
+        placeholder: undefined,
+      });
+
+      fireEvent.keyDown(trigger, {
+        key: "ArrowDown",
+      });
+
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("opens empty listbox with ArrowUp when there are no options", () => {
+      const { trigger } = renderSelect({
+        options: [],
+        placeholder: undefined,
+      });
+
+      fireEvent.keyDown(trigger, {
+        key: "ArrowUp",
+      });
+
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("ignores unsupported keyboard keys", () => {
+      const { onValueChange, trigger } = renderSelect();
+
+      fireEvent.keyDown(trigger, {
+        key: "Tab",
+      });
+
+      expect(onValueChange).not.toHaveBeenCalled();
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("keeps active index empty when all options are disabled", () => {
+      const disabledOptions = [
+        { value: "js", label: "JavaScript", disabled: true },
+        { value: "ts", label: "TypeScript", disabled: true },
+      ];
+
+      const { onValueChange, trigger } = renderSelect({
+        options: disabledOptions,
+        placeholder: undefined,
+        value: "unknown",
+      });
+
+      fireEvent.keyDown(trigger, {
+        key: "Enter",
+      });
+
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+
+      fireEvent.keyDown(trigger, {
+        key: "Enter",
+      });
+
+      expect(onValueChange).not.toHaveBeenCalled();
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
   });
 
-  it("does not render hidden input when name is not provided", () => {
-    const { container } = renderSelect({
-      name: undefined,
+  describe("disabled behavior", () => {
+    it("does not open listbox when disabled", async () => {
+      const user = userEvent.setup();
+      const { trigger } = renderSelect({
+        disabled: true,
+      });
+
+      expect(trigger).toBeDisabled();
+
+      await user.click(trigger);
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
 
-    expect(container.querySelector('input[type="hidden"]')).not.toBeInTheDocument();
+    it("does not handle keyboard interaction when disabled", () => {
+      const { trigger } = renderSelect({
+        disabled: true,
+      });
+
+      fireEvent.keyDown(trigger, {
+        key: "ArrowDown",
+      });
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
   });
 
-  it("merges custom className on root element", () => {
-    const { container } = renderSelect({
-      className: "custom-select-class",
+  describe("external handlers", () => {
+    it("calls external onKeyDown handler", () => {
+      const onKeyDown = vi.fn();
+      const { trigger } = renderSelect({
+        onKeyDown,
+      });
+
+      fireEvent.keyDown(trigger, {
+        key: "ArrowDown",
+      });
+
+      expect(onKeyDown).toHaveBeenCalledTimes(1);
     });
 
-    const root = container.firstElementChild;
+    it("does not handle keyboard interaction when external onKeyDown prevents default", () => {
+      const onKeyDown = vi.fn((event) => {
+        event.preventDefault();
+      });
 
-    expect(root).toHaveClass("relative");
-    expect(root).toHaveClass("custom-select-class");
-  });
+      const { trigger } = renderSelect({
+        onKeyDown,
+      });
 
-  it("opens listbox on trigger click", async () => {
-    const user = userEvent.setup();
-    const { trigger } = renderSelect();
+      fireEvent.keyDown(trigger, {
+        key: "ArrowDown",
+      });
 
-    await user.click(trigger);
-
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
-    expect(trigger).toHaveAttribute("aria-controls");
-
-    const listbox = screen.getByRole("listbox");
-
-    expect(listbox).toBeInTheDocument();
-    expect(within(listbox).getByText("JavaScript")).toBeInTheDocument();
-    expect(within(listbox).getByText("TypeScript")).toBeInTheDocument();
-    expect(within(listbox).getByText("Python")).toBeInTheDocument();
-    expect(within(listbox).getByText("Rust")).toBeInTheDocument();
-  });
-
-  it("closes listbox when trigger is clicked again", async () => {
-    const user = userEvent.setup();
-    const { trigger } = renderSelect();
-
-    await user.click(trigger);
-
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-
-    await user.click(trigger);
-
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(trigger).toHaveAttribute("aria-expanded", "false");
-  });
-
-  it("selects enabled option by click", async () => {
-    const user = userEvent.setup();
-    const { onValueChange, trigger } = renderSelect();
-
-    await user.click(trigger);
-
-    const listbox = screen.getByRole("listbox");
-
-    await user.click(within(listbox).getByText("Python"));
-
-    expect(onValueChange).toHaveBeenCalledTimes(1);
-    expect(onValueChange).toHaveBeenCalledWith("py");
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
-  it("does not select disabled option by click", async () => {
-    const user = userEvent.setup();
-    const { onValueChange, trigger } = renderSelect();
-
-    await user.click(trigger);
-
-    const listbox = screen.getByRole("listbox");
-
-    await user.click(within(listbox).getByText("Rust"));
-
-    expect(onValueChange).not.toHaveBeenCalled();
-  });
-
-  it("opens listbox with ArrowDown", () => {
-    const { trigger } = renderSelect();
-
-    fireEvent.keyDown(trigger, {
-      key: "ArrowDown",
+      expect(onKeyDown).toHaveBeenCalledTimes(1);
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
 
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-  });
+    it("calls external onBlur handler", () => {
+      const onBlur = vi.fn();
+      const { trigger } = renderSelect({
+        onBlur,
+      });
 
-  it("opens listbox with ArrowUp", () => {
-    const { trigger } = renderSelect();
+      fireEvent.blur(trigger);
 
-    fireEvent.keyDown(trigger, {
-      key: "ArrowUp",
+      expect(onBlur).toHaveBeenCalledTimes(1);
     });
-
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-  });
-
-  it("opens listbox with Enter", () => {
-    const { trigger } = renderSelect();
-
-    fireEvent.keyDown(trigger, {
-      key: "Enter",
-    });
-
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-  });
-
-  it("opens listbox with Space", () => {
-    const { trigger } = renderSelect();
-
-    fireEvent.keyDown(trigger, {
-      key: " ",
-    });
-
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-  });
-
-  it("selects active option with Enter when listbox is open", () => {
-    const { onValueChange, trigger } = renderSelect();
-
-    fireEvent.keyDown(trigger, {
-      key: "ArrowDown",
-    });
-
-    fireEvent.keyDown(trigger, {
-      key: "Enter",
-    });
-
-    expect(onValueChange).toHaveBeenCalledWith("js");
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
-  it("selects active option with Space when listbox is open", () => {
-    const { onValueChange, trigger } = renderSelect();
-
-    fireEvent.keyDown(trigger, {
-      key: "ArrowDown",
-    });
-
-    fireEvent.keyDown(trigger, {
-      key: " ",
-    });
-
-    expect(onValueChange).toHaveBeenCalledWith("js");
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
-  it("skips disabled option during keyboard navigation", () => {
-    const { onValueChange, trigger } = renderSelect({
-      value: "py",
-    });
-
-    fireEvent.keyDown(trigger, {
-      key: "ArrowDown",
-    });
-
-    fireEvent.keyDown(trigger, {
-      key: "Enter",
-    });
-
-    expect(onValueChange).toHaveBeenCalledWith("");
-  });
-
-  it("closes listbox on Escape key", async () => {
-    const user = userEvent.setup();
-    const { trigger } = renderSelect();
-
-    await user.click(trigger);
-
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-
-    fireEvent.keyDown(document, {
-      key: "Escape",
-    });
-
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
-  it("closes listbox on outside pointer down", async () => {
-    const user = userEvent.setup();
-    const { trigger } = renderSelect();
-
-    render(<button type="button">Outside button</button>);
-
-    await user.click(trigger);
-
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-
-    fireEvent.pointerDown(screen.getByRole("button", { name: "Outside button" }));
-
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
-  it("keeps listbox open on inside pointer down", async () => {
-    const user = userEvent.setup();
-    const { trigger } = renderSelect();
-
-    await user.click(trigger);
-
-    const listbox = screen.getByRole("listbox");
-
-    fireEvent.pointerDown(listbox);
-
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-  });
-
-  it("does not open listbox when disabled", async () => {
-    const user = userEvent.setup();
-    const { trigger } = renderSelect({
-      disabled: true,
-    });
-
-    expect(trigger).toBeDisabled();
-
-    await user.click(trigger);
-
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
-  it("does not handle keyboard interaction when disabled", () => {
-    const { trigger } = renderSelect({
-      disabled: true,
-    });
-
-    fireEvent.keyDown(trigger, {
-      key: "ArrowDown",
-    });
-
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
-  it("calls external onKeyDown handler", () => {
-    const onKeyDown = vi.fn();
-    const { trigger } = renderSelect({
-      onKeyDown,
-    });
-
-    fireEvent.keyDown(trigger, {
-      key: "ArrowDown",
-    });
-
-    expect(onKeyDown).toHaveBeenCalledTimes(1);
-  });
-
-  it("renders options without placeholder when placeholder is not provided", async () => {
-    const user = userEvent.setup();
-
-    const { trigger } = renderSelect({
-      placeholder: undefined,
-      value: "js",
-    });
-
-    expect(screen.getByText("JavaScript")).toBeInTheDocument();
-    expect(screen.queryByText("Choose language")).not.toBeInTheDocument();
-
-    await user.click(trigger);
-
-    const listbox = screen.getByRole("listbox");
-
-    expect(within(listbox).getByText("JavaScript")).toBeInTheDocument();
-    expect(within(listbox).queryByText("Choose language")).not.toBeInTheDocument();
-  });
-
-  it("uses first enabled option as preferred active option when selected value is unknown", () => {
-    const { onValueChange, trigger } = renderSelect({
-      placeholder: undefined,
-      value: "unknown",
-    });
-
-    fireEvent.keyDown(trigger, {
-      key: "Enter",
-    });
-
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-
-    fireEvent.keyDown(trigger, {
-      key: "Enter",
-    });
-
-    expect(onValueChange).toHaveBeenCalledWith("js");
-  });
-
-  it("does not select disabled selected option with Enter", () => {
-    const { onValueChange, trigger } = renderSelect({
-      value: "rs",
-    });
-
-    fireEvent.keyDown(trigger, {
-      key: "Enter",
-    });
-
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-
-    fireEvent.keyDown(trigger, {
-      key: "Enter",
-    });
-
-    expect(onValueChange).not.toHaveBeenCalled();
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-  });
-
-  it("does not handle keyboard interaction when external onKeyDown prevents default", () => {
-    const onKeyDown = vi.fn((event) => {
-      event.preventDefault();
-    });
-
-    const { trigger } = renderSelect({
-      onKeyDown,
-    });
-
-    fireEvent.keyDown(trigger, {
-      key: "ArrowDown",
-    });
-
-    expect(onKeyDown).toHaveBeenCalledTimes(1);
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
-  it("opens empty listbox with ArrowDown when there are no options", () => {
-    const { trigger } = renderSelect({
-      options: [],
-      placeholder: undefined,
-    });
-
-    fireEvent.keyDown(trigger, {
-      key: "ArrowDown",
-    });
-
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-  });
-
-  it("opens empty listbox with ArrowUp when there are no options", () => {
-    const { trigger } = renderSelect({
-      options: [],
-      placeholder: undefined,
-    });
-
-    fireEvent.keyDown(trigger, {
-      key: "ArrowUp",
-    });
-
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-  });
-
-  it("ignores unsupported keyboard keys", () => {
-    const { onValueChange, trigger } = renderSelect();
-
-    fireEvent.keyDown(trigger, {
-      key: "Tab",
-    });
-
-    expect(onValueChange).not.toHaveBeenCalled();
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
-  it("keeps active index empty when all options are disabled", () => {
-    const disabledOptions = [
-      { value: "js", label: "JavaScript", disabled: true },
-      { value: "ts", label: "TypeScript", disabled: true },
-    ];
-
-    const { onValueChange, trigger } = renderSelect({
-      options: disabledOptions,
-      placeholder: undefined,
-      value: "unknown",
-    });
-
-    fireEvent.keyDown(trigger, {
-      key: "Enter",
-    });
-
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-
-    fireEvent.keyDown(trigger, {
-      key: "Enter",
-    });
-
-    expect(onValueChange).not.toHaveBeenCalled();
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
-  });
-
-  it("calls external onBlur handler", () => {
-    const onBlur = vi.fn();
-    const { trigger } = renderSelect({
-      onBlur,
-    });
-
-    fireEvent.blur(trigger);
-
-    expect(onBlur).toHaveBeenCalledTimes(1);
   });
 });
