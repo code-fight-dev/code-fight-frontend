@@ -3,6 +3,7 @@
 import { Github } from "lucide-react";
 import { Button } from "@/shared/ui/Button";
 import { getOAuthStartUrl } from "../api/auth";
+import { navigateTo } from "../model/navigation";
 import type { AuthMode } from "../model/types";
 
 type Props = {
@@ -44,7 +45,7 @@ export function OAuthButton({ provider, mode, disabled = false }: Props) {
       variant="secondary"
       disabled={disabled}
       onClick={() => {
-        window.location.assign(href);
+        navigateTo(href);
       }}
       className="min-h-14.5 w-full justify-center rounded-2xl text-[15px]"
     >

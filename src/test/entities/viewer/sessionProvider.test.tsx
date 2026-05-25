@@ -2,8 +2,9 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { type Viewer, ViewerSessionProvider, useViewerSession } from "@/entities/viewer";
+import { ViewerSessionProvider, useViewerSession } from "@/entities/viewer";
 import { HOME_HREF } from "@/shared/config/routes";
+import { createViewerWithUsername } from "@/test/fixtures/viewer";
 
 const routerMocks = vi.hoisted(() => ({
   push: vi.fn(),
@@ -17,15 +18,6 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 
-function createViewer(username: string): Viewer {
-  return {
-    id: `viewer-${username}`,
-    email: `${username}@example.com`,
-    username,
-    createdAt: "2026-05-24T12:00:00.000Z",
-  };
-}
-
 function ViewerSessionHarness() {
   const { viewer, isLoading, isSigningOut, setViewer, signOut } = useViewerSession();
   const [errorMessage, setErrorMessage] = useState("none");
@@ -37,7 +29,7 @@ function ViewerSessionHarness() {
       <span data-testid="is-signing-out">{String(isSigningOut)}</span>
       <span data-testid="error-message">{errorMessage}</span>
 
-      <button type="button" onClick={() => setViewer(createViewer("manual"))}>
+      <button type="button" onClick={() => setViewer(createViewerWithUsername("manual"))}>
         set-viewer
       </button>
       <button type="button" onClick={() => setViewer(null)}>
@@ -89,7 +81,7 @@ describe("ViewerSessionProvider", () => {
 
   it("exposes initial viewer and default loading state", () => {
     render(
-      <ViewerSessionProvider initialViewer={createViewer("alice")}>
+      <ViewerSessionProvider initialViewer={createViewerWithUsername("alice")}>
         <ViewerSessionHarness />
       </ViewerSessionProvider>,
     );
@@ -101,7 +93,7 @@ describe("ViewerSessionProvider", () => {
 
   it("updates viewer state via context setViewer", () => {
     render(
-      <ViewerSessionProvider initialViewer={createViewer("alice")}>
+      <ViewerSessionProvider initialViewer={createViewerWithUsername("alice")}>
         <ViewerSessionHarness />
       </ViewerSessionProvider>,
     );
@@ -115,7 +107,7 @@ describe("ViewerSessionProvider", () => {
 
   it("syncs viewer when initialViewer prop changes", () => {
     const { rerender } = render(
-      <ViewerSessionProvider initialViewer={createViewer("alice")}>
+      <ViewerSessionProvider initialViewer={createViewerWithUsername("alice")}>
         <ViewerSessionHarness />
       </ViewerSessionProvider>,
     );
@@ -123,7 +115,7 @@ describe("ViewerSessionProvider", () => {
     expect(screen.getByTestId("viewer")).toHaveTextContent("alice");
 
     rerender(
-      <ViewerSessionProvider initialViewer={createViewer("bob")}>
+      <ViewerSessionProvider initialViewer={createViewerWithUsername("bob")}>
         <ViewerSessionHarness />
       </ViewerSessionProvider>,
     );
@@ -136,7 +128,7 @@ describe("ViewerSessionProvider", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     render(
-      <ViewerSessionProvider initialViewer={createViewer("alice")}>
+      <ViewerSessionProvider initialViewer={createViewerWithUsername("alice")}>
         <ViewerSessionHarness />
       </ViewerSessionProvider>,
     );
@@ -169,7 +161,7 @@ describe("ViewerSessionProvider", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     render(
-      <ViewerSessionProvider initialViewer={createViewer("alice")}>
+      <ViewerSessionProvider initialViewer={createViewerWithUsername("alice")}>
         <ViewerSessionHarness />
       </ViewerSessionProvider>,
     );
@@ -192,7 +184,7 @@ describe("ViewerSessionProvider", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     render(
-      <ViewerSessionProvider initialViewer={createViewer("alice")}>
+      <ViewerSessionProvider initialViewer={createViewerWithUsername("alice")}>
         <ViewerSessionHarness />
       </ViewerSessionProvider>,
     );

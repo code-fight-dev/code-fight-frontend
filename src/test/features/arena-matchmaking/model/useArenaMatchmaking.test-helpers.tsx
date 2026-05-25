@@ -2,6 +2,7 @@ import { vi } from "vitest";
 import { useArenaMatchmaking } from "@/features/arena-matchmaking/model/useArenaMatchmaking";
 import type { Match, QueueResult } from "@/entities/match";
 import { createMatchFixture } from "@/test/entities/match/match.test-helpers";
+import { createViewerFixture } from "@/test/fixtures/viewer";
 
 const arenaMocks = vi.hoisted(() => ({
   useViewerSession: vi.fn(),
@@ -73,12 +74,9 @@ let latestRealtimeInput: RealtimeInput | null = null;
 let latestPollingInput: PollingInput | null = null;
 
 export function createViewer(id = "viewer-1") {
-  return {
-    id,
-    email: `${id}@example.com`,
-    username: id,
+  return createViewerFixture(id, {
     createdAt: "2026-05-24T10:00:00.000Z",
-  };
+  });
 }
 
 export function createMatch(overrides: Partial<Match> = {}): Match {
@@ -89,7 +87,7 @@ export function resetUseArenaMatchmakingTestState() {
   latestRealtimeInput = null;
   latestPollingInput = null;
 
-  vi.clearAllMocks();
+  vi.resetAllMocks();
 
   arenaMocks.useViewerSession.mockReturnValue({
     viewer: createViewer(),

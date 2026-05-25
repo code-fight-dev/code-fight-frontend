@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { Viewer } from "@/entities/viewer";
+import { createViewerWithUsername } from "@/test/fixtures/viewer";
 
 const serverMocks = vi.hoisted(() => ({
   headers: vi.fn(),
@@ -9,15 +9,6 @@ const serverMocks = vi.hoisted(() => ({
 vi.mock("next/headers", () => ({
   headers: serverMocks.headers,
 }));
-
-function createViewer(username = "alice"): Viewer {
-  return {
-    id: `viewer-${username}`,
-    email: `${username}@example.com`,
-    username,
-    createdAt: "2026-05-24T12:00:00.000Z",
-  };
-}
 
 async function importServerApi() {
   vi.resetModules();
@@ -47,7 +38,7 @@ describe("viewer server api", () => {
   });
 
   it("returns viewer when backend returns valid auth response", async () => {
-    const viewer = createViewer();
+    const viewer = createViewerWithUsername();
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(JSON.stringify({ user: viewer }), {
         status: 200,

@@ -2,15 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { getFirstCallProps, loadPageModule } from "@/test/app/test-helpers/page-module";
-
-function createViewer(username: string) {
-  return {
-    id: `viewer-${username}`,
-    username,
-    email: `${username}@example.com`,
-    createdAt: "2026-05-24T12:00:00.000Z",
-  };
-}
+import { createViewerWithUsername } from "@/test/fixtures/viewer";
 
 describe("app/settings/profile/page", () => {
   it("redirects guests to sign in", async () => {
@@ -58,7 +50,7 @@ describe("app/settings/profile/page", () => {
     const notFoundMock = vi.fn(() => {
       throw new Error("NEXT_NOT_FOUND");
     });
-    const viewer = createViewer("alice");
+    const viewer = createViewerWithUsername("alice");
     const getCurrentViewerServerMock = vi.fn().mockResolvedValue(viewer);
     const getViewerProfileMock = vi.fn().mockResolvedValue(null);
     const ProfileSettingsPanelMock = vi.fn(() => <div>Profile settings</div>);
@@ -98,7 +90,7 @@ describe("app/settings/profile/page", () => {
     const notFoundMock = vi.fn(() => {
       throw new Error("NEXT_NOT_FOUND");
     });
-    const viewer = createViewer("alice");
+    const viewer = createViewerWithUsername("alice");
     const profile = {
       id: "viewer-alice",
       username: "alice",

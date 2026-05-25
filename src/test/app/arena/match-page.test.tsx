@@ -2,15 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { getFirstCallProps, loadPageModule } from "@/test/app/test-helpers/page-module";
-
-function createViewer(username: string) {
-  return {
-    id: `viewer-${username}`,
-    username,
-    email: `${username}@example.com`,
-    createdAt: "2026-05-24T12:00:00.000Z",
-  };
-}
+import { createViewerWithUsername } from "@/test/fixtures/viewer";
 
 describe("app/arena/match/[matchId]/page", () => {
   it("exposes stable metadata", async () => {
@@ -73,7 +65,9 @@ describe("app/arena/match/[matchId]/page", () => {
     const redirectMock = vi.fn(() => {
       throw new Error("NEXT_REDIRECT");
     });
-    const getCurrentViewerServerMock = vi.fn().mockResolvedValue(createViewer("alice"));
+    const getCurrentViewerServerMock = vi
+      .fn()
+      .mockResolvedValue(createViewerWithUsername("alice"));
     const ArenaMatchRoomPageViewMock = vi.fn(({ matchId }: { matchId: string }) => (
       <div data-testid="arena-match-room">{matchId}</div>
     ));

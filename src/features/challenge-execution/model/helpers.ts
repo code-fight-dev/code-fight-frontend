@@ -47,7 +47,15 @@ export function upsertSubmission(
 }
 
 export function isAbortError(error: unknown) {
-  return error instanceof Error && error.name === "AbortError";
+  if (error instanceof Error) {
+    return error.name === "AbortError";
+  }
+
+  if (!error || typeof error !== "object" || !("name" in error)) {
+    return false;
+  }
+
+  return (error as { name: unknown }).name === "AbortError";
 }
 
 export function isFinalExecutionStatus(status: string) {

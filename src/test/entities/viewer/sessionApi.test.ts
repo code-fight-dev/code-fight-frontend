@@ -1,16 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { Viewer } from "@/entities/viewer";
 import { getCurrentViewer, signOutViewer } from "@/entities/viewer";
-
-function createViewer(username = "alice"): Viewer {
-  return {
-    id: `viewer-${username}`,
-    email: `${username}@example.com`,
-    username,
-    createdAt: "2026-05-24T12:00:00.000Z",
-  };
-}
+import { createViewerWithUsername } from "@/test/fixtures/viewer";
 
 describe("viewer session api", () => {
   afterEach(() => {
@@ -19,7 +10,7 @@ describe("viewer session api", () => {
   });
 
   it("returns current viewer and forwards abort signal", async () => {
-    const viewer = createViewer();
+    const viewer = createViewerWithUsername();
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(JSON.stringify({ user: viewer }), {
         status: 200,
