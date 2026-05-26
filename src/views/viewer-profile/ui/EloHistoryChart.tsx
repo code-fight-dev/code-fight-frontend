@@ -29,9 +29,7 @@ export function EloHistoryChart({ points, accentColor }: Props) {
   const filteredPoints = getEloHistoryPointsForRange(points, range);
   const chartPoints = getChartCoordinates(filteredPoints);
   const hoveredPoint =
-    chartPoints.find((point) => point.date === hoveredDate) ??
-    chartPoints[chartPoints.length - 1] ??
-    null;
+    chartPoints.find((point) => point.date === hoveredDate) ?? chartPoints.at(-1) ?? null;
   const ticks = getChartTicks(filteredPoints);
 
   return (
@@ -179,7 +177,9 @@ export function EloHistoryChart({ points, accentColor }: Props) {
   );
 }
 
-function getChartCoordinates(points: ViewerProfileEloHistoryPoint[]): ChartPoint[] {
+export function getChartCoordinates(
+  points: ViewerProfileEloHistoryPoint[],
+): ChartPoint[] {
   if (points.length === 0) {
     return [];
   }
@@ -211,13 +211,13 @@ function getChartCoordinates(points: ViewerProfileEloHistoryPoint[]): ChartPoint
   });
 }
 
-function createLinePath(points: ChartPoint[]) {
+export function createLinePath(points: ChartPoint[]) {
   return points
     .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`)
     .join(" ");
 }
 
-function createAreaPath(points: ChartPoint[]) {
+export function createAreaPath(points: ChartPoint[]) {
   if (points.length === 0) {
     return "";
   }
@@ -230,7 +230,7 @@ function createAreaPath(points: ChartPoint[]) {
   return `${linePath} L ${lastPoint.x} ${bottom} L ${firstPoint.x} ${bottom} Z`;
 }
 
-function clampTooltipPosition(value: number) {
+export function clampTooltipPosition(value: number) {
   if (value < 18) {
     return 18;
   }
