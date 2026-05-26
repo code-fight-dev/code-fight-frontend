@@ -1,11 +1,13 @@
 import { City, Country, State } from "country-state-city";
 
-const countryOptionsCache = Country.getAllCountries()
+const allCountries = Country.getAllCountries();
+
+const countryOptionsCache = allCountries
   .map((country) => country.name)
   .sort((left, right) => left.localeCompare(right));
 
 const countryByNameCache = new Map(
-  Country.getAllCountries().map((country) => [country.name, country]),
+  allCountries.map((country) => [country.name, country]),
 );
 
 const stateOptionsCache = new Map<string, string[]>();

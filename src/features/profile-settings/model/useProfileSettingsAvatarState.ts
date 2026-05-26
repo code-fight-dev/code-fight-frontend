@@ -28,13 +28,17 @@ export function useProfileSettingsAvatarState({
 
   function resetPhoto() {
     const fallback = getProfileSettingsFallbackAvatar(profileState);
+    const hasProfileAvatar = Boolean(profileState.avatarUrl);
 
     clearAvatarError();
     clearSaveFeedback();
     setDraft((currentDraft) => ({
       ...currentDraft,
-      avatarUrl: profileState.avatarUrl || fallback.avatarUrl,
-      avatarSource: profileState.avatarSource || fallback.avatarSource,
+      avatarUrl: hasProfileAvatar ? profileState.avatarUrl : fallback.avatarUrl,
+      avatarSource:
+        hasProfileAvatar && profileState.avatarSource
+          ? profileState.avatarSource
+          : fallback.avatarSource,
       pendingAvatarFile: null,
       removeCustomAvatar: false,
     }));
