@@ -130,6 +130,7 @@ describe("features/password-recovery/ui/PasswordRecoveryFlow", () => {
 
     expect(screen.getByRole("button", { name: "Sending code..." })).toBeDisabled();
     expect(screen.getByText("Protected by Google reCAPTCHA.")).toBeInTheDocument();
+    expect(screen.queryByTestId("captcha-expression")).not.toBeInTheDocument();
   });
 
   it("renders verify step with cooldown timer", () => {

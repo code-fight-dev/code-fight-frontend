@@ -211,15 +211,17 @@ export function usePasswordRecoveryFlow() {
       return;
     }
 
-    if (!captchaAnswer.trim()) {
-      setErrorMessage("Captcha answer is required.");
-      return;
-    }
+    if (!isGoogleRecaptchaEnabled) {
+      if (!captchaAnswer.trim()) {
+        setErrorMessage("Captcha answer is required.");
+        return;
+      }
 
-    if (captchaAnswer.trim() !== expectedCaptchaAnswer) {
-      setErrorMessage("Captcha answer is incorrect.");
-      refreshCaptcha();
-      return;
+      if (captchaAnswer.trim() !== expectedCaptchaAnswer) {
+        setErrorMessage("Captcha answer is incorrect.");
+        refreshCaptcha();
+        return;
+      }
     }
 
     try {

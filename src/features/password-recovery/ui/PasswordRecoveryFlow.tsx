@@ -213,45 +213,47 @@ export function PasswordRecoveryFlow() {
               </div>
             </div>
 
-            <div className="mt-5">
-              <label
-                htmlFor="recovery-captcha"
-                className="mb-3 block text-[13px] font-medium tracking-widest text-(--app-text-faint) uppercase"
-              >
-                Captcha - Confirm You&apos;re Human
-              </label>
-
-              <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_44px] gap-2">
-                <div
-                  data-testid="captcha-expression"
-                  className="flex h-13.5 items-center justify-center rounded-2xl border border-dashed border-(--app-surface-soft-border) bg-(--app-surface-input) px-2 text-[15px] tracking-[-0.02em] text-(--app-text-strong)"
+            {!isGoogleRecaptchaEnabled ? (
+              <div className="mt-5">
+                <label
+                  htmlFor="recovery-captcha"
+                  className="mb-3 block text-[13px] font-medium tracking-widest text-(--app-text-faint) uppercase"
                 >
-                  {captchaExpression}
+                  Captcha - Confirm You&apos;re Human
+                </label>
+
+                <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_44px] gap-2">
+                  <div
+                    data-testid="captcha-expression"
+                    className="flex h-13.5 items-center justify-center rounded-2xl border border-dashed border-(--app-surface-soft-border) bg-(--app-surface-input) px-2 text-[15px] tracking-[-0.02em] text-(--app-text-strong)"
+                  >
+                    {captchaExpression}
+                  </div>
+
+                  <input
+                    id="recovery-captcha"
+                    name="captcha"
+                    value={captchaAnswer}
+                    onChange={(event) => setCaptchaAnswer(event.currentTarget.value)}
+                    autoComplete="off"
+                    inputMode="numeric"
+                    placeholder="Answer"
+                    disabled={isSubmitting}
+                    className="app-input-surface h-13.5 w-full rounded-2xl px-4 text-[16px] tracking-[-0.03em] transition-[border-color,box-shadow,background-color] duration-200 outline-none focus:border-(--app-input-focus-border) focus:bg-(--app-surface-input-focus) focus:shadow-[0_0_0_1px_rgba(59,130,246,0.18),0_10px_24px_rgba(3,7,18,0.12)]"
+                  />
+
+                  <IconButton
+                    type="button"
+                    aria-label="Refresh captcha"
+                    onClick={refreshCaptcha}
+                    disabled={isSubmitting}
+                    className="h-11 w-11 self-center rounded-2xl border border-(--app-surface-soft-border)"
+                  >
+                    <RefreshCw className="h-4 w-4" strokeWidth={2} />
+                  </IconButton>
                 </div>
-
-                <input
-                  id="recovery-captcha"
-                  name="captcha"
-                  value={captchaAnswer}
-                  onChange={(event) => setCaptchaAnswer(event.currentTarget.value)}
-                  autoComplete="off"
-                  inputMode="numeric"
-                  placeholder="Answer"
-                  disabled={isSubmitting}
-                  className="app-input-surface h-13.5 w-full rounded-2xl px-4 text-[16px] tracking-[-0.03em] transition-[border-color,box-shadow,background-color] duration-200 outline-none focus:border-(--app-input-focus-border) focus:bg-(--app-surface-input-focus) focus:shadow-[0_0_0_1px_rgba(59,130,246,0.18),0_10px_24px_rgba(3,7,18,0.12)]"
-                />
-
-                <IconButton
-                  type="button"
-                  aria-label="Refresh captcha"
-                  onClick={refreshCaptcha}
-                  disabled={isSubmitting}
-                  className="h-11 w-11 self-center rounded-2xl border border-(--app-surface-soft-border)"
-                >
-                  <RefreshCw className="h-4 w-4" strokeWidth={2} />
-                </IconButton>
               </div>
-            </div>
+            ) : null}
 
             <Button
               type="submit"
