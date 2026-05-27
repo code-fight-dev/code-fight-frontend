@@ -138,6 +138,10 @@ function PasswordRecoveryHookHarness() {
           <button type="submit">update-password</button>
         </form>
       ) : null}
+
+      <button type="button" onClick={handleResendCode}>
+        resend-direct
+      </button>
     </div>
   );
 }
@@ -380,6 +384,54 @@ describe("features/password-recovery/model/usePasswordRecoveryFlow", () => {
     });
   });
 
+  it("handles code digit keyboard and paste interactions", async () => {
+    render(<PasswordRecoveryHookHarness />);
+
+    await submitEmailStep({
+      email: "coder@example.com",
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("step")).toHaveTextContent("verify");
+    });
+
+    fireEvent.change(screen.getByLabelText("digit-1"), {
+      target: {
+        value: "a5",
+      },
+    });
+    expect(screen.getByLabelText("digit-1")).toHaveValue("5");
+
+    fireEvent.keyDown(screen.getByLabelText("digit-1"), {
+      key: "ArrowLeft",
+    });
+    expect(screen.getByLabelText("digit-1")).toHaveValue("5");
+
+    fireEvent.keyDown(screen.getByLabelText("digit-1"), {
+      key: "Backspace",
+    });
+    expect(screen.getByLabelText("digit-1")).toHaveValue("");
+
+    fireEvent.change(screen.getByLabelText("digit-1"), {
+      target: {
+        value: "9",
+      },
+    });
+    fireEvent.keyDown(screen.getByLabelText("digit-2"), {
+      key: "Backspace",
+    });
+    expect(screen.getByLabelText("digit-1")).toHaveValue("");
+
+    fireEvent.paste(screen.getByLabelText("digit-1"), {
+      clipboardData: {
+        getData: () => "abc",
+      },
+    });
+    for (let index = 0; index < 6; index += 1) {
+      expect(screen.getByLabelText(`digit-${index + 1}`)).toHaveValue("");
+    }
+  });
+
   it("returns to email step from verify step", async () => {
     render(<PasswordRecoveryHookHarness />);
 
@@ -461,6 +513,60 @@ describe("features/password-recovery/model/usePasswordRecoveryFlow", () => {
     for (let index = 0; index < 6; index += 1) {
       expect(screen.getByLabelText(`digit-${index + 1}`)).toHaveValue("");
     }
+  });
+
+  it("does not resend code while cooldown is active", async () => {
+    render(<PasswordRecoveryHookHarness />);
+
+    await submitEmailStep({
+      email: "coder@example.com",
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("step")).toHaveTextContent("verify");
+      expect(screen.getByTestId("cooldown")).toHaveTextContent("45");
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "resend" }));
+
+    await waitFor(() => {
+      expect(passwordRecoveryMocks.requestPasswordReset).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it("does not resend code when email is empty", async () => {
+    render(<PasswordRecoveryHookHarness />);
+
+    fireEvent.click(screen.getByRole("button", { name: "resend-direct" }));
+
+    await waitFor(() => {
+      expect(passwordRecoveryMocks.requestPasswordReset).not.toHaveBeenCalled();
+    });
+  });
+
+  it("maps resend errors after cooldown ends", async () => {
+    render(<PasswordRecoveryHookHarness />);
+
+    fireEvent.change(screen.getByLabelText("email"), {
+      target: {
+        value: "coder@example.com",
+      },
+    });
+
+    passwordRecoveryMocks.requestPasswordReset.mockRejectedValueOnce(
+      new Error("password reset code is expired"),
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "resend-direct" }));
+
+    await waitFor(() => {
+      expect(passwordRecoveryMocks.requestPasswordReset).toHaveBeenCalledWith({
+        email: "coder@example.com",
+      });
+      expect(screen.getByTestId("error-message")).toHaveTextContent(
+        "Verification code expired. Request a new code.",
+      );
+    });
   });
 
   it("confirms password reset and moves to success step", async () => {
