@@ -55,6 +55,7 @@ export function useArenaMatchmaking(): UseArenaMatchmakingResult {
   }, [currentMatch]);
 
   const setIdle = useCallback((options?: { toastMessage?: string }) => {
+    currentMatchRef.current = null;
     setCurrentMatch(null);
     setSearchStartedAt(null);
     setState("idle");
@@ -71,6 +72,7 @@ export function useArenaMatchmaking(): UseArenaMatchmakingResult {
       return false;
     }
 
+    currentMatchRef.current = match;
     setState("starting");
     setCurrentMatch(match);
     setSearchStartedAt(null);
@@ -99,6 +101,7 @@ export function useArenaMatchmaking(): UseArenaMatchmakingResult {
       }
 
       if (match.status === "pending") {
+        currentMatchRef.current = match;
         setCurrentMatch(match);
         setSearchStartedAt(null);
         setErrorMessage(null);
@@ -250,6 +253,7 @@ export function useArenaMatchmaking(): UseArenaMatchmakingResult {
         return;
       }
 
+      currentMatchRef.current = null;
       setCurrentMatch(null);
       setState("searching");
     } catch (error) {
@@ -279,7 +283,9 @@ export function useArenaMatchmaking(): UseArenaMatchmakingResult {
   }, [setIdle, viewerId]);
 
   const acceptMatch = useCallback(async () => {
-    if (!viewerId || !currentMatchRef.current) {
+    const currentMatch = currentMatchRef.current;
+
+    if (!viewerId || !currentMatch) {
       return;
     }
 
@@ -287,7 +293,7 @@ export function useArenaMatchmaking(): UseArenaMatchmakingResult {
     setErrorMessage(null);
 
     try {
-      const updatedMatch = await acceptMatchmakingMatch(currentMatchRef.current.id);
+      const updatedMatch = await acceptMatchmakingMatch(currentMatch.id);
       reconcileMatchSnapshot(updatedMatch, "action");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to accept match";
