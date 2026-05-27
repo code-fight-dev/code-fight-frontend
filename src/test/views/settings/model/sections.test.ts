@@ -11,6 +11,7 @@ describe("settings sections model", () => {
   it("exposes settings sections in the expected order", () => {
     expect(SETTINGS_SECTIONS.map((section) => section.id)).toEqual([
       "profile",
+      "security",
       "appearance",
       "editor",
       "performance",
@@ -24,6 +25,7 @@ describe("settings sections model", () => {
 
   it("detects valid settings section ids", () => {
     expect(isSettingsSectionId("profile")).toBe(true);
+    expect(isSettingsSectionId("security")).toBe(true);
     expect(isSettingsSectionId("appearance")).toBe(true);
     expect(isSettingsSectionId("editor")).toBe(true);
     expect(isSettingsSectionId("performance")).toBe(true);
@@ -37,6 +39,7 @@ describe("settings sections model", () => {
 
   it("returns section by valid route segment", () => {
     expect(getSettingsSectionBySegment("profile").id).toBe("profile");
+    expect(getSettingsSectionBySegment("security").id).toBe("security");
     expect(getSettingsSectionBySegment("appearance").id).toBe("appearance");
     expect(getSettingsSectionBySegment("editor").id).toBe("editor");
     expect(getSettingsSectionBySegment("performance").id).toBe("performance");

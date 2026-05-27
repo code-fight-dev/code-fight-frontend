@@ -1,10 +1,11 @@
-import { Gauge, Palette, SquareTerminal, UserRound } from "lucide-react";
+import { Gauge, Palette, ShieldCheck, SquareTerminal, UserRound } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import {
   SETTINGS_APPEARANCE_HREF,
   SETTINGS_EDITOR_HREF,
   SETTINGS_PERFORMANCE_HREF,
   SETTINGS_PROFILE_HREF,
+  SETTINGS_SECURITY_HREF,
   type SettingsRoute,
   type SettingsSectionId,
 } from "@/shared/config/routes";
@@ -27,6 +28,15 @@ const SETTINGS_SECTION_BY_ID = {
     description:
       "Manage the public profile fields shown on your player page, including avatar, display name, location, and bio.",
     icon: UserRound,
+  },
+  security: {
+    id: "security",
+    href: SETTINGS_SECURITY_HREF,
+    label: "Security",
+    meta: "Auth",
+    description:
+      "Manage account access and start email-based password recovery when you need to rotate credentials.",
+    icon: ShieldCheck,
   },
   appearance: {
     id: "appearance",
@@ -57,6 +67,7 @@ const SETTINGS_SECTION_BY_ID = {
 
 export const SETTINGS_SECTIONS = [
   SETTINGS_SECTION_BY_ID.profile,
+  SETTINGS_SECTION_BY_ID.security,
   SETTINGS_SECTION_BY_ID.appearance,
   SETTINGS_SECTION_BY_ID.editor,
   SETTINGS_SECTION_BY_ID.performance,
