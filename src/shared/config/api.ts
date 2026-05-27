@@ -1,4 +1,7 @@
-const DEFAULT_API_BASE_URL = "https://api.code-fight.com";
+const DEFAULT_API_BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://api.code-fight.com"
+    : "http://localhost:8080";
 
 function normalizeApiBaseUrl(value: string | undefined) {
   if (!value) {

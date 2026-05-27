@@ -1,11 +1,11 @@
-FROM oven/bun:alpine AS deps
+FROM oven/bun:1.2-alpine AS deps
 
 WORKDIR /app
 
-COPY package.json bun.lock* ./
+COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
-FROM oven/bun:alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -19,9 +19,9 @@ ENV NEXT_PUBLIC_GOOGLE_RECAPTCHA_ACTION=${NEXT_PUBLIC_GOOGLE_RECAPTCHA_ACTION}
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN bun run build
+RUN npm run build
 
-FROM oven/bun:alpine AS runner
+FROM node:22-alpine AS runner
 
 WORKDIR /app
 
@@ -37,4 +37,4 @@ COPY --from=builder /app/next.config.* ./
 
 EXPOSE 3000
 
-CMD ["bun", "run", "start"]
+CMD ["npm", "run", "start"]
