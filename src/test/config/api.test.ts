@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+const DEFAULT_API_BASE_URL = "https://api.code-fight.com";
+
 async function importApiConfig() {
   vi.resetModules();
 
@@ -29,7 +31,7 @@ describe("API_BASE_URL in client environment", () => {
 
     const { API_BASE_URL } = await importApiConfig();
 
-    expect(API_BASE_URL).toBe("http://localhost:8080");
+    expect(API_BASE_URL).toBe(DEFAULT_API_BASE_URL);
   });
 
   it("uses public API base URL in browser environment", async () => {
@@ -63,7 +65,7 @@ describe("API_BASE_URL in client environment", () => {
 
     const { API_BASE_URL } = await importApiConfig();
 
-    expect(API_BASE_URL).toBe("http://localhost:8080");
+    expect(API_BASE_URL).toBe(DEFAULT_API_BASE_URL);
   });
 
   it("rejects non-http public URLs", async () => {
@@ -73,7 +75,7 @@ describe("API_BASE_URL in client environment", () => {
 
     const { API_BASE_URL } = await importApiConfig();
 
-    expect(API_BASE_URL).toBe("http://localhost:8080");
+    expect(API_BASE_URL).toBe(DEFAULT_API_BASE_URL);
   });
 });
 
@@ -114,7 +116,7 @@ describe("API_BASE_URL in server environment", () => {
 
     const { API_BASE_URL } = await importApiConfig();
 
-    expect(API_BASE_URL).toBe("http://localhost:8080");
+    expect(API_BASE_URL).toBe(DEFAULT_API_BASE_URL);
   });
 
   it("normalizes internal API base URL on the server", async () => {
