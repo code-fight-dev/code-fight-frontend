@@ -13,6 +13,7 @@ import {
   SETTINGS_PERFORMANCE_HREF,
   SETTINGS_PROFILE_HREF,
   SETTINGS_ROUTES,
+  SETTINGS_SECURITY_HREF,
 } from "@/shared/config/routes";
 
 describe("route constants", () => {
@@ -26,6 +27,7 @@ describe("route constants", () => {
   it("defines settings routes", () => {
     expect(SETTINGS_ROUTES).toEqual({
       profile: "/settings/profile",
+      security: "/settings/security",
       appearance: "/settings/appearance",
       performance: "/settings/performance",
       editor: "/settings/editor",
@@ -37,6 +39,7 @@ describe("route constants", () => {
     expect(SETTINGS_APPEARANCE_HREF).toBe(SETTINGS_ROUTES.appearance);
     expect(SETTINGS_PERFORMANCE_HREF).toBe(SETTINGS_ROUTES.performance);
     expect(SETTINGS_EDITOR_HREF).toBe(SETTINGS_ROUTES.editor);
+    expect(SETTINGS_SECURITY_HREF).toBe(SETTINGS_ROUTES.security);
   });
 });
 
