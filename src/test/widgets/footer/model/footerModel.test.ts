@@ -11,13 +11,12 @@ describe("widgets/footer/model", () => {
     ]);
 
     const links = FOOTER_COLUMNS.flatMap((column) => column.links);
-    expect(links).toHaveLength(10);
+    expect(links).toHaveLength(8);
     expect(links.every((link) => link.href.startsWith("/"))).toBe(true);
 
     expect(FOOTER_COLUMNS[0]?.links).toEqual([
       { label: "Global Arena", href: "/arena" },
       { label: "Challenges", href: "/challenges" },
-      { label: "Tournaments", href: "/tournaments" },
       { label: "Leaderboards", href: "/leaderboard" },
     ]);
   });
