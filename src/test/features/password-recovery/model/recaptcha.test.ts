@@ -104,6 +104,30 @@ describe("features/password-recovery/model/recaptcha", () => {
     });
   });
 
+  it("reuses pending script-loading promise for concurrent execution calls", async () => {
+    vi.stubEnv("NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY", "shared-promise-key");
+
+    const { executePasswordResetRecaptcha } = await importRecaptchaModule();
+
+    const firstExecutionPromise = executePasswordResetRecaptcha();
+    const secondExecutionPromise = executePasswordResetRecaptcha();
+
+    const scripts = document.querySelectorAll(`#${RECAPTCHA_SCRIPT_ID}`);
+    expect(scripts).toHaveLength(1);
+
+    const executeMock = vi.fn().mockResolvedValue("shared-token");
+    setGrecaptcha({
+      ready: (callback) => callback(),
+      execute: executeMock,
+    });
+
+    (scripts[0] as HTMLScriptElement).onload?.(new Event("load"));
+
+    await expect(firstExecutionPromise).resolves.toBe("shared-token");
+    await expect(secondExecutionPromise).resolves.toBe("shared-token");
+    expect(executeMock).toHaveBeenCalledTimes(2);
+  });
+
   it("waits for existing recaptcha script load event", async () => {
     vi.stubEnv("NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY", "existing-script-key");
 
@@ -124,6 +148,25 @@ describe("features/password-recovery/model/recaptcha", () => {
     existingScript.dispatchEvent(new Event("load"));
 
     await expect(executionPromise).resolves.toBe("existing-script-token");
+    expect(executeMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("uses already loaded existing script when grecaptcha is already available", async () => {
+    vi.stubEnv("NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY", "existing-ready-key");
+
+    const existingScript = document.createElement("script");
+    existingScript.id = RECAPTCHA_SCRIPT_ID;
+    document.head.appendChild(existingScript);
+
+    const executeMock = vi.fn().mockResolvedValue("existing-ready-token");
+    setGrecaptcha({
+      ready: (callback) => callback(),
+      execute: executeMock,
+    });
+
+    const { executePasswordResetRecaptcha } = await importRecaptchaModule();
+
+    await expect(executePasswordResetRecaptcha()).resolves.toBe("existing-ready-token");
     expect(executeMock).toHaveBeenCalledTimes(1);
   });
 
@@ -190,6 +233,22 @@ describe("features/password-recovery/model/recaptcha", () => {
     await expect(executePasswordResetRecaptcha()).rejects.toThrow(
       "captcha verification failed",
     );
+  });
+
+  it("fails when script loads but grecaptcha API is still missing", async () => {
+    vi.stubEnv("NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY", "missing-api-key");
+
+    const { executePasswordResetRecaptcha } = await importRecaptchaModule();
+    const executionPromise = executePasswordResetRecaptcha();
+
+    const script = document.getElementById(
+      RECAPTCHA_SCRIPT_ID,
+    ) as HTMLScriptElement | null;
+    expect(script).not.toBeNull();
+
+    script?.onload?.(new Event("load"));
+
+    await expect(executionPromise).rejects.toThrow("captcha verification is unavailable");
   });
 
   it("fails when grecaptcha becomes unavailable by ready stage", async () => {
