@@ -5,6 +5,9 @@ import { getDocsPageData } from "@/views/docs/server";
 export const metadata: Metadata = {
   title: "Documentation | CodeFight",
   description: "Guides, API reference, and platform workflows for CodeFight.",
+  alternates: {
+    canonical: "/docs",
+  },
 };
 
 export default async function DocumentationPage() {

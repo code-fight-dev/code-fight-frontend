@@ -29,6 +29,9 @@ describe("app/recovery/page", () => {
     expect(metadata).toMatchObject({
       title: "Password Recovery | CodeFight",
       description: "Recover access to your CodeFight account.",
+      alternates: {
+        canonical: "/recovery",
+      },
       robots: {
         index: false,
         follow: false,

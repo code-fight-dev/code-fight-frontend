@@ -36,6 +36,7 @@ describe("app/challenges/[slug]/page", () => {
 
   it("returns challenge metadata when challenge exists", async () => {
     const challenge = {
+      slug: "two-sum",
       title: "Two Sum",
       summary: "Find two numbers that sum to target.",
     };
@@ -65,6 +66,9 @@ describe("app/challenges/[slug]/page", () => {
     expect(metadata).toEqual({
       title: "Two Sum | CodeFight Challenges",
       description: "Find two numbers that sum to target.",
+      alternates: {
+        canonical: "/challenges/two-sum",
+      },
     });
   });
 

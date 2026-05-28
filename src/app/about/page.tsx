@@ -4,6 +4,9 @@ import { AboutPageView } from "@/views/company";
 export const metadata: Metadata = {
   title: "About | CodeFight",
   description: "Learn how the four-student CodeFight team is building the platform.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {

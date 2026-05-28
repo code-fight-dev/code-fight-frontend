@@ -12,6 +12,10 @@ type Props = {
 export const metadata: Metadata = {
   title: "Arena Match | CodeFight",
   description: "Live arena duel room for head-to-head coding matches.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function ArenaMatchPage({ params }: Props) {

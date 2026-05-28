@@ -12,6 +12,10 @@ type Props = {
 export const metadata: Metadata = {
   title: "Arena Replay | CodeFight",
   description: "Watch completed coding duels with timeline playback.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function ArenaReplayPage({ params }: Props) {

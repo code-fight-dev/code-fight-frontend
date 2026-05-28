@@ -35,6 +35,9 @@ describe("app/challenges/page", () => {
     expect(pageModule.metadata).toEqual({
       title: "Challenges | CodeFight",
       description: "Solo coding practice problems for the CodeFight platform.",
+      alternates: {
+        canonical: "/challenges",
+      },
     });
   });
 

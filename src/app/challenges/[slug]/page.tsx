@@ -22,6 +22,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${challenge.title} | CodeFight Challenges`,
     description: challenge.summary,
+    alternates: {
+      canonical: `/challenges/${encodeURIComponent(challenge.slug)}`,
+    },
   };
 }
 

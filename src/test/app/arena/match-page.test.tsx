@@ -24,6 +24,10 @@ describe("app/arena/match/[matchId]/page", () => {
     expect(pageModule.metadata).toEqual({
       title: "Arena Match | CodeFight",
       description: "Live arena duel room for head-to-head coding matches.",
+      robots: {
+        index: false,
+        follow: false,
+      },
     });
   });
 

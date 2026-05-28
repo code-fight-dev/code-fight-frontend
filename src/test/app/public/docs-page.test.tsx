@@ -36,6 +36,9 @@ describe("app/docs/page", () => {
     expect(metadata).toEqual({
       title: "Documentation | CodeFight",
       description: "Guides, API reference, and platform workflows for CodeFight.",
+      alternates: {
+        canonical: "/docs",
+      },
     });
     expect(getDocsPageDataMock).toHaveBeenCalledTimes(1);
     expect(getFirstCallProps(DocsPageViewMock)).toEqual({

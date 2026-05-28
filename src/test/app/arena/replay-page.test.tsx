@@ -24,6 +24,10 @@ describe("app/arena/replay/[matchId]/page", () => {
     expect(pageModule.metadata).toEqual({
       title: "Arena Replay | CodeFight",
       description: "Watch completed coding duels with timeline playback.",
+      robots: {
+        index: false,
+        follow: false,
+      },
     });
   });
 

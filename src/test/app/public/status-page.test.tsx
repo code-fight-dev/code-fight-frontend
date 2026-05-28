@@ -15,7 +15,7 @@ describe("app/status/page", () => {
       <div data-testid="status-page-view">{JSON.stringify(data)}</div>
     ));
 
-    const { default: StatusPage } = await loadPageModule(
+    const { default: StatusPage, metadata } = await loadPageModule(
       () => import("@/app/status/page"),
       () => {
         vi.doMock("@/views/status/server", () => ({
@@ -37,5 +37,13 @@ describe("app/status/page", () => {
     expect(screen.getByTestId("status-page-view")).toHaveTextContent(
       '"service":"frontend"',
     );
+    expect(metadata).toEqual({
+      title: "Status | CodeFight",
+      description:
+        "Current availability, incidents, and uptime information for CodeFight services.",
+      alternates: {
+        canonical: "/status",
+      },
+    });
   });
 });
