@@ -72,10 +72,24 @@ describe("app/layout", () => {
     );
     const { default: RootLayout, metadata } = layoutModule;
 
-    expect(metadata).toEqual({
-      title: "CodeFight App",
-      description: "A platform for coding challenges and competitions.",
+    expect(metadata).toMatchObject({
+      title: "CodeFight",
+      description: "CodeFight platform for coding challenges and live competitions.",
+      applicationName: "CodeFight",
+      openGraph: {
+        type: "website",
+        siteName: "CodeFight",
+        title: "CodeFight",
+        description: "CodeFight platform for coding challenges and live competitions.",
+        url: "/",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "CodeFight",
+        description: "CodeFight platform for coding challenges and live competitions.",
+      },
     });
+    expect(metadata.metadataBase?.toString()).toBe("http://localhost:3000/");
 
     const node = await RootLayout({
       children: <div>Route content</div>,
