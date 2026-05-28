@@ -20,6 +20,9 @@ describe("app/arena/page", () => {
     expect(pageModule.metadata).toEqual({
       title: "Arena | CodeFight",
       description: "PVP matchmaking and live coding duels in CodeFight Arena.",
+      alternates: {
+        canonical: "/arena",
+      },
     });
   });
 

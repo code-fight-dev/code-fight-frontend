@@ -20,7 +20,7 @@ describe("app/signin/page", () => {
       ),
     );
 
-    const { default: SignInPage } = await loadPageModule(
+    const { default: SignInPage, metadata } = await loadPageModule(
       () => import("@/app/signin/page"),
       () => {
         vi.doMock("@/features/auth", () => ({
@@ -52,5 +52,16 @@ describe("app/signin/page", () => {
       oauthErrorCode: "access_denied",
     });
     expect(screen.getByTestId("auth-page-view")).toHaveTextContent('"mode":"signin"');
+    expect(metadata).toEqual({
+      title: "Sign In | CodeFight",
+      description: "Sign in to CodeFight and continue your coding journey.",
+      alternates: {
+        canonical: "/signin",
+      },
+      robots: {
+        index: false,
+        follow: false,
+      },
+    });
   });
 });

@@ -1,8 +1,18 @@
+import type { Metadata } from "next";
 import {
   getLeaderboardViewData,
   LeaderboardPageView,
   parseLeaderboardViewQuery,
 } from "@/views/leaderboard";
+
+export const metadata: Metadata = {
+  title: "Leaderboard | CodeFight",
+  description:
+    "Top CodeFight competitors ranked by performance across coding challenges and arena battles.",
+  alternates: {
+    canonical: "/leaderboard",
+  },
+};
 
 export default async function LeaderboardPage({
   searchParams,

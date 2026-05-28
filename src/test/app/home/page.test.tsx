@@ -18,7 +18,7 @@ describe("app/page", () => {
       <div data-testid="home-page">{JSON.stringify(data)}</div>
     ));
 
-    const { default: HomePage } = await loadPageModule(
+    const { default: HomePage, metadata } = await loadPageModule(
       () => import("@/app/page"),
       () => {
         vi.doMock("@/views/home/server", () => ({
@@ -38,5 +38,13 @@ describe("app/page", () => {
       data: homeData,
     });
     expect(screen.getByTestId("home-page")).toHaveTextContent('"activeUsers":100');
+    expect(metadata).toEqual({
+      title: "CodeFight",
+      description:
+        "Practice coding challenges, climb rankings, and duel in live coding arena matches.",
+      alternates: {
+        canonical: "/",
+      },
+    });
   });
 });

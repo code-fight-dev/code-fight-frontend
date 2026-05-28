@@ -9,7 +9,7 @@ describe("app/ranking/page", () => {
       <div data-testid="ranking-page-view">Ranking</div>
     ));
 
-    const { default: RankingPage } = await loadPageModule(
+    const { default: RankingPage, metadata } = await loadPageModule(
       () => import("@/app/ranking/page"),
       () => {
         vi.doMock("@/views/ranking", () => ({
@@ -22,5 +22,13 @@ describe("app/ranking/page", () => {
 
     expect(RankingPageViewMock).toHaveBeenCalledTimes(1);
     expect(screen.getByTestId("ranking-page-view")).toHaveTextContent("Ranking");
+    expect(metadata).toEqual({
+      title: "Ranking | CodeFight",
+      description:
+        "Explore CodeFight rank tiers, progression milestones, and competitive ladder details.",
+      alternates: {
+        canonical: "/ranking",
+      },
+    });
   });
 });

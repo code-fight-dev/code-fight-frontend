@@ -10,6 +10,7 @@ import "./globals.css";
 import { ViewerSessionProvider } from "@/entities/viewer";
 import { getCurrentViewerServer } from "@/entities/viewer/server";
 import { getPreferencesInitScript, PreferencesProvider } from "@/features/preferences";
+import { SITE_URL } from "@/shared/config/seo";
 import { getPreferencesServer } from "@/features/preferences/server";
 import { Footer } from "@/widgets/footer";
 import { Header } from "@/widgets/header";
@@ -39,9 +40,26 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const SITE_DESCRIPTION =
+  "CodeFight platform for coding challenges and live competitions.";
+
 export const metadata: Metadata = {
-  title: "CodeFight App",
-  description: "A platform for coding challenges and competitions.",
+  metadataBase: new URL(SITE_URL),
+  title: "CodeFight",
+  description: SITE_DESCRIPTION,
+  applicationName: "CodeFight",
+  openGraph: {
+    type: "website",
+    siteName: "CodeFight",
+    title: "CodeFight",
+    description: SITE_DESCRIPTION,
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CodeFight",
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {

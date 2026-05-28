@@ -5,6 +5,9 @@ import { getChallengesPageData } from "@/views/challenges/server";
 export const metadata: Metadata = {
   title: "Challenges | CodeFight",
   description: "Solo coding practice problems for the CodeFight platform.",
+  alternates: {
+    canonical: "/challenges",
+  },
 };
 
 export default async function ChallengesPage() {

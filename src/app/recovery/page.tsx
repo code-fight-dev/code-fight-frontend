@@ -4,6 +4,9 @@ import { RecoveryPageView } from "@/views/recovery";
 export const metadata: Metadata = {
   title: "Password Recovery | CodeFight",
   description: "Recover access to your CodeFight account.",
+  alternates: {
+    canonical: "/recovery",
+  },
   robots: {
     index: false,
     follow: false,

@@ -41,7 +41,7 @@ describe("app/leaderboard/page", () => {
       ),
     );
 
-    const { default: LeaderboardPage } = await loadPageModule(
+    const { default: LeaderboardPage, metadata } = await loadPageModule(
       () => import("@/app/leaderboard/page"),
       () => {
         vi.doMock("@/views/leaderboard", () => ({
@@ -71,5 +71,13 @@ describe("app/leaderboard/page", () => {
     expect(screen.getByTestId("leaderboard-page-view")).toHaveTextContent(
       '"username":"alice"',
     );
+    expect(metadata).toEqual({
+      title: "Leaderboard | CodeFight",
+      description:
+        "Top CodeFight competitors ranked by performance across coding challenges and arena battles.",
+      alternates: {
+        canonical: "/leaderboard",
+      },
+    });
   });
 });

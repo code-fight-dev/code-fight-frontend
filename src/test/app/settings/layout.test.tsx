@@ -15,7 +15,7 @@ describe("app/settings/layout", () => {
       <section data-testid="settings-view">{children}</section>
     ));
 
-    const { default: SettingsLayout } = await loadPageModule(
+    const { default: SettingsLayout, metadata } = await loadPageModule(
       () => import("@/app/settings/layout"),
       () => {
         vi.doMock("next/navigation", () => ({
@@ -36,6 +36,14 @@ describe("app/settings/layout", () => {
       }),
     ).rejects.toThrow("NEXT_REDIRECT");
 
+    expect(metadata).toEqual({
+      title: "Settings | CodeFight",
+      description: "Manage your CodeFight account, editor, and appearance preferences.",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    });
     expect(redirectMock).toHaveBeenCalledWith("/signin");
     expect(SettingsPageViewMock).not.toHaveBeenCalled();
   });

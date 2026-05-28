@@ -20,7 +20,7 @@ describe("app/signup/page", () => {
       ),
     );
 
-    const { default: SignUpPage } = await loadPageModule(
+    const { default: SignUpPage, metadata } = await loadPageModule(
       () => import("@/app/signup/page"),
       () => {
         vi.doMock("@/features/auth", () => ({
@@ -50,5 +50,17 @@ describe("app/signup/page", () => {
       oauthErrorCode: null,
     });
     expect(screen.getByTestId("auth-page-view")).toHaveTextContent('"mode":"signup"');
+    expect(metadata).toEqual({
+      title: "Sign Up | CodeFight",
+      description:
+        "Create a CodeFight account to solve challenges and compete in coding duels.",
+      alternates: {
+        canonical: "/signup",
+      },
+      robots: {
+        index: false,
+        follow: false,
+      },
+    });
   });
 });
