@@ -4,6 +4,31 @@ import { describe, expect, it, vi } from "vitest";
 import { getFirstCallProps, loadPageModule } from "@/test/app/test-helpers/page-module";
 
 describe("app/u/[username]/page", () => {
+  it("returns fallback metadata when username is blank", async () => {
+    const { generateMetadata } = await loadPageModule(
+      () => import("@/app/u/[username]/page"),
+      () => {
+        vi.doMock("next/navigation", () => ({
+          notFound: vi.fn(),
+        }));
+        vi.doMock("@/views/viewer-profile/server", () => ({
+          getViewerProfilePageData: vi.fn(),
+        }));
+        vi.doMock("@/views/viewer-profile", () => ({
+          ViewerProfilePageView: vi.fn(() => null),
+        }));
+      },
+    );
+
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ username: "   " }),
+    });
+
+    expect(metadata).toEqual({
+      title: "Profile | CodeFight",
+    });
+  });
+
   it("generates profile metadata from username route param", async () => {
     const { generateMetadata } = await loadPageModule(
       () => import("@/app/u/[username]/page"),
