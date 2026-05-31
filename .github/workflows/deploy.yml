@@ -43,6 +43,12 @@ jobs:
         run: bun run typecheck
 
       - name: Run tests
+        env:
+          NEXT_PUBLIC_SITE_URL: https://www.code-fight.com
+          NEXT_PUBLIC_API_BASE_URL: https://api.code-fight.com
+          INTERNAL_API_BASE_URL: http://backend:8080
+          NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY }}
+          NEXT_PUBLIC_GOOGLE_RECAPTCHA_ACTION: password_reset
         run: bun run test:run
 
       - name: Build frontend
