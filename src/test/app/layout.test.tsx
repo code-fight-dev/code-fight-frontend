@@ -17,6 +17,7 @@ describe("app/layout", () => {
       username: "alice",
       createdAt: "2026-05-24T12:00:00.000Z",
     };
+
     const initialPreferences = {
       theme: "light",
       motion: "disabled",
@@ -34,9 +35,11 @@ describe("app/layout", () => {
     const PreferencesProviderMock = vi.fn(({ children }: { children: ReactNode }) => (
       <div data-testid="preferences-provider">{children}</div>
     ));
+
     const ViewerSessionProviderMock = vi.fn(({ children }: { children: ReactNode }) => (
       <div data-testid="viewer-provider">{children}</div>
     ));
+
     const HeaderMock = vi.fn(() => <header>Header</header>);
     const FooterMock = vi.fn(() => <footer>Footer</footer>);
 
@@ -49,27 +52,38 @@ describe("app/layout", () => {
           Fira_Code: FiraCodeMock,
           JetBrains_Mono: JetbrainsMonoMock,
         }));
+
+        vi.doMock("@/shared/config/seo", () => ({
+          SITE_URL: "http://localhost:3000",
+        }));
+
         vi.doMock("@/entities/viewer/server", () => ({
           getCurrentViewerServer: getCurrentViewerServerMock,
         }));
+
         vi.doMock("@/features/preferences/server", () => ({
           getPreferencesServer: getPreferencesServerMock,
         }));
+
         vi.doMock("@/features/preferences", () => ({
           getPreferencesInitScript: getPreferencesInitScriptMock,
           PreferencesProvider: PreferencesProviderMock,
         }));
+
         vi.doMock("@/entities/viewer", () => ({
           ViewerSessionProvider: ViewerSessionProviderMock,
         }));
+
         vi.doMock("@/widgets/header", () => ({
           Header: HeaderMock,
         }));
+
         vi.doMock("@/widgets/footer", () => ({
           Footer: FooterMock,
         }));
       },
     );
+
     const { default: RootLayout, metadata } = layoutModule;
 
     expect(metadata).toMatchObject({
@@ -89,11 +103,13 @@ describe("app/layout", () => {
         description: "CodeFight platform for coding challenges and live competitions.",
       },
     });
+
     expect(metadata.metadataBase?.toString()).toBe("http://localhost:3000/");
 
     const node = await RootLayout({
       children: <div>Route content</div>,
     });
+
     const html = renderToStaticMarkup(node);
 
     expect(getCurrentViewerServerMock).toHaveBeenCalledTimes(1);
@@ -105,17 +121,20 @@ describe("app/layout", () => {
       variable: "--font-sans",
       display: "swap",
     });
+
     expect(IbmPlexMonoMock).toHaveBeenCalledWith({
       subsets: ["latin", "cyrillic"],
       variable: "--font-accent",
       display: "swap",
       weight: ["400", "500", "600"],
     });
+
     expect(FiraCodeMock).toHaveBeenCalledWith({
       subsets: ["latin"],
       variable: "--font-editor-fira",
       display: "swap",
     });
+
     expect(JetbrainsMonoMock).toHaveBeenCalledWith({
       subsets: ["latin"],
       variable: "--font-editor-jetbrains",
@@ -126,10 +145,13 @@ describe("app/layout", () => {
     expect(ViewerSessionProviderMock).toHaveBeenCalledTimes(1);
 
     const preferencesProviderProps = PreferencesProviderMock.mock.calls[0]?.[0];
+
     expect(preferencesProviderProps).toMatchObject({
       initialPreferences,
     });
+
     const viewerProviderProps = ViewerSessionProviderMock.mock.calls[0]?.[0];
+
     expect(viewerProviderProps).toMatchObject({
       initialViewer,
     });

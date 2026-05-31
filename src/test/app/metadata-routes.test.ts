@@ -8,8 +8,8 @@ describe("app/robots", () => {
     vi.resetModules();
   });
 
-  it("blocks all crawlers outside production", async () => {
-    vi.stubEnv("NODE_ENV", "development");
+  it("blocks all crawlers when indexing is disabled", async () => {
+    vi.stubEnv("SITE_INDEXING_ENABLED", "false");
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://www.code-fight.com");
 
     const { default: robots } = await loadPageModule(() => import("@/app/robots"));
@@ -22,8 +22,8 @@ describe("app/robots", () => {
     });
   });
 
-  it("publishes production crawler rules with sitemap and host", async () => {
-    vi.stubEnv("NODE_ENV", "production");
+  it("publishes crawler rules with sitemap and host when indexing is enabled", async () => {
+    vi.stubEnv("SITE_INDEXING_ENABLED", "true");
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://www.code-fight.com/");
 
     const { default: robots } = await loadPageModule(() => import("@/app/robots"));
@@ -51,22 +51,20 @@ describe("app/robots", () => {
 
 describe("app/sitemap", () => {
   afterEach(() => {
-    vi.unstubAllEnvs();
     vi.resetModules();
+    vi.clearAllMocks();
   });
 
-  it("returns static and challenge URLs when challenge list is available", async () => {
-    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://www.code-fight.com");
-
+  it("builds sitemap entries for static routes and challenges", async () => {
     const getChallengesMock = vi.fn().mockResolvedValue({
       challenges: [
         {
-          slug: "two-sum",
-          createdAt: "2026-05-01T12:30:00.000Z",
+          slug: "two sum",
+          createdAt: "2026-05-01T10:00:00.000Z",
         },
         {
-          slug: "sql joins",
-          createdAt: "invalid-date",
+          slug: "broken-date",
+          createdAt: "not-a-date",
         },
       ],
     });
@@ -77,34 +75,38 @@ describe("app/sitemap", () => {
         vi.doMock("@/entities/challenge/server", () => ({
           getChallenges: getChallengesMock,
         }));
+        vi.doMock("@/shared/config/seo", () => ({
+          SITE_URL: "https://code-fight.test",
+        }));
       },
     );
+
     const entries = await sitemap();
+    const firstChallengeEntry = entries.find(
+      (entry) => entry.url === "https://code-fight.test/challenges/two%20sum",
+    );
+    const secondChallengeEntry = entries.find(
+      (entry) => entry.url === "https://code-fight.test/challenges/broken-date",
+    );
 
     expect(getChallengesMock).toHaveBeenCalledTimes(1);
+    expect(entries).toHaveLength(12);
     expect(entries).toContainEqual({
-      url: "https://www.code-fight.com/",
+      url: "https://code-fight.test/",
       changeFrequency: "daily",
       priority: 1,
     });
-    expect(entries).toContainEqual({
-      url: "https://www.code-fight.com/challenges/two-sum",
+    expect(firstChallengeEntry).toEqual({
+      url: "https://code-fight.test/challenges/two%20sum",
       changeFrequency: "weekly",
       priority: 0.8,
-      lastModified: new Date("2026-05-01T12:30:00.000Z"),
+      lastModified: new Date("2026-05-01T10:00:00.000Z"),
     });
-    expect(entries).toContainEqual({
-      url: "https://www.code-fight.com/challenges/sql%20joins",
-      changeFrequency: "weekly",
-      priority: 0.8,
-      lastModified: undefined,
-    });
+    expect(secondChallengeEntry?.lastModified).toBeUndefined();
   });
 
-  it("falls back to static URLs when challenge endpoint fails", async () => {
-    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://www.code-fight.com");
-
-    const getChallengesMock = vi.fn().mockRejectedValue(new Error("service down"));
+  it("returns static sitemap routes when challenge loading fails", async () => {
+    const getChallengesMock = vi.fn().mockRejectedValue(new Error("api unavailable"));
 
     const { default: sitemap } = await loadPageModule(
       () => import("@/app/sitemap"),
@@ -112,16 +114,64 @@ describe("app/sitemap", () => {
         vi.doMock("@/entities/challenge/server", () => ({
           getChallenges: getChallengesMock,
         }));
+        vi.doMock("@/shared/config/seo", () => ({
+          SITE_URL: "https://code-fight.test",
+        }));
       },
     );
-    const entries = await sitemap();
 
+    await expect(sitemap()).resolves.toEqual([
+      {
+        url: "https://code-fight.test/",
+        changeFrequency: "daily",
+        priority: 1,
+      },
+      {
+        url: "https://code-fight.test/challenges",
+        changeFrequency: "daily",
+        priority: 0.95,
+      },
+      {
+        url: "https://code-fight.test/arena",
+        changeFrequency: "daily",
+        priority: 0.9,
+      },
+      {
+        url: "https://code-fight.test/leaderboard",
+        changeFrequency: "hourly",
+        priority: 0.9,
+      },
+      {
+        url: "https://code-fight.test/ranking",
+        changeFrequency: "weekly",
+        priority: 0.75,
+      },
+      {
+        url: "https://code-fight.test/docs",
+        changeFrequency: "weekly",
+        priority: 0.7,
+      },
+      {
+        url: "https://code-fight.test/status",
+        changeFrequency: "daily",
+        priority: 0.7,
+      },
+      {
+        url: "https://code-fight.test/about",
+        changeFrequency: "monthly",
+        priority: 0.6,
+      },
+      {
+        url: "https://code-fight.test/privacy",
+        changeFrequency: "yearly",
+        priority: 0.4,
+      },
+      {
+        url: "https://code-fight.test/contact",
+        changeFrequency: "yearly",
+        priority: 0.4,
+      },
+    ]);
     expect(getChallengesMock).toHaveBeenCalledTimes(1);
-    expect(entries).toContainEqual({
-      url: "https://www.code-fight.com/challenges",
-      changeFrequency: "daily",
-      priority: 0.95,
-    });
-    expect(entries.some((entry) => entry.url.includes("/challenges/"))).toBe(false);
   });
 });
