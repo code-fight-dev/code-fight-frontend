@@ -5,7 +5,7 @@ import {
   getViewerProfileHref,
   VIEWER_SETTINGS_HREF,
 } from "../model/getViewerProfileHref";
-import { VIEWER_ACCOUNT_MENU_ITEMS } from "../model/items";
+import { getManagementLinks, VIEWER_ACCOUNT_MENU_ITEMS } from "../model/items";
 
 type Props = {
   isOpen: boolean;
@@ -45,6 +45,17 @@ export function ViewerAccountMobilePanel({
       </div>
 
       <div className="grid gap-2">
+        {getManagementLinks(viewer.role).map((item) => (
+          <Button
+            key={item.href}
+            href={item.href}
+            variant="secondary"
+            onClick={onClose}
+            className="min-h-13 justify-start rounded-2xl px-4 py-3 text-sm"
+          >
+            {item.label}
+          </Button>
+        ))}
         {VIEWER_ACCOUNT_MENU_ITEMS.map((item) => {
           const isSignOutAction = item.id === "sign-out";
           const isProfileLink = item.id === "my-profile";
