@@ -8,6 +8,8 @@ export function createViewerFixture(
 ): Viewer {
   return {
     id: overrides.id ?? id,
+    role: overrides.role ?? "user",
+    roleVersion: overrides.roleVersion ?? 1,
     email: overrides.email ?? `${id}@example.com`,
     username: overrides.username ?? id,
     createdAt: overrides.createdAt ?? DEFAULT_VIEWER_CREATED_AT,

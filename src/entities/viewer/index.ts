@@ -8,8 +8,14 @@ export {
   shouldShowGeneratedAvatar,
   validateAvatarFile,
 } from "./model/avatar";
-export { isViewer, isViewerProfile } from "./model/types";
+export {
+  isViewer,
+  isViewerProfile,
+  isAccountRole,
+  canOrganizeTournaments,
+} from "./model/types";
 export type {
+  AccountRole,
   AvatarSource,
   UpdateViewerProfileInput,
   Viewer,
