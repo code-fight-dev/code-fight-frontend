@@ -29,3 +29,4 @@ export type {
   ViewerProfileTopLanguage,
 } from "./model/types";
 export { ViewerSessionProvider, useViewerSession } from "./ui/ViewerSessionProvider";
+export { useManagementAccess } from "./model/useManagementAccess";

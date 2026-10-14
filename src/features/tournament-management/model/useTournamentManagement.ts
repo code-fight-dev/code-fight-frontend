@@ -1,20 +1,44 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { listTournamentDrafts } from "@/entities/tournament";
-import type { DraftPage, TournamentDraft } from "@/entities/tournament";
+import type { DraftInput, DraftPage, TournamentDraft } from "@/entities/tournament";
+import { useManagementAccess } from "@/entities/viewer";
 import { managementErrorMessage } from "@/shared/api/management";
 
 export function useTournamentManagement() {
+  const { accessError, rejectAccess } = useManagementAccess();
   const [page, setPage] = useState<DraftPage>({ items: [] });
   const [selected, setSelected] = useState<TournamentDraft | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<unknown>(null);
+  const [initialValues, setInitialValues] = useState<DraftInput | undefined>();
+  const [unconfirmedSaves, setUnconfirmedSaves] = useState(
+    () => new Map<string, DraftInput>(),
+  );
   const [refreshVersion, setRefreshVersion] = useState(0);
   const [editingBusy, setEditingBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const activeRequest = useRef<AbortController | null>(null);
   const editing = useRef(false);
+  const dirty = useRef(false);
+
+  const onError = useCallback(
+    (error: unknown) => {
+      setError(error);
+      if (rejectAccess(error)) {
+        setPage({ items: [] });
+        setSelected(null);
+        setInitialValues(undefined);
+        setUnconfirmedSaves(new Map());
+        setNotice("");
+        setEditingBusy(false);
+        dirty.current = false;
+        editing.current = false;
+      }
+    },
+    [rejectAccess],
+  );
 
   useEffect(() => {
     const controller = new AbortController();
@@ -23,14 +47,14 @@ export function useTournamentManagement() {
       .then((next) => {
         if (controller.signal.aborted) return;
         setPage(next);
-        setError("");
+        setError(null);
         // console.debug("[tournament.drafts.loaded]", {
         //   mode: "replace", count: next.items.length, hasMore: Boolean(next.nextCursor),
         //   versions: next.items.map(({ id, configVersion }) => ({ id, configVersion })),
         // });
       })
       .catch((error: unknown) => {
-        if (!controller.signal.aborted) setError(managementErrorMessage(error));
+        if (!controller.signal.aborted) onError(error);
       })
       .finally(() => {
         if (controller.signal.aborted) return;
@@ -38,10 +62,17 @@ export function useTournamentManagement() {
         setLoading(false);
       });
     return () => activeRequest.current?.abort();
-  }, [refreshVersion]);
+  }, [refreshVersion, onError]);
 
   async function loadMore() {
-    if (!page.nextCursor || activeRequest.current || loading || editing.current) return;
+    if (
+      !page.nextCursor ||
+      activeRequest.current ||
+      loading ||
+      editing.current ||
+      accessError
+    )
+      return;
     const controller = new AbortController();
     activeRequest.current = controller;
     setLoading(true);
@@ -55,13 +86,13 @@ export function useTournamentManagement() {
           nextCursor: next.nextCursor,
         };
       });
-      setError("");
+      setError(null);
       // console.debug("[tournament.drafts.loaded]", {
       //   mode: "append", receivedCount: next.items.length,
       //   existingCount: page.items.length, hasMore: Boolean(next.nextCursor),
       // });
     } catch (error) {
-      if (!controller.signal.aborted) setError(managementErrorMessage(error));
+      if (!controller.signal.aborted) onError(error);
     } finally {
       if (!controller.signal.aborted) {
         activeRequest.current = null;
@@ -71,13 +102,18 @@ export function useTournamentManagement() {
   }
 
   function selectDraft(draft: TournamentDraft | null) {
-    if (activeRequest.current || loading || editing.current) return;
+    if (activeRequest.current || loading || editing.current || accessError) return;
+    if (selected?.id === draft?.id) return;
+    if (dirty.current && !window.confirm("Discard unsaved changes and switch drafts?"))
+      return;
+    dirty.current = false;
+    setInitialValues(undefined);
     setSelected(draft);
     setNotice("");
   }
 
   function refreshList() {
-    if (activeRequest.current || loading || editing.current) return;
+    if (activeRequest.current || loading || editing.current || accessError) return;
     setLoading(true);
     setRefreshVersion((version) => version + 1);
   }
@@ -88,7 +124,12 @@ export function useTournamentManagement() {
     if (busy) setNotice("");
   }
 
-  function onSaved(draft: TournamentDraft, message: string) {
+  function onSaved(
+    draft: TournamentDraft,
+    message: string,
+    preservedValues?: DraftInput,
+  ) {
+    setInitialValues(preservedValues);
     setSelected(draft);
     setNotice(message);
     setPage((current) => ({
@@ -99,18 +140,38 @@ export function useTournamentManagement() {
     }));
   }
 
+  function onDirtyChange(isDirty: boolean) {
+    dirty.current = isDirty;
+  }
+
+  function onReconciliationChange(input: DraftInput | null) {
+    const key = selected?.id ?? "new";
+    setUnconfirmedSaves((current) => {
+      const next = new Map(current);
+      if (input) next.set(key, input);
+      else next.delete(key);
+      return next;
+    });
+  }
+
   return {
     drafts: page.items,
     hasMore: Boolean(page.nextCursor),
     selected,
     loading,
-    error,
+    error: error ? managementErrorMessage(error) : "",
+    accessError,
+    initialValues,
+    unconfirmedSave: unconfirmedSaves.get(selected?.id ?? "new") ?? null,
     notice,
-    controlsDisabled: loading || editingBusy,
+    controlsDisabled: loading || editingBusy || accessError !== null,
     loadMore,
     selectDraft,
     refreshList,
     onBusyChange,
     onSaved,
+    onError,
+    onDirtyChange,
+    onReconciliationChange,
   };
 }

@@ -1,8 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type { FormEvent } from "react";
-import { managementErrorMessage } from "@/shared/api/management";
+import { useManagementAccess } from "@/entities/viewer";
+import {
+  isUncertainMutationError,
+  managementErrorMessage,
+} from "@/shared/api/management";
 import { Button } from "@/shared/ui/Button";
 import { changeAccountRole, getManagedUser } from "../api/roles";
 import type { ManagedUser } from "../api/roles";
@@ -11,6 +16,7 @@ const fieldClass =
   "mt-2 w-full rounded-xl border border-(--app-control-secondary-border) bg-(--app-control-secondary-bg) px-4 py-3 text-(--app-text-strong) focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400";
 
 export function AccountRolesPanel() {
+  const { accessError, rejectAccess } = useManagementAccess();
   const [id, setId] = useState("");
   const [user, setUser] = useState<ManagedUser | null>(null);
   const [reason, setReason] = useState("");
@@ -20,7 +26,7 @@ export function AccountRolesPanel() {
 
   async function lookup(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy) return;
+    if (busy || accessError) return;
     setBusy(true);
     setError("");
     setNotice("");
@@ -29,6 +35,7 @@ export function AccountRolesPanel() {
     try {
       setUser(await getManagedUser(id.trim()));
     } catch (error) {
+      rejectAccess(error);
       setError(managementErrorMessage(error));
     } finally {
       setBusy(false);
@@ -37,7 +44,7 @@ export function AccountRolesPanel() {
 
   async function changeRole(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!user || user.role === "admin" || busy) return;
+    if (!user || user.role === "admin" || busy || accessError) return;
     setBusy(true);
     setError("");
     setNotice("");
@@ -56,7 +63,18 @@ export function AccountRolesPanel() {
       setReason("");
       setNotice(`Role updated: ${next.username} is now ${next.role}.`);
     } catch (error) {
-      setError(managementErrorMessage(error));
+      if (rejectAccess(error)) {
+        setUser(null);
+        setReason("");
+        setError(managementErrorMessage(error));
+      } else if (isUncertainMutationError(error)) {
+        setUser(null);
+        setError(
+          "The role change may have reached the server. Load the account again before retrying.",
+        );
+      } else {
+        setError(managementErrorMessage(error));
+      }
     } finally {
       setBusy(false);
     }
@@ -71,7 +89,7 @@ export function AccountRolesPanel() {
             className={fieldClass}
             required
             value={id}
-            disabled={busy}
+            disabled={busy || accessError !== null}
             onChange={(event) => {
               setId(event.target.value);
               setUser(null);
@@ -80,7 +98,11 @@ export function AccountRolesPanel() {
             placeholder="Account UUID"
           />
         </label>
-        <Button type="submit" disabled={busy} className="justify-self-start">
+        <Button
+          type="submit"
+          disabled={busy || accessError !== null}
+          className="justify-self-start"
+        >
           Load account
         </Button>
       </form>
@@ -134,6 +156,14 @@ export function AccountRolesPanel() {
         <p role="status" className="mt-4 text-sm">
           {notice}
         </p>
+      )}
+      {accessError && (
+        <Link
+          href={accessError.status === 401 ? "/signin" : "/"}
+          className="mt-4 inline-block text-blue-400 underline"
+        >
+          {accessError.status === 401 ? "Sign in" : "Go home"}
+        </Link>
       )}
     </div>
   );

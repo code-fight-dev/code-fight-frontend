@@ -1,6 +1,7 @@
 export {
   createTournamentDraft,
   getTournamentDraft,
+  findTournamentDraftBySlug,
   listTournamentDrafts,
   updateTournamentDraft,
 } from "./api/management";

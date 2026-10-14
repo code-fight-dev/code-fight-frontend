@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useTournamentManagement } from "../model/useTournamentManagement";
 import { TournamentDraftForm } from "./TournamentDraftForm";
 import { TournamentDraftList } from "./TournamentDraftList";
@@ -21,13 +22,34 @@ export function TournamentManagementPanel() {
         onLoadMore={management.loadMore}
         onRefresh={management.refreshList}
       />
-      <TournamentDraftForm
-        key={`${management.selected?.id ?? "new"}:${management.selected?.configVersion ?? 0}`}
-        draft={management.selected}
-        disabled={management.loading}
-        onBusyChange={management.onBusyChange}
-        onSaved={management.onSaved}
-      />
+      {management.accessError ? (
+        <div className="app-surface rounded-3xl p-6">
+          <p>
+            {management.accessError.status === 401
+              ? "Your session has expired. Sign in to manage tournaments."
+              : "You no longer have access to tournament management."}
+          </p>
+          <Link
+            href={management.accessError.status === 401 ? "/signin" : "/"}
+            className="mt-4 inline-block text-blue-400 underline"
+          >
+            {management.accessError.status === 401 ? "Sign in" : "Go home"}
+          </Link>
+        </div>
+      ) : (
+        <TournamentDraftForm
+          key={management.selected?.id ?? "new"}
+          draft={management.selected}
+          disabled={management.loading}
+          initialValues={management.initialValues}
+          unconfirmedSave={management.unconfirmedSave}
+          onBusyChange={management.onBusyChange}
+          onSaved={management.onSaved}
+          onDirtyChange={management.onDirtyChange}
+          onAccessError={management.onError}
+          onReconciliationChange={management.onReconciliationChange}
+        />
+      )}
     </div>
   );
 }

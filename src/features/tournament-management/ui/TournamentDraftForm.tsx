@@ -31,7 +31,7 @@ export function TournamentDraftForm(props: TournamentDraftFormOptions) {
           required
           maxLength={200}
           value={form.values.title}
-          disabled={form.busy}
+          disabled={form.busy || props.disabled}
           onChange={(event) => form.updateField("title", event.target.value)}
         />
       </label>
@@ -47,7 +47,7 @@ export function TournamentDraftForm(props: TournamentDraftFormOptions) {
           maxLength={100}
           pattern="[a-z0-9]+(-[a-z0-9]+)*"
           value={form.values.slug}
-          disabled={form.busy}
+          disabled={form.busy || props.disabled}
           onChange={(event) => form.updateField("slug", event.target.value)}
           aria-describedby={`${slugId}-help`}
         />
@@ -62,13 +62,19 @@ export function TournamentDraftForm(props: TournamentDraftFormOptions) {
           rows={5}
           maxLength={20000}
           value={form.values.description}
-          disabled={form.busy}
+          disabled={form.busy || props.disabled}
           onChange={(event) => form.updateField("description", event.target.value)}
         />
       </label>
-      {form.error && (
+      {(form.error || form.requiresReconciliation) && (
         <div role="alert" className="text-sm text-red-400">
           <p>{form.error}</p>
+          {form.requiresReconciliation && (
+            <p className="mt-2">
+              The save may have reached the server. Your edits are still here. Check save
+              status before saving again.
+            </p>
+          )}
           {form.conflict && props.draft && (
             <p className="mt-2">
               Your edits are still here. Reload draft to replace them with the current
@@ -77,14 +83,31 @@ export function TournamentDraftForm(props: TournamentDraftFormOptions) {
           )}
         </div>
       )}
+      {form.notice && (
+        <p role="status" className="text-sm">
+          {form.notice}
+        </p>
+      )}
       <div className="flex flex-wrap gap-3">
-        <Button type="submit" disabled={form.busy || props.disabled}>
+        <Button
+          type="submit"
+          disabled={form.busy || props.disabled || form.requiresReconciliation}
+        >
           {form.pending === "save"
             ? "Saving…"
             : props.draft
               ? "Save changes"
               : "Create draft"}
         </Button>
+        {form.requiresReconciliation && (
+          <Button
+            variant="secondary"
+            disabled={form.busy || props.disabled}
+            onClick={() => void form.checkSaveStatus()}
+          >
+            {form.pending === "check" ? "Checking…" : "Check save status"}
+          </Button>
+        )}
         {props.draft && (
           <Button
             variant="secondary"

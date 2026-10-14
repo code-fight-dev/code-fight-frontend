@@ -1,4 +1,5 @@
 import { isRecord, managementRequest } from "@/shared/api/management";
+import { withRequestDeadline } from "@/shared/api/requestDeadline";
 import { isTournamentDraft } from "../model/types";
 import type { DraftInput, DraftPage } from "../model/types";
 
@@ -30,6 +31,26 @@ export async function getTournamentDraft(id: string, signal?: AbortSignal) {
       signal,
     }),
   );
+}
+
+export async function findTournamentDraftBySlug(
+  slug: string,
+  callerSignal?: AbortSignal,
+) {
+  return withRequestDeadline(async (signal) => {
+    let cursor: string | undefined;
+    const cursors = new Set<string>();
+    do {
+      const page = await listTournamentDrafts(cursor, signal);
+      const draft = page.items.find((item) => item.slug === slug.trim().toLowerCase());
+      if (draft) return draft;
+      cursor = page.nextCursor;
+      if (cursor && cursors.has(cursor))
+        throw new Error("Unable to check the draft list.");
+      if (cursor) cursors.add(cursor);
+    } while (cursor);
+    return null;
+  }, callerSignal);
 }
 
 export async function createTournamentDraft(input: DraftInput, signal?: AbortSignal) {
