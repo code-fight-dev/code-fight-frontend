@@ -28,6 +28,8 @@ const VERDICT_VALUES = [
   "wrong_answer",
   "time_limit_exceeded",
   "memory_limit_exceeded",
+  "output_limit_exceeded",
+  "output_directory_limit_exceeded",
   "runtime_error",
   "compile_error",
   "presentation_error",
