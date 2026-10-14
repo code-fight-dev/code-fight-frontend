@@ -10,9 +10,13 @@ import AdminUsersPage from "@/app/admin/users/page";
 import OrganizerTournamentsPage from "@/app/organizer/tournaments/page";
 import { createViewerFixture } from "@/test/fixtures/viewer";
 import { createTournamentDraftFixture } from "@/test/fixtures/tournament";
+import { ManagementSession } from "@/test/helpers/managementSession";
+
+const routerMocks = vi.hoisted(() => ({ refresh: vi.fn(), push: vi.fn() }));
 
 vi.mock("@/entities/viewer/server", () => ({ getCurrentViewerServer: vi.fn() }));
 vi.mock("next/navigation", () => ({
+  useRouter: () => routerMocks,
   redirect: (path: string) => {
     throw new Error(`redirect:${path}`);
   },
@@ -84,7 +88,7 @@ describe("foundation roles and management", () => {
         response({ user: { ...account, role: "user", roleVersion: 8 } }),
       );
     vi.stubGlobal("fetch", fetchMock);
-    render(<AccountRolesPanel />);
+    render(<AccountRolesPanel />, { wrapper: ManagementSession });
     await user.type(screen.getByLabelText("Account ID"), account.id);
     await user.click(screen.getByRole("button", { name: "Load account" }));
     await screen.findByText("Current role: organizer");
@@ -119,7 +123,7 @@ describe("foundation roles and management", () => {
         ),
       );
     vi.stubGlobal("fetch", fetchMock);
-    render(<AccountRolesPanel />);
+    render(<AccountRolesPanel />, { wrapper: ManagementSession });
     await user.type(screen.getByLabelText("Account ID"), "admin-id");
     await user.click(screen.getByRole("button", { name: "Load account" }));
     await screen.findByText("Administrator roles cannot be changed here.");
@@ -149,7 +153,7 @@ describe("foundation roles and management", () => {
         response({ tournament: { ...draft, title: "Final title", configVersion: 5 } }),
       );
     vi.stubGlobal("fetch", fetchMock);
-    render(<TournamentManagementPanel />);
+    render(<TournamentManagementPanel />, { wrapper: ManagementSession });
     await screen.findByText("No drafts yet. Create your first tournament.");
     await user.type(screen.getByLabelText("Title"), draft.title);
     await user.type(screen.getByLabelText("Slug"), draft.slug);
@@ -212,7 +216,7 @@ describe("foundation roles and management", () => {
         response({ tournament: { ...draft, slug: "autumn-cup-b", configVersion: 2 } }),
       );
     vi.stubGlobal("fetch", fetchMock);
-    render(<TournamentManagementPanel />);
+    render(<TournamentManagementPanel />, { wrapper: ManagementSession });
     await user.click(await screen.findByRole("button", { name: /Spring Cup/ }));
     await user.clear(screen.getByLabelText("Slug"));
     await user.type(screen.getByLabelText("Slug"), taken.slug);
@@ -242,7 +246,7 @@ describe("foundation roles and management", () => {
       "fetch",
       vi.fn().mockResolvedValue(response({ error: "forbidden" }, 403)),
     );
-    render(<TournamentManagementPanel />);
+    render(<TournamentManagementPanel />, { wrapper: ManagementSession });
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("forbidden"));
     expect(screen.getByRole("list", { name: "Tournament drafts" })).toBeEmptyDOMElement();
   });

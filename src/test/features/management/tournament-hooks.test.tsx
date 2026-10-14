@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
@@ -13,9 +12,14 @@ import { useTournamentManagement } from "@/features/tournament-management/model/
 import { ManagementError } from "@/shared/api/management";
 import { createTournamentDraftFixture } from "@/test/fixtures/tournament";
 import { createDeferred } from "@/test/helpers/deferred";
+import { ManagementSession } from "@/test/helpers/managementSession";
+
+const routerMocks = vi.hoisted(() => ({ refresh: vi.fn() }));
+vi.mock("next/navigation", () => ({ useRouter: () => routerMocks }));
 
 vi.mock("@/entities/tournament", () => ({
   createTournamentDraft: vi.fn(),
+  findTournamentDraftBySlug: vi.fn(),
   getTournamentDraft: vi.fn(),
   listTournamentDrafts: vi.fn(),
   updateTournamentDraft: vi.fn(),
@@ -31,7 +35,9 @@ describe("tournament list model", () => {
     vi.mocked(listTournamentDrafts)
       .mockResolvedValueOnce({ items: [first], nextCursor: "next-page" })
       .mockResolvedValueOnce({ items: [first, second] });
-    const { result } = renderHook(() => useTournamentManagement());
+    const { result } = renderHook(() => useTournamentManagement(), {
+      wrapper: ManagementSession,
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
     await act(async () => {
       await Promise.all([result.current.loadMore(), result.current.loadMore()]);
@@ -52,7 +58,8 @@ describe("tournament list model", () => {
       .mockReturnValueOnce(stale.promise)
       .mockResolvedValueOnce({ items: [current] });
     const { result } = renderHook(() => useTournamentManagement(), {
-      wrapper: StrictMode,
+      wrapper: ManagementSession,
+      reactStrictMode: true,
     });
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(vi.mocked(listTournamentDrafts).mock.calls[0][1]?.aborted).toBe(true);
@@ -67,7 +74,9 @@ describe("tournament list model", () => {
     vi.mocked(listTournamentDrafts)
       .mockResolvedValueOnce({ items: [], nextCursor: "next-page" })
       .mockReturnValueOnce(pending.promise);
-    const { result, unmount } = renderHook(() => useTournamentManagement());
+    const { result, unmount } = renderHook(() => useTournamentManagement(), {
+      wrapper: ManagementSession,
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
     let loading: Promise<void>;
     act(() => {
@@ -88,7 +97,9 @@ describe("tournament list model", () => {
       items: [draft],
       nextCursor: "next-page",
     });
-    const { result } = renderHook(() => useTournamentManagement());
+    const { result } = renderHook(() => useTournamentManagement(), {
+      wrapper: ManagementSession,
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
     act(() => result.current.selectDraft(draft));
     act(() => {
