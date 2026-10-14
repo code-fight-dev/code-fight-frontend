@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "@/shared/config/api";
+import { RequestTimeoutError, withRequestDeadline } from "./requestDeadline";
 
 export class ManagementError extends Error {
   constructor(
@@ -16,42 +17,66 @@ export async function managementRequest(
   path: string,
   options: { method?: string; body?: unknown; signal?: AbortSignal } = {},
 ): Promise<unknown> {
-  // const debugStartedAt = performance.now();
-  const response = await fetch(`${API_BASE_URL}/api${path}`, {
-    method: options.method ?? "GET",
-    credentials: "include",
-    cache: "no-store",
-    signal: options.signal,
-    ...(options.body !== undefined
-      ? {
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(options.body),
+  let receivedResponse: Response | undefined;
+  try {
+    return await withRequestDeadline(async (signal) => {
+      const response = await fetch(`${API_BASE_URL}/api${path}`, {
+        method: options.method ?? "GET",
+        credentials: "include",
+        cache: "no-store",
+        signal,
+        ...(options.body !== undefined
+          ? {
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(options.body),
+            }
+          : {}),
+      });
+      receivedResponse = response;
+      const body: unknown = await response.json().catch(() => null);
+      signal.throwIfAborted();
+      if (!response.ok) {
+        let message = "The request could not be completed. Please try again.";
+        let code: string | undefined;
+        let requestId = response.headers.get("X-Request-ID") ?? undefined;
+        if (isRecord(body)) {
+          if (typeof body.error === "string") message = body.error;
+          else if (isRecord(body.error)) {
+            if (typeof body.error.message === "string") message = body.error.message;
+            if (typeof body.error.code === "string") code = body.error.code;
+            if (typeof body.error.requestId === "string")
+              requestId = body.error.requestId;
+          }
         }
-      : {}),
-  });
-  const body: unknown = await response.json().catch(() => null);
-  // console.debug("[management.http.completed]", {
-  //   method: options.method ?? "GET", route: path.split("?")[0],
-  //   status: response.status, ok: response.ok,
-  //   durationMs: Math.round(performance.now() - debugStartedAt),
-  //   requestId: isRecord(body) && isRecord(body.error) ? body.error.requestId : response.headers.get("X-Request-ID"),
-  //   errorCode: isRecord(body) && isRecord(body.error) ? body.error.code : undefined,
-  // });
-  if (!response.ok) {
-    let message = "The request could not be completed. Please try again.";
-    let code: string | undefined;
-    let requestId = response.headers.get("X-Request-ID") ?? undefined;
-    if (isRecord(body)) {
-      if (typeof body.error === "string") message = body.error;
-      else if (isRecord(body.error)) {
-        if (typeof body.error.message === "string") message = body.error.message;
-        if (typeof body.error.code === "string") code = body.error.code;
-        if (typeof body.error.requestId === "string") requestId = body.error.requestId;
+        throw new ManagementError(message, response.status, code, requestId);
       }
+      return body;
+    }, options.signal);
+  } catch (error) {
+    if (
+      error instanceof RequestTimeoutError &&
+      receivedResponse &&
+      !receivedResponse.ok
+    ) {
+      throw new ManagementError(
+        error.message,
+        receivedResponse.status,
+        undefined,
+        receivedResponse.headers.get("X-Request-ID") ?? undefined,
+      );
     }
-    throw new ManagementError(message, response.status, code, requestId);
+    throw error;
   }
-  return body;
+}
+
+export function isManagementAccessError(error: unknown): error is ManagementError {
+  return (
+    error instanceof ManagementError && (error.status === 401 || error.status === 403)
+  );
+}
+
+export function isUncertainMutationError(error: unknown): boolean {
+  return !(error instanceof ManagementError && error.status >= 400 && error.status < 500);
 }
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
