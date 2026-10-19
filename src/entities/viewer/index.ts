@@ -8,8 +8,14 @@ export {
   shouldShowGeneratedAvatar,
   validateAvatarFile,
 } from "./model/avatar";
-export { isViewer, isViewerProfile } from "./model/types";
+export {
+  isViewer,
+  isViewerProfile,
+  isAccountRole,
+  canOrganizeTournaments,
+} from "./model/types";
 export type {
+  AccountRole,
   AvatarSource,
   UpdateViewerProfileInput,
   Viewer,
@@ -23,3 +29,4 @@ export type {
   ViewerProfileTopLanguage,
 } from "./model/types";
 export { ViewerSessionProvider, useViewerSession } from "./ui/ViewerSessionProvider";
+export { useManagementAccess } from "./model/useManagementAccess";

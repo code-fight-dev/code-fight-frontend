@@ -1,3 +1,14 @@
+import { canOrganizeTournaments } from "@/entities/viewer";
+import type { AccountRole } from "@/entities/viewer";
+
+export function getManagementLinks(role: AccountRole) {
+  const links: { href: string; label: string }[] = [];
+  if (canOrganizeTournaments(role))
+    links.push({ href: "/organizer/tournaments", label: "Manage tournaments" });
+  if (role === "admin") links.push({ href: "/admin/users", label: "Account roles" });
+  return links;
+}
+
 export type ViewerAccountMenuItem = {
   id: "my-profile" | "settings" | "sign-out";
   label: string;

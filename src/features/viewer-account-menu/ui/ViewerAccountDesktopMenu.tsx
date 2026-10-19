@@ -9,7 +9,7 @@ import {
   getViewerProfileHref,
   VIEWER_SETTINGS_HREF,
 } from "../model/getViewerProfileHref";
-import { VIEWER_ACCOUNT_MENU_ITEMS } from "../model/items";
+import { getManagementLinks, VIEWER_ACCOUNT_MENU_ITEMS } from "../model/items";
 
 type Props = {
   isElevated: boolean;
@@ -113,6 +113,17 @@ export function ViewerAccountDesktopMenu({
         </div>
 
         <div className="app-popover-section grid gap-1 rounded-[22px] p-1.5">
+          {getManagementLinks(viewer.role).map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              role="menuitem"
+              onClick={() => setIsDropdownOpen(false)}
+              className="font-accent flex min-h-11 items-center rounded-2xl px-3.5 text-sm text-(--app-text-strong) hover:bg-blue-500/10"
+            >
+              {item.label}
+            </Link>
+          ))}
           {VIEWER_ACCOUNT_MENU_ITEMS.map((item) => {
             const isSignOutAction = item.id === "sign-out";
             const isProfileLink = item.id === "my-profile";

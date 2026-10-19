@@ -19,7 +19,8 @@ vi.mock("next/navigation", () => ({
 }));
 
 function ViewerSessionHarness() {
-  const { viewer, isLoading, isSigningOut, setViewer, signOut } = useViewerSession();
+  const { viewer, isLoading, isSigningOut, setViewer, signOut, revalidate } =
+    useViewerSession();
   const [errorMessage, setErrorMessage] = useState("none");
 
   return (
@@ -34,6 +35,14 @@ function ViewerSessionHarness() {
       </button>
       <button type="button" onClick={() => setViewer(null)}>
         clear-viewer
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          void revalidate().catch(() => {});
+        }}
+      >
+        revalidate
       </button>
       <button
         type="button"
@@ -148,6 +157,53 @@ describe("ViewerSessionProvider", () => {
       expect(screen.getByTestId("viewer")).toHaveTextContent("none");
       expect(screen.getByTestId("is-signing-out")).toHaveTextContent("false");
     });
+  });
+
+  it("revalidates the current session and releases its loading state", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ user: createViewerWithUsername("fresh") }), {
+          status: 200,
+        }),
+      ),
+    );
+    render(
+      <ViewerSessionProvider initialViewer={createViewerWithUsername("old")}>
+        <ViewerSessionHarness />
+      </ViewerSessionProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "revalidate" }));
+    expect(screen.getByTestId("is-loading")).toHaveTextContent("true");
+    await waitFor(() => expect(screen.getByTestId("viewer")).toHaveTextContent("fresh"));
+    expect(screen.getByTestId("is-loading")).toHaveTextContent("false");
+  });
+
+  it("does not restore stale session data after the viewer was changed", async () => {
+    let resolveFetch!: (response: Response) => void;
+    const fetchMock = vi.fn().mockReturnValue(
+      new Promise<Response>((resolve) => {
+        resolveFetch = resolve;
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    render(
+      <ViewerSessionProvider initialViewer={createViewerWithUsername("old")}>
+        <ViewerSessionHarness />
+      </ViewerSessionProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "revalidate" }));
+    fireEvent.click(screen.getByRole("button", { name: "set-viewer" }));
+    await waitFor(() =>
+      expect(screen.getByTestId("is-loading")).toHaveTextContent("false"),
+    );
+    expect((fetchMock.mock.calls[0][1] as RequestInit).signal?.aborted).toBe(true);
+    resolveFetch(
+      new Response(JSON.stringify({ user: createViewerWithUsername("stale") }), {
+        status: 200,
+      }),
+    );
+    await waitFor(() => expect(screen.getByTestId("viewer")).toHaveTextContent("manual"));
   });
 
   it("prevents duplicate sign-out requests while one is already running", async () => {

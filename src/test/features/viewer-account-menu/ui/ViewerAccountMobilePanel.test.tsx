@@ -48,6 +48,8 @@ function restoreMenuItems() {
 function createViewer(overrides: Partial<Viewer> = {}): Viewer {
   return {
     id: "viewer-1",
+    role: "user",
+    roleVersion: 1,
     email: "alice@example.com",
     username: "alice smith/qa",
     createdAt: "2026-01-01T00:00:00.000Z",

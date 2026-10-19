@@ -1,9 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { createContext, startTransition, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  startTransition,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { HOME_HREF } from "@/shared/config/routes";
-import { signOutViewer } from "../api/session";
+import { getCurrentViewer, signOutViewer } from "../api/session";
 import type { Viewer } from "../model/types";
 
 type ViewerSessionContextValue = {
@@ -11,6 +19,7 @@ type ViewerSessionContextValue = {
   isLoading: boolean;
   isSigningOut: boolean;
   setViewer: (viewer: Viewer | null) => void;
+  revalidate: () => Promise<Viewer | null>;
   signOut: () => Promise<void>;
 };
 
@@ -23,12 +32,41 @@ type Props = {
 
 export function ViewerSessionProvider({ children, initialViewer }: Props) {
   const router = useRouter();
-  const [viewer, setViewer] = useState<Viewer | null>(initialViewer);
+  const [viewer, setViewerState] = useState<Viewer | null>(initialViewer);
+  const [isLoading, setIsLoading] = useState(false);
+  const activeRevalidation = useRef<AbortController | null>(null);
   const [isSigningOut, setIsSigningOut] = useState(false);
+
+  const setViewer = useCallback((next: Viewer | null) => {
+    activeRevalidation.current?.abort();
+    activeRevalidation.current = null;
+    setIsLoading(false);
+    setViewerState(next);
+  }, []);
+
+  const revalidate = useCallback(async () => {
+    activeRevalidation.current?.abort();
+    const controller = new AbortController();
+    activeRevalidation.current = controller;
+    setIsLoading(true);
+    try {
+      const next = await getCurrentViewer(controller.signal);
+      controller.signal.throwIfAborted();
+      setViewerState(next);
+      return next;
+    } finally {
+      if (activeRevalidation.current === controller) {
+        activeRevalidation.current = null;
+        setIsLoading(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     setViewer(initialViewer);
-  }, [initialViewer]);
+  }, [initialViewer, setViewer]);
+
+  useEffect(() => () => activeRevalidation.current?.abort(), []);
 
   async function handleSignOut() {
     if (isSigningOut) {
@@ -53,9 +91,10 @@ export function ViewerSessionProvider({ children, initialViewer }: Props) {
     <ViewerSessionContext.Provider
       value={{
         viewer,
-        isLoading: false,
+        isLoading,
         isSigningOut,
         setViewer,
+        revalidate,
         signOut: handleSignOut,
       }}
     >

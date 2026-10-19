@@ -1,5 +1,17 @@
+export type AccountRole = "user" | "organizer" | "admin";
+
+export function isAccountRole(value: unknown): value is AccountRole {
+  return value === "user" || value === "organizer" || value === "admin";
+}
+
+export function canOrganizeTournaments(role: AccountRole): boolean {
+  return role === "organizer" || role === "admin";
+}
+
 export type Viewer = {
   id: string;
+  role: AccountRole;
+  roleVersion: number;
   email: string;
   username: string;
   createdAt: string;
@@ -179,6 +191,10 @@ export function isViewer(value: unknown): value is Viewer {
     typeof value.id === "string" &&
     typeof value.email === "string" &&
     typeof value.username === "string" &&
+    isAccountRole(value.role) &&
+    typeof value.roleVersion === "number" &&
+    Number.isSafeInteger(value.roleVersion) &&
+    value.roleVersion > 0 &&
     typeof value.createdAt === "string"
   );
 }

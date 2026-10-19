@@ -28,7 +28,8 @@ describe("viewer session api", () => {
     expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/auth/me"), {
       method: "GET",
       credentials: "include",
-      signal,
+      cache: "no-store",
+      signal: expect.any(AbortSignal),
     });
   });
 
