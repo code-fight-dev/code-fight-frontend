@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { managementRequest } from "@/shared/api/management";
 import {
   PROGRAMMING_LANGUAGE_BY_ID,
   toTaskSubmissionSummary,
@@ -262,6 +263,18 @@ export function useChallengeExecution({
             timedOut,
           }),
         );
+        if (
+          !timedOut &&
+          !controller.signal.aborted &&
+          document.visibilityState === "visible"
+        ) {
+          void managementRequest(
+            "/notifications/submissions/" + encodeURIComponent(submission.id) + "/seen",
+            { method: "POST", signal: controller.signal },
+          ).catch(() => {
+            // If acknowledgement fails, the result stays available in the inbox.
+          });
+        }
       }
     } catch (error) {
       if (isAbortError(error)) {

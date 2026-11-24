@@ -133,7 +133,9 @@ export function useArenaRoomState(matchId: string): UseArenaRoomStateResult {
   });
 
   useArenaRoomPolling({
-    enabled: loadState === "ready" && Boolean(match) && match?.status === "running",
+    enabled:
+      loadState === "ready" &&
+      (match?.status === "running" || match?.status === "pending"),
     onPoll: () => {
       void refreshMatch().catch(() => {
         // Poll failures are tolerated while realtime updates continue.

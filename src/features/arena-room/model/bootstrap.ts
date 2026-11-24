@@ -31,8 +31,8 @@ export async function bootstrapArenaRoom(
   }
 
   const currentMatch = await getMatch(normalizedMatchID);
-  if (currentMatch.status !== "running" && currentMatch.status !== "finished") {
-    throw new Error("This match room is only available for running or finished matches.");
+  if (currentMatch.status === "cancelled") {
+    throw new Error("This match was cancelled.");
   }
 
   if (!currentMatch.taskId) {

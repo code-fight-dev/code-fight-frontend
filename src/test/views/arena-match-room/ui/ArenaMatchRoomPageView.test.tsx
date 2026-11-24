@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import type { ComponentProps, ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -12,6 +12,7 @@ import {
 
 const pageViewMocks = vi.hoisted(() => ({
   useArenaRoomState: vi.fn(),
+  startMatch: vi.fn(),
   useSurrenderConfirm: vi.fn(),
   ArenaRoomHeaderBar: vi.fn(),
   ArenaRoomScoreStrip: vi.fn(),
@@ -31,6 +32,10 @@ vi.mock("next/link", () => ({
 
 vi.mock("@/features/arena-room", () => ({
   useArenaRoomState: pageViewMocks.useArenaRoomState,
+}));
+
+vi.mock("@/entities/match/client", () => ({
+  startMatch: pageViewMocks.startMatch,
 }));
 
 vi.mock("@/views/arena-match-room/model/useSurrenderConfirm", () => ({
@@ -150,6 +155,23 @@ describe("views/arena-match-room/ui/ArenaMatchRoomPageView", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     pageViewMocks.useSurrenderConfirm.mockReturnValue(createSurrenderConfirmState());
+  });
+
+  it("allows confirming readiness from a pending room", async () => {
+    pageViewMocks.startMatch.mockResolvedValue(undefined);
+    const state = createReadyState({
+      match: createArenaMatchFixture({
+        player1Id: "viewer-1",
+        player2Id: "viewer-2",
+        player1Ready: false,
+        status: "pending",
+      }),
+    });
+    pageViewMocks.useArenaRoomState.mockReturnValue(state);
+    renderPageView();
+    fireEvent.click(screen.getByRole("button", { name: "Confirm readiness" }));
+    await waitFor(() => expect(state.refreshMatch).toHaveBeenCalled());
+    expect(pageViewMocks.startMatch).toHaveBeenCalledWith("match-1");
   });
 
   it("renders loading skeleton while room state is loading", () => {
