@@ -151,6 +151,7 @@ export function useTournamentDraftForm({
 
   return {
     values,
+    dirty,
     pending,
     busy: pending !== null,
     error,

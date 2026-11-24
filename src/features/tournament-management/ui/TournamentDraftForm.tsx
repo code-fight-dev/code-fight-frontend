@@ -4,11 +4,16 @@ import { useId } from "react";
 import { Button } from "@/shared/ui/Button";
 import { useTournamentDraftForm } from "../model/useTournamentDraftForm";
 import type { TournamentDraftFormOptions } from "../model/useTournamentDraftForm";
+import { PublishTournament } from "./PublishTournament";
 
 const fieldClass =
   "mt-2 w-full rounded-xl border border-(--app-control-secondary-border) bg-(--app-control-secondary-bg) px-4 py-3 text-(--app-text-strong) focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400";
 
-export function TournamentDraftForm(props: TournamentDraftFormOptions) {
+export function TournamentDraftForm(
+  props: TournamentDraftFormOptions & {
+    tasks?: { slug: string; title: string }[];
+  },
+) {
   const slugId = useId();
   const form = useTournamentDraftForm(props);
 
@@ -118,6 +123,15 @@ export function TournamentDraftForm(props: TournamentDraftFormOptions) {
           </Button>
         )}
       </div>
+      {props.draft && props.tasks && (
+        <PublishTournament
+          draft={props.draft}
+          tasks={props.tasks}
+          disabled={
+            form.busy || form.dirty || form.requiresReconciliation || props.disabled
+          }
+        />
+      )}
     </form>
   );
 }
