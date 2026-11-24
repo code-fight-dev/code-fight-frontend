@@ -57,15 +57,23 @@ describe("bootstrapArenaRoom", () => {
     expect(bootstrapMocks.getMatch).not.toHaveBeenCalled();
   });
 
-  it("throws when match is not running or finished", async () => {
+  it("loads a pending room reached from a notification", async () => {
+    bootstrapMocks.getMatch.mockResolvedValue(
+      createArenaMatchFixture({ status: "pending" }),
+    );
+    const result = await bootstrapArenaRoom("match-1");
+    expect(result.match.status).toBe("pending");
+  });
+
+  it("throws when the match was cancelled", async () => {
     bootstrapMocks.getMatch.mockResolvedValue(
       createArenaMatchFixture({
-        status: "pending",
+        status: "cancelled",
       }),
     );
 
     await expect(bootstrapArenaRoom("match-1")).rejects.toThrow(
-      "This match room is only available for running or finished matches.",
+      "This match was cancelled.",
     );
   });
 

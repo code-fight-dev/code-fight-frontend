@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import { startMatch } from "@/entities/match/client";
 import { useArenaRoomState } from "@/features/arena-room";
 import { Container } from "@/shared/ui/Container";
+import { Button } from "@/shared/ui/Button";
 import { useSurrenderConfirm } from "../model/useSurrenderConfirm";
 import { ArenaMatchFinishedOverlay } from "./ArenaMatchFinishedOverlay";
 import { ArenaRoomHeaderBar } from "./ArenaRoomHeaderBar";
@@ -41,7 +44,10 @@ export function ArenaMatchRoomPageView({ matchId }: Props) {
     setCurrentCode,
     submitSolution,
     surrenderMatch,
+    refreshMatch,
   } = useArenaRoomState(matchId);
+  const [isAccepting, setIsAccepting] = useState(false);
+  const [acceptError, setAcceptError] = useState("");
   const {
     isDialogOpen: isSurrenderDialogOpen,
     openDialog: openSurrenderDialog,
@@ -69,7 +75,13 @@ export function ArenaMatchRoomPageView({ matchId }: Props) {
     );
   }
 
-  if (loadState === "error" || !challenge || !match || !selectedLanguage) {
+  if (
+    loadState === "error" ||
+    !challenge ||
+    !match ||
+    !selectedLanguage ||
+    match.status === "cancelled"
+  ) {
     return (
       <section className="challenge-page py-10">
         <Container>
@@ -78,7 +90,9 @@ export function ArenaMatchRoomPageView({ matchId }: Props) {
               Arena room unavailable
             </h1>
             <p className="mt-3 text-[15px] leading-7 text-(--app-text-muted)">
-              {errorMessage ?? "Unable to open this match room right now."}
+              {match?.status === "cancelled"
+                ? "This match was cancelled."
+                : (errorMessage ?? "Unable to open this match room right now.")}
             </p>
             <Link
               href="/arena"
@@ -94,6 +108,43 @@ export function ArenaMatchRoomPageView({ matchId }: Props) {
 
   const isPlayer1 = viewerId === match.player1Id;
   const opponentId = isPlayer1 ? match.player2Id : match.player1Id;
+  if (match.status === "pending") {
+    const viewerReady = isPlayer1 ? match.player1Ready : match.player2Ready;
+    async function confirmReady() {
+      setIsAccepting(true);
+      setAcceptError("");
+      try {
+        await startMatch(matchId);
+        await refreshMatch();
+      } catch {
+        setAcceptError(
+          "Could not confirm readiness. Check whether the match is still open.",
+        );
+      } finally {
+        setIsAccepting(false);
+      }
+    }
+    return (
+      <section className="challenge-page py-10">
+        <Container>
+          <div className="challenge-panel mx-auto max-w-2xl space-y-4 rounded-2xl p-6 text-center sm:p-8">
+            <h1 className="text-3xl font-semibold">Match ready</h1>
+            <p>
+              {viewerReady
+                ? "Waiting for your opponent."
+                : "Confirm readiness to join the match."}
+            </p>
+            {!viewerReady && (
+              <Button disabled={isAccepting} onClick={() => void confirmReady()}>
+                {isAccepting ? "Confirming…" : "Confirm readiness"}
+              </Button>
+            )}
+            {acceptError && <p role="alert">{acceptError}</p>}
+          </div>
+        </Container>
+      </section>
+    );
+  }
 
   return (
     <section className="challenge-page relative overflow-hidden py-4 sm:py-5 lg:py-6">

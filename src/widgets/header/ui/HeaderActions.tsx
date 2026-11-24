@@ -1,6 +1,7 @@
 import { Menu, X } from "lucide-react";
 import type { Viewer } from "@/entities/viewer";
 import { ViewerAccountDesktopMenu } from "@/features/viewer-account-menu";
+import { NotificationBell } from "@/features/notifications/NotificationBell";
 import { cn } from "@/shared/lib/cn";
 import { IconButton } from "@/shared/ui/IconButton";
 import { HeaderDesktopGuestActions } from "./HeaderDesktopGuestActions";
@@ -26,6 +27,7 @@ export function HeaderActions({
 }: Props) {
   return (
     <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 lg:gap-4 xl:gap-6">
+      {!isLoading && viewer && <NotificationBell key={viewer.id} />}
       {isLoading ? (
         <div className="hidden h-10 w-44 rounded-full border border-(--app-control-secondary-border) bg-(--app-control-secondary-bg) sm:inline-flex" />
       ) : viewer ? (
