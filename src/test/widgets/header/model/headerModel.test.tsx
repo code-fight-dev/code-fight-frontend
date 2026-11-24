@@ -82,6 +82,7 @@ describe("widgets/header/model", () => {
   it("defines stable header navigation links", () => {
     expect(HEADER_NAV).toEqual([
       { label: "Arena", href: "/arena" },
+      { label: "Tournaments", href: "/tournaments" },
       { label: "Leaderboard", href: "/leaderboard" },
       { label: "Challenges", href: "/challenges" },
       { label: "Documentation", href: "/docs" },

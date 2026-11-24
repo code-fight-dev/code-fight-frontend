@@ -5,7 +5,11 @@ import { useTournamentManagement } from "../model/useTournamentManagement";
 import { TournamentDraftForm } from "./TournamentDraftForm";
 import { TournamentDraftList } from "./TournamentDraftList";
 
-export function TournamentManagementPanel() {
+export function TournamentManagementPanel({
+  tasks,
+}: {
+  tasks?: { slug: string; title: string }[];
+}) {
   const management = useTournamentManagement();
 
   return (
@@ -48,6 +52,7 @@ export function TournamentManagementPanel() {
           onDirtyChange={management.onDirtyChange}
           onAccessError={management.onError}
           onReconciliationChange={management.onReconciliationChange}
+          tasks={tasks}
         />
       )}
     </div>
